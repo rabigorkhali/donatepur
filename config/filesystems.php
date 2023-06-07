@@ -56,6 +56,13 @@ return [
             'throw' => false,
         ],
 
+        'voyager' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),// change here something specific to your application need
+            'url' => env('APP_URL').'/uploads',
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*

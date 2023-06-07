@@ -15,7 +15,7 @@ copy all controllers as well
 
 for css
 
-copy donationpur/vendor/tcg/voyager/publishable to app/
+copy donatepur/vendor/tcg/voyager/publishable to app/
 user env.example
 for env set up
 </p>

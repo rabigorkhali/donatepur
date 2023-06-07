@@ -17,6 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+include('frontend.php');
 
 Route::group(['prefix' => 'admin'], function () {
     include('voyager.php');

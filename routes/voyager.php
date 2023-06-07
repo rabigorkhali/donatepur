@@ -34,8 +34,8 @@ Route::group(['as' => 'voyager.'], function () {
         Route::post('upload', ['uses' => $namespacePrefix.'VoyagerController@upload',  'as' => 'upload']);
 
         Route::get('profile', ['uses' => $namespacePrefix.'VoyagerUserController@profile', 'as' => 'profile']);
-        Route::resource('users', $namespacePrefix.'VoyagerUserController',['names' => 'users']);
-        Route::resource('roles', $namespacePrefix.'VoyagerRoleController',['names' => 'roles']);
+        // Route::resource('users', $namespacePrefix.'VoyagerUserController',['names' => 'users']);
+        // Route::resource('roles', $namespacePrefix.'VoyagerRoleController',['names' => 'roles']);
 
         try {
             foreach (Voyager::model('DataType')::all() as $dataType) {
