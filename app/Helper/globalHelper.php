@@ -45,3 +45,11 @@ function getDaysDiffByToday($givenDate)
 
     return $days;
 }
+
+function convertToNepaliFormat($number) {
+ 
+    $formattedNumber = number_format($number);
+    return $formattedNumber;
+}
+
+

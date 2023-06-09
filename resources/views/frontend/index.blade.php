@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 @include('frontend.partials.header')
+<style>
+
+.fun-fact .circle-data {
+    max-width: 230px;
+    max-height: 230px;
+    line-height: 230px;
+    border: 3px solid #fff;
+    margin: 0 auto 25px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+}
+</style>
+
 <body>
     <div class="page-wrapper">
         @include('frontend.partials.loader')
@@ -9,35 +25,24 @@
         <!-- start of hero -->
         <section class="hero hero-slider-wrapper hero-slider-s1">
             <div class="hero-slider">
-                <div class="slide">
-                    <img src="images/KXa4pn47bUnY.jpg" alt="" class="slider-bg">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col col-xs-12 slide-caption">
-                                <h1>We can’t do it alone without your support</h1>
-                                <p>Help us to eradicate poverty around the world and save the million of lives from
-                                    unwanted
-                                    demises. Millions of innocent lives we lost every year for malnutritions.</p>
-                                <a href="#" class="btn theme-btn">Join us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @foreach ($sliderBanners as $sliderBannersKey => $sliderBannersDatum)
 
-                <div class="slide row">
-                    <img src="images/RRsQ2uTTLwzD.jpg" alt="" class="slider-bg">
+                <div class="slide">
+                    <img src="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}" alt="" class="slider-bg">
                     <div class="container">
                         <div class="row">
                             <div class="col col-xs-12 slide-caption">
-                                <h1>We can’t do it alone without your support</h1>
-                                <p>Help us to eradicate poverty around the world and save the million of lives from
-                                    unwanted
-                                    demises. Millions of innocent lives we lost every year for malnutritions.</p>
-                                <a href="#" class="btn theme-btn">Join us</a>
+                                <h1>{{$sliderBannersDatum->title}}</h1>
+                                <p>
+                                    {{ substr($sliderBannersDatum->description, 0, 150) }}....
+                                </p>
+                                <a href="{{$sliderBannersDatum->url}}" class="btn theme-btn">{{$sliderBannersDatum->btn_text}}</a>
                             </div>
                         </div>
                     </div>
                 </div>
+                @endforeach
+
             </div>
         </section>
         <!-- end of hero slider -->
@@ -54,8 +59,21 @@
                 </div> <!-- end section-title -->
 
                 <div class="row content">
+                    @php
+                        $rowCount = 0;
+                        $style = '';
+                    @endphp
+
                     @foreach ($topCauses as $topCausesKey => $topCausesDatum)
-                        <div class="col col-md-4 col-xs-6">
+                        @if ($rowCount == 3)
+                            @php
+                                $rowCount = 0;
+                                $style = 'margin-top:15px;';
+                            @endphp
+                        @else
+                            @php ++$rowCount @endphp
+                        @endif
+                        <div style="{{ $style }}" class="col col-md-4 col-xs-6">
                             <div class="grid">
                                 <div class="img-holder">
                                     <img src="{{ asset('uploads') . '/' . imageName($topCausesDatum->cover_image, '-cropped') }}"
@@ -88,14 +106,14 @@
                                         {{ getDaysDiffByToday($topCausesDatum->end_date) }} days remaining</span>
                                 </div>
                                 <div class="causes-details">
-                                    <p>{{ substr($topCausesDatum->description, 0, 100) }}. </p>
+                                    <p>{{ substr($topCausesDatum->description, 0, 150) }}....<a href="">See More</a> </p>
                                     <a href="#" class="btn theme-btn-s3">Donate</a>
                                 </div>
                             </div>
                         </div>
                     @endforeach
+                </div>
 
-                </div> <!-- end row -->
             </div> <!-- end container -->
         </section>
         <!-- end causes -->
@@ -108,27 +126,28 @@
                     <div class="col col-sm-3 col-xs-6">
                         <div class="grid">
                             <div class="circle-data">
-                                <span class="counter" data-count="12">00</span>
+                                <span class="counter" data-count="{{$total_donars}}">{{$total_donars}}</span>
                             </div>
-                            <h3>Years of Experience</h3>
+                            <h3>Total Donars</h3>
                         </div>
                     </div>
 
                     <div class="col col-sm-3 col-xs-6">
                         <div class="grid">
                             <div class="circle-data">
-                                <span class="counter" data-count="14">00</span>
+                                <span class="counter" data-count="{{$total_campaign}}">{{$total_campaign}}</span>
                             </div>
-                            <h3>Thousands Volunteers</h3>
+                            <h3>Total Campaign</h3>
                         </div>
                     </div>
 
                     <div class="col col-sm-3 col-xs-6">
                         <div class="grid">
                             <div class="circle-data">
-                                <span class="counter" data-count="23">00</span>
+                                
+                                <span class="counter" >Rs.{{convertToNepaliFormat($total_collection+100000)}}</span>
                             </div>
-                            <h3>Worldwide Offices</h3>
+                            <h3>Total Donation</h3>
                         </div>
                     </div>
 
@@ -507,4 +526,5 @@
     </div>
     @include('frontend.partials.script')
 </body>
+
 </html>

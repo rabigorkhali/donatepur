@@ -17,7 +17,7 @@
                     <ol class="breadcrumb">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="causes.html">Causes</a></li>
-                        <li>single cause</li>
+                        <li>{{$campaignDetails->title??''}}</li>
                     </ol>
                 </div>
             </div>
@@ -32,25 +32,26 @@
                     <div class="col col-md-9">
                         <div class="causes-single">
                             <div class="img-holder">
-                                <img src="{{ asset('uploads') . '/' . $campaignDetails->cover_image }}" alt class="img img-responsive">
+                                <img   src="{{ asset('uploads') . '/' . $campaignDetails->cover_image }}" alt class="img img-responsive">
                             </div>
                             <div class="causes-list-box">
                                 <div class="title">
                                     <h3>{{$campaignDetails->title}}</h3>
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-s1" data-percent="55"></div>
+                                        <div class="progress-bar progress-bar-s1" data-percent="{{calculatePercentageMaxTo100($campaignDetails->total_collection,$campaignDetails->goal_amount)}}"></div>
                                     </div>
-                                    <h4>Raised: <span>$52,872</span> / $70,000</h4>
+                                    <h4>Raised: <span>Rs.{{$campaignDetails->total_collection??0}}</span> / Rs. {{$campaignDetails->goal_amount??0}}</h4>
                                 </div>
                                 <div class="inner-details">
                                     <p>
                                         {{$campaignDetails->description}}
                                     </p>
-                                    <ul>
+                                    {{-- <ul>
+                                        <h2>Updates</h2>
                                         <li><i class="fa fa-check"></i> Aspernatur aut odit aut fugit</li>
                                         <li><i class="fa fa-check"></i> Nventore veritatis et quasi architecto</li>
                                         <li><i class="fa fa-check"></i> Con se quuntur magni dolores</li>
-                                    </ul>
+                                    </ul> --}}
 
                                     <div class="donation-form quick-donation-section">
                                         <form action="#" class="form">
@@ -58,17 +59,17 @@
                                                 <div class="box">
                                                     <input type="radio" id="c1" name="c1">
                                                     <label for="c1"><span class="check-icon"></span> <span
-                                                            class="amount">$100</span></label>
+                                                            class="amount">Rs.100</span></label>
                                                 </div>
                                                 <div class="box">
                                                     <input type="radio" id="c2" name="c1">
                                                     <label for="c2"><span class="check-icon"></span> <span
-                                                            class="amount">$200</span></label>
+                                                            class="amount">Rs.1000</span></label>
                                                 </div>
                                                 <div class="box active">
                                                     <input type="radio" id="c3" name="c1" checked>
                                                     <label for="c3"><span class="check-icon"></span> <span
-                                                            class="amount">$500</span></label>
+                                                            class="amount">Rs.5000</span></label>
                                                 </div>
                                             </div>
 
@@ -98,52 +99,35 @@
                             </div>
 
                             <div class="widget recent-post">
-                                <h3>Recent post</h3>
+                                <h3>Donors</h3>
                                 <div>
                                     <h4><a href="#">Education program in Uganda</a></h4>
-                                    <a href="#" class="date">November 26, 2016</a>
+                                    <a href="#" class="date">November 26, 2016</a> <br>
+                                    <i class="fa fa-map-marker"></i> 221B, Baker Street
                                 </div>
                                 <div>
-                                    <h4><a href="#">War kids in Syria</a></h4>
-                                    <a href="#" class="date">November 26, 2016</a>
+                                    <h4><a href="#">Education program in Uganda</a></h4>
+                                    <a href="#" class="date">November 26, 2016</a> <br>
+                                    <i class="fa fa-map-marker"></i> 221B, Baker Street
                                 </div>
                                 <div>
-                                    <h4><a href="#">African water crisis : Children and women</a></h4>
-                                    <a href="#" class="date">November 26, 2016</a>
+                                    <h4><a href="#">Education program in Uganda</a></h4>
+                                    <a href="#" class="date">November 26, 2016</a> <br>
+                                    <i class="fa fa-map-marker"></i> 221B, Baker Street
                                 </div>
                             </div>
 
                             <div class="widget recent-causes">
                                 <h3>Recent causes</h3>
                                 <div>
-                                    <h4><a href="#">Blood Donation in virginia</a></h4>
-                                    <p class="remaing-date">22 days remaing</p>
+                                    <h4><a href="#">Education program in Uganda</a></h4>
+                                    <a href="#" class="date">November 26, 2016</a> <br>
+                                    <i class="fa fa-map-marker"></i> 221B, Baker Street
                                 </div>
                                 <div>
-                                    <h4><a href="#">Boston orphanage opening</a></h4>
-                                    <p class="remaing-date">22 days remaing</p>
-                                </div>
-                                <div>
-                                    <h4><a href="#">Hair for cancer</a></h4>
-                                    <p class="remaing-date">22 days remaing</p>
-                                </div>
-                            </div>
-
-                            <div class="widget recent-events-widget">
-                                <h3>Events nearby</h3>
-                                <div class="event-list">
-                                    <div class="event-pic">
-                                        <a href="#"><img src="images/hD2wUssAmQwS.jpg" alt
-                                                class="img img-responsive"></a>
-                                    </div>
-                                    <div class="event-info">
-                                        <h4><a href="#">Towards Humanity</a></h4>
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-calender"></i> 17 March, 2017</a></li>
-                                            <li><a href="#"><i class="fa fa-map-marker"></i> 221B, Baker
-                                                    Street</a></li>
-                                        </ul>
-                                    </div>
+                                    <h4><a href="#">Education program in Uganda</a></h4>
+                                    <a href="#" class="date">November 26, 2016</a> <br>
+                                    <i class="fa fa-map-marker"></i> 221B, Baker Street
                                 </div>
                             </div>
                         </div> <!-- end sidebar -->
