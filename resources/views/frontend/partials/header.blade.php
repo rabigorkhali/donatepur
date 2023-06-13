@@ -7,7 +7,7 @@
     <meta name="author" content="themexriver">
 
     <!-- Page Title -->
-    <title> CharityWorld - Multipurpose non profit HTML template</title>
+    <title> {{setting('site.title')}}</title>
 
     <!-- Favicon and Touch Icons -->
     <link href="{{asset('frontend/images/s35RlLbXuwI3.png')}}" rel="shortcut icon" type="image/png">

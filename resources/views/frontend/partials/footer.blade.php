@@ -4,10 +4,10 @@
             <div class="col col-md-3 col-sm-6">
                 <div class="widget about-widget">
                     <div class="footer-logo">
-                        <img src="images/ecAlIKoOVfAE.png" alt="" class="img img-responsive">
+                        <img height="75" src="{{asset('uploads').'/'.setting('site.logo')}}" alt="" class="img img-responsive">
                     </div>
                     <div class="company-info">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore sed do eiusmod.</p>
+                        <p>{{setting('site.footer_short_description')}}</p>
                     </div>
                     <ul class="social-links">
                         <li><a href="#"><i class="fa fa-facebook"></i></a></li>

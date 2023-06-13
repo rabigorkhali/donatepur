@@ -7,8 +7,8 @@
                     <div class="row">
                         <div class="col col-lg-8 col-md-7 col-sm-6 info">
                             <ul>
-                                <li><i class="fi flaticon-envelope-of-white-paper"></i> mail@charityworld.com</li>
-                                <li><i class="fi flaticon-cellphone"></i> +123 (456) 789 012</li>
+                                <li><i class="fi flaticon-envelope-of-white-paper"></i> {{setting('site.site_email')}}</li>
+                                <li><i class="fi flaticon-cellphone"></i> {{setting('site.mobile_number')}} </li>
                             </ul>
                         </div>
                         <div class="col col-lg-4 col-md-5 col-sm-6">
@@ -16,8 +16,8 @@
                                 <div class="social-follow">
                                     <span>Follow us</span>
                                     <ul class="social-links">
-                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="{{setting('site.twitter_url')}}" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="{{setting('site.facebook_url')}}" target="_blank"><i class="fa fa-facebook"></i></a></li>
                                     </ul>
                                 </div>
                                 <div class="donate">
@@ -40,7 +40,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="index.html"><img src="images/Hezqnfd0qR8C.png" alt=""></a>
+                        <a class="navbar-brand" href="{{ url('/')}}"><img height="75" src="{{asset('uploads').'/'.setting('site.logo')}}" alt=""></a>
                     </div>
                     <div id="navbar" class="navbar-collapse collapse navigation-menu-holder navbar-right">
                         <button class="close-navbar"><i class="fa fa-close"></i></button>
