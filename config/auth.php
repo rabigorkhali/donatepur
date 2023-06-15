@@ -17,6 +17,14 @@ return [
         'guard' => 'web',
         'passwords' => 'users',
     ],
+    // 'defaults' => [
+    //     'guard' => 'frontend_users',
+    //     'passwords' => 'frontend_users',
+    // ],
+    'frontend_users' => [
+        'guard' => 'frontend_users',
+        'passwords' => 'public_users',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -39,6 +47,10 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'frontend_users' => [
+            'driver' => 'session',
+            'provider' => 'frontend_users',
         ],
     ],
 
@@ -63,6 +75,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'frontend_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Voyager\PublicUser::class,
         ],
 
         // 'users' => [
@@ -89,6 +105,13 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'frontend_users' => [
+            'provider' => 'frontend_users',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
