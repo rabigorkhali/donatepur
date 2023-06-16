@@ -15,8 +15,11 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create()
     {
+        if (Auth::guard('frontend_users')->user()) {
+            return redirect('/dashboard');
+        }
         return view('auth.login');
     }
 
@@ -37,7 +40,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        Auth::guard('frontend_users')->logout();
 
         $request->session()->invalidate();
 

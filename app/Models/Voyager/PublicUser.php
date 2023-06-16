@@ -3,6 +3,7 @@
 namespace App\Models\Voyager;
 
 use Carbon\Carbon;
+use Database\Factories\UserFactory as FactoriesUserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use TCG\Voyager\Contracts\User as UserContract;
@@ -49,6 +50,6 @@ class PublicUser extends Authenticatable implements UserContract
 
     protected static function newFactory()
     {
-        return UserFactory::new();
+        return FactoriesUserFactory::new();
     }
 }
