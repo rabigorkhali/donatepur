@@ -1,29 +1,37 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@extends('adminlte::page')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+@section('title', 'Dashboard')
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+@section('content_header')
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
+
+    <form action="/submit-form" method="POST" class="form-horizontal">
+
+        @csrf
+        <x-adminlte-input name="iMail" type="email" placeholder="mail@example.com"/>
+
+        {{-- Options with placeholder --}}
+        <x-adminlte-options :options="['Option 1', 'Option 2', 'Option 3']" disabled="1" placeholder="Select an option..." />
+        <!-- Form fields go here -->
+        
+        <x-adminlte-textarea name="taBasic" placeholder="Insert description..." required="required" />
+
+        <x-adminlte-button type="submit" label="Submit" theme="success" icon="fas fa-check" />
+    </form>
+
+
+@stop
+
+@section('content')
+    <p>Welcome to this beautiful admin panel.</p>
+@stop
+
+@section('css')
+    <link rel="stylesheet" href="/css/admin_custom.css">
+@stop
+
+@section('js')
+    <script>
+        console.log('Hi!');
+    </script>
+@stop

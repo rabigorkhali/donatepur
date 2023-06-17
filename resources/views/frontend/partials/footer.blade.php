@@ -4,7 +4,7 @@
             <div class="col col-md-3 col-sm-6">
                 <div class="widget about-widget">
                     <div class="footer-logo">
-                        <img height="75" src="{{asset('uploads').'/'.setting('site.logo')}}" alt="" class="img img-responsive">
+                        <img height="60" src="{{asset('uploads').'/'.setting('site.logo')}}" alt="" class="img img-responsive">
                     </div>
                     <div class="company-info">
                         <p>{{setting('site.footer_short_description')}}</p>
