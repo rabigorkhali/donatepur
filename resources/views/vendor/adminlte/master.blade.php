@@ -15,7 +15,7 @@
     {{-- Title --}}
     <title>
         @yield('title_prefix', config('adminlte.title_prefix', ''))
-        @yield('title', config('adminlte.title', 'AdminLTE 3'))
+        @yield('title', config('adminlte.title', 'Donatepur'))
         @yield('title_postfix', config('adminlte.title_postfix', ''))
     </title>
 
@@ -107,4 +107,13 @@
 
 </body>
 
+<script>
+    $(document).ready(function() {
+    if ($('.message-alert').length) {
+        setTimeout(function() {
+            $('.message-alert').fadeOut('slow');
+        }, 3000); 
+    }
+});
+</script>
 </html>

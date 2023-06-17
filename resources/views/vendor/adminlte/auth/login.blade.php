@@ -24,6 +24,7 @@
     <form action="{{ $login_url }}" method="post">
         @csrf
 
+        @dump()
         {{-- Email field --}}
         <div class="input-group mb-3">
             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"

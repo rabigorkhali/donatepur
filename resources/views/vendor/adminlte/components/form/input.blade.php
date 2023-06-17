@@ -9,8 +9,9 @@
 @section('input_group_item')
 
     {{-- Input --}}
-    <input id="{{ $id }}" name="{{ $name }}"
+    {{-- {{$attributes}} to take values given in component --}}
+    <input id="{{ $id }}" name="{{ $name }}" 
         value="{{ $getOldValue($errorKey, $attributes->get('value')) }}"
-        {{ $attributes->merge(['class' => $makeItemClass()]) }}>
+        class="{{$makeItemClass().' '. $attributes['class']??' '}} @if ($errors->first($name)) is-invalid @endif">
 
 @overwrite
