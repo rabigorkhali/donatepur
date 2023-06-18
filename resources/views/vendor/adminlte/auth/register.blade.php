@@ -19,8 +19,8 @@
 
         {{-- Name field --}}
         <div class="input-group mb-3">
-            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                   value="{{ old('name') }}" placeholder="{{ __('adminlte::adminlte.full_name') }}" autofocus>
+            <input type="text" name="full_name" class="form-control @error('full_name') is-invalid @enderror"
+                   value="{{ old('full_name') }}" placeholder="{{ __('adminlte::adminlte.full_name') }}" autofocus>
 
             <div class="input-group-append">
                 <div class="input-group-text">

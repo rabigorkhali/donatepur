@@ -10,8 +10,8 @@
 
     {{-- Input --}}
     {{-- {{$attributes}} to take values given in component --}}
-    <input id="{{ $id }}" name="{{ $name }}" 
+    <input type="@if($attributes['type']){{$attributes['type']}}@endif"
+        @if ($attributes['required']) required @endif id="{{ $id }}" name="{{ $name }}"
         value="{{ $getOldValue($errorKey, $attributes->get('value')) }}"
-        class="{{$makeItemClass().' '. $attributes['class']??' '}} @if ($errors->first($name)) is-invalid @endif">
-
+        class="{{ $makeItemClass() . ' ' . $attributes['class'] ?? ' ' }} @if ($errors->first($name)) is-invalid @endif">
 @overwrite

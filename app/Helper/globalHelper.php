@@ -52,4 +52,9 @@ function convertToNepaliFormat($number) {
     return $formattedNumber;
 }
 
+function giveImageName($imageName,$imagegenerateType)
+{
+    return  str_replace('.', '-'.$imagegenerateType.'.', $imageName);
+}
+
 

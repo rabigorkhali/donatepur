@@ -362,6 +362,8 @@ class VoyagerBaseController extends Controller
             });
         $original_data = clone($data);
 
+        dump( $original_data);
+        dd( $to_remove);
         $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
 
         // Delete Images

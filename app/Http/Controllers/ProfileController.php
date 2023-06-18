@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Voyager\PublicUser;
+use App\Traits\ImageTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +14,10 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    use ImageTrait;
+    public $dir = "/uploads/public-users";
+    public $dirforDb = "/public-users/";
+
     /**
      * Display the user's profile form.
      */
@@ -27,14 +33,14 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $userDetails = PublicUser::findorfail(Auth::guard('frontend_users')->user()->id);
+        $data = $request->except('_token', 'password', 'user','_method');
+        if ($request->file('profile_picture')) {
+            if ($userDetails->profile_picture) $this->removeImage($this->dir, $userDetails->profile_picture);
+            $data['profile_picture'] = $this->dirforDb.$this->uploadImage($this->dir, 'profile_picture', true, 1280, null);
         }
-
-        $request->user()->save();
-
+        PublicUser::where('id', $userDetails->id)->update($data);
+        $userDetails->save($data);
         Session::flash('success', 'Success! Your action has been completed.');
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

@@ -41,6 +41,10 @@ class ComposerStaticInit5292ee816ca9260b853ee4189acb610e
         array (
             'voku\\' => 5,
         ),
+        'k' => 
+        array (
+            'kartik\\plugins\\fileinput\\' => 25,
+        ),
         'W' => 
         array (
             'Whoops\\' => 7,
@@ -191,6 +195,10 @@ class ComposerStaticInit5292ee816ca9260b853ee4189acb610e
         'voku\\' => 
         array (
             0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
+        ),
+        'kartik\\plugins\\fileinput\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/bootstrap-fileinput',
         ),
         'Whoops\\' => 
         array (

@@ -9,7 +9,7 @@
 @section('input_group_item')
 
     {{-- Select --}}
-    <select id="{{ $id }}" name="{{ $name }}"
+    <select @if($attributes['required']) required @endif id="{{ $id }}" name="{{ $name }}"
         {{ $attributes->merge(['class' => $makeItemClass()]) }}>
         {{ $slot }}
     </select>

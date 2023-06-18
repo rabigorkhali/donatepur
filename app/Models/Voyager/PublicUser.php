@@ -5,51 +5,57 @@ namespace App\Models\Voyager;
 use Carbon\Carbon;
 use Database\Factories\UserFactory as FactoriesUserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use TCG\Voyager\Contracts\User as UserContract;
 use TCG\Voyager\Tests\Database\Factories\UserFactory;
 use TCG\Voyager\Traits\VoyagerUser;
 
-class PublicUser extends Authenticatable implements UserContract
+// class PublicUser extends Authenticatable implements UserContract
+class PublicUser  extends Authenticatable
 {
-    use VoyagerUser, HasFactory;
+      use  HasFactory;
+     protected $table = 'public_users';
 
-    protected $guarded = [];
 
-    public $additional_attributes = ['locale'];
+     protected $guarded = ['_token', 'id'];
+    // protected $guarded = [];
 
-    public function getAvatarAttribute($value)
-    {
-        return $value ?? config('voyager.user.default_avatar', 'users/default.png');
-    }
+    // public $additional_attributes = ['locale'];
+     protected $fillable = ['username','full_name', 'mobile_number','email'];
 
-    public function setCreatedAtAttribute($value)
-    {
-        $this->attributes['created_at'] = Carbon::parse($value)->format('Y-m-d H:i:s');
-    }
+    // public function getAvatarAttribute($value)
+    // {
+    //     return $value ?? config('voyager.user.default_avatar', 'users/default.png');
+    // }
 
-    public function setSettingsAttribute($value)
-    {
-        $this->attributes['settings'] = $value ? $value->toJson() : json_encode([]);
-    }
+    // public function setCreatedAtAttribute($value)
+    // {
+    //     $this->attributes['created_at'] = Carbon::parse($value)->format('Y-m-d H:i:s');
+    // }
 
-    public function getSettingsAttribute($value)
-    {
-        return collect(json_decode((string)$value));
-    }
+    // public function setSettingsAttribute($value)
+    // {
+    //     $this->attributes['settings'] = $value ? $value->toJson() : json_encode([]);
+    // }
 
-    public function setLocaleAttribute($value)
-    {
-        $this->settings = $this->settings->merge(['locale' => $value]);
-    }
+    // public function getSettingsAttribute($value)
+    // {
+    //     return collect(json_decode((string)$value));
+    // }
 
-    public function getLocaleAttribute()
-    {
-        return $this->settings->get('locale');
-    }
+    // public function setLocaleAttribute($value)
+    // {
+    //     $this->settings = $this->settings->merge(['locale' => $value]);
+    // }
 
-    protected static function newFactory()
-    {
-        return FactoriesUserFactory::new();
-    }
+    // public function getLocaleAttribute()
+    // {
+    //     return $this->settings->get('locale');
+    // }
+
+    // protected static function newFactory()
+    // {
+    //     return FactoriesUserFactory::new();
+    // }
 }
