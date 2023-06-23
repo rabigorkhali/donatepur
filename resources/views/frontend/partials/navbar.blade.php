@@ -13,13 +13,13 @@
                         </div>
                         <div class="col col-lg-4 col-md-5 col-sm-6">
                             <div class="social-follow-donate">
-                                <div class="social-follow">
+                                {{-- <div class="social-follow">
                                     <span>Follow us</span>
                                     <ul class="social-links">
                                         <li><a href="{{setting('site.twitter_url')}}" target="_blank"><i class="fa fa-twitter"></i></a></li>
                                         <li><a href="{{setting('site.facebook_url')}}" target="_blank"><i class="fa fa-facebook"></i></a></li>
                                     </ul>
-                                </div>
+                                </div> --}}
                                 <div class="donate">
                                     <a href="#"><i class="fi flaticon-money-4"></i> Donate</a>
                                 </div>
@@ -40,65 +40,30 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="{{ url('/')}}"><img height="75" src="{{asset('uploads').'/'.setting('site.logo')}}" alt=""></a>
+                        <a class="navbar-brand" href="{{ url('/')}}"><img height="50" src="{{asset('uploads').'/'.setting('site.logo')}}" alt=""></a>
                     </div>
                     <div id="navbar" class="navbar-collapse collapse navigation-menu-holder navbar-right">
                         <button class="close-navbar"><i class="fa fa-close"></i></button>
                         <ul class="nav navbar-nav">
-                            <li class="sub-menu">
+                            {{-- <li class="sub-menu">
                                 <a href="#">Home</a>
                                 <ul>
                                     <li class="current"><a href="index.html">Home style 1</a></li>
                                     <li><a href="index-2.html">Home style 2</a></li>
                                     <li><a href="index-3.html">Home style 3</a></li>
                                 </ul>
-                            </li>
-                            <li><a href="about.html">About</a></li>
-                            <li class="sub-menu">
-                                <a href="#">Causes</a>
-                                <ul>
-                                    <li><a href="causes.html">Causes style 1</a></li>
-                                    <li><a href="causes-s2.html">Causes style 2</a></li>
-                                    <li><a href="causes-list.html">Causes list</a></li>
-                                    <li><a href="cause-single.html">Cause single</a></li>
-                                    <li class="sub-sub-menu"><a href="#">Third level</a>
-                                        <ul>
-                                            <li><a href="#">Third level</a></li>
-                                            <li><a href="#">Third level</a></li>
-                                            <li><a href="#">Third level</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="sub-menu">
-                                <a href="#">Events</a>
-                                <ul>
-                                    <li><a href="events.html">Events style 1</a></li>
-                                    <li><a href="event-single.html">Event single</a></li>
-                                </ul>
-                            </li>
-                            <li class="sub-menu">
-                                <a href="#">Shop</a>
-                                <ul>
-                                    <li><a href="shop.html">Shop</a></li>
-                                    <li><a href="shop-left-sidebar.html">Shop left sidebar</a></li>
-                                    <li><a href="shop-right-sidebar.html">Shop right sidebar</a></li>
-                                    <li><a href="shop-details.html">Shop details</a></li>
-                                </ul>
-                            </li>
-                            <li class="sub-menu">
-                                <a href="#">Blog</a>
-                                <ul>
-                                    <li><a href="blog.html">Blog</a></li>
-                                    <li><a href="blog-details.html">Blog details</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="contact.html">Contact</a></li>
+                            </li> --}}
+                            <li><a href="{{url('/')}}">Home</a></li>
+                            <li><a href="{{url('/page/about-us')}}">About</a></li>
+                            <li><a href="{{url('page/how-it-works')}}">How it works?</a></li>
+                            
+            
+                            <li><a href="{{ url('/contact-us')}}">Contact Us</a></li>
                         </ul>
                     </div><!-- end of nav-collapse -->
 
 
-                    <div class="search-mini-cart">
+{{--                     <div class="search-mini-cart">
                         <div class="search header-search-area">
                             <a href="#" class="open-btn">
                                 <i class="fi flaticon-magnifying-glass"></i>
@@ -155,7 +120,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </div> --}}
                 </div><!-- end of container -->
             </nav> <!-- end navigation -->
         </header>

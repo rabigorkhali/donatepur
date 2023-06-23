@@ -17,9 +17,9 @@
 </style> --}}
 <style>
     .section-padding {
-    padding: 10px 0 20px;
-}
-    </style>
+        padding: 10px 0 20px;
+    }
+</style>
 
 <body>
     <div class="page-wrapper">
@@ -38,9 +38,10 @@
                                 <div class="col col-xs-12 slide-caption">
                                     <h1>{{ $sliderBannersDatum->title }}</h1>
                                     <p>
+
                                         {{ substr($sliderBannersDatum->description, 0, 150) }}....
                                     </p>
-                                    <a href="{{ $sliderBannersDatum->url }}"
+                                    <a href="{{ $sliderBannersDatum->go_to_link }}"
                                         class="btn theme-btn">{{ $sliderBannersDatum->btn_text }}</a>
                                 </div>
                             </div>
@@ -57,9 +58,7 @@
                 <div class="row section-title">
                     <div class="col col-md-8 col-md-offset-2">
                         <h2>Top causes</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore
-                            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                        <p>Discover our impactful causes that make a difference in people's lives.</p>
                     </div>
                 </div> <!-- end section-title -->
 
@@ -81,8 +80,10 @@
                         <div style="{{ $style }}" class="col col-md-4 col-xs-6">
                             <div class="grid">
                                 <div class="img-holder">
-                                    <img src="{{ asset('uploads') . '/' . imageName($topCausesDatum->cover_image, '-cropped') }}"
-                                        alt="" class="img img-responsive">
+                                    <a href="{{ url('campaigns/' . $topCausesDatum->id) }}"> <img
+                                            src="{{ asset('uploads') . '/' . imageName($topCausesDatum->cover_image, '-cropped') }}"
+                                            alt="" class="img img-responsive">
+                                    </a>
                                     {{-- <img src="{{asset('uploads').'/'.$topCausesDatum->cover_image}}" alt="" class="img img-responsive"> --}}
                                 </div>
                                 <div class="goal-raised">
@@ -106,14 +107,25 @@
                                     <h3><a
                                             href="{{ url('campaigns/' . $topCausesDatum->id) }}">{{ $topCausesDatum->title }}</a>
                                     </h3>
+                                    {{-- @if ($topCausesDatum->end_date > date('Y-m-d'))
+                                        <span class="remaining-days"><i
+                                                class="fi flaticon-calendar-page-with-circular-clock-symbol"></i>
+                                            {{ getDaysDiffByToday($topCausesDatum->end_date) }} days remaining</span>
+                                    @else
+                                        <span class="remaining-days"><i
+                                                class="fi flaticon-calendar-page-with-circular-clock-symbol"></i>
+                                            Completed</span>
+                                    @endif --}}
                                     <span class="remaining-days"><i
-                                            class="fi flaticon-calendar-page-with-circular-clock-symbol"></i>
-                                        {{ getDaysDiffByToday($topCausesDatum->end_date) }} days remaining</span>
+                                        class="fi flaticon-calendar-page-with-circular-clock-symbol"></i>
+                                    Completed</span>
                                 </div>
                                 <div class="causes-details">
-                                    <p>{{ substr($topCausesDatum->description, 0, 150) }}....<a href="">See
+                                    <p>{{ substr($topCausesDatum->description, 0, 150) }}....<a
+                                            href="{{ url('campaigns/' . $topCausesDatum->id) }}">See
                                             More</a> </p>
-                                    <a href="#" class="btn theme-btn-s3">Donate</a>
+                                    <a href="{{ url('campaigns/' . $topCausesDatum->id) }}"
+                                        class="btn theme-btn-s3">Donate</a>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +162,8 @@
                     <div class="col col-sm-3 col-xs-6">
                         <div class="grid">
                             <div class="circle-data">
-                                <span class="counter"  style="font-size:24px;">Nrs. {{ convertToNepaliFormat($total_collection) }}</span>
+                                <span class="counter" style="font-size:24px;">Nrs.
+                                    {{ convertToNepaliFormat($total_collection) }}</span>
                             </div>
                             <h3>Total Donation</h3>
                         </div>
@@ -171,38 +184,53 @@
 
 
         <!-- start volunteers-->
-        <section class="volunteers section-padding">
-            <div class="container">
-                <div class="row section-title">
-                    <div class="col col-md-8 col-md-offset-2">
-                        <h2>Our Top Fantastic Donors</h2>
-                        <p>{{ setting('site.top_donar_text') }}</p>
-                    </div>
-                </div> <!-- end section-title -->
-                @if ($topDonors->count())
+        @if ($topDonors->count())
+            <section class="volunteers section-padding">
+                <div class="container">
+                    <div class="row section-title">
+                        <div class="col col-md-8 col-md-offset-2">
+                            <h2>Our Top Fantastic Donors</h2>
+                            <p>{{ setting('site.top_donar_text') }}</p>
+                        </div>
+                    </div> <!-- end section-title -->
+
                     <div class="row volunteers-grids">
                         @foreach ($topDonors as $topDonorsKey => $topDonorsDatum)
-                            <div class="col col-md-3 col-xs-4">
-                                <div class="grid">
-                                    <div class="img-holder">
-                                        
-                                        <img src="{{ asset('uploads') . '/' . imageName($topDonorsDatum->publicUser->profile_picture, '-cropped') }}"
-                                            alt="" class="img img-responsive">
-                                    </div>
-                                    <div class="volunteers-details">
-                                        <h4><a href="#">{{ $topDonorsDatum->fullname }}</a></h4>
-                                        <span class="volunteers-post">{{ucfirst(ltrim($topDonorsDatum->street_address.','.$topDonorsDatum->country, ","))  }}
+                            @if ($topDonorsDatum?->publicUser)
+                                <div class="col col-md-3 col-xs-4">
+                                    <div class="grid">
+                                        <div class="img-holder">
+
+                                            <img src="{{ asset('uploads') . '/' . imageName($topDonorsDatum?->publicUser?->profile_picture, '-cropped') }}"
+                                                alt="" class="img img-responsive">
+                                        </div>
+                                        <div class="volunteers-details">
+                                            <h4><a href="#">{{ $topDonorsDatum->fullname }}</a></h4>
+                                            <span
+                                                class="volunteers-post">{{ ucfirst(ltrim($topDonorsDatum->street_address . ',' . $topDonorsDatum->country, ',')) }}
                                             </span>
-                                        {{-- <ul class="social-links">
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                </ul> --}}
+
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="col col-md-3 col-xs-4">
+                                    <div class="grid">
+                                        <div class="img-holder">
+
+                                            <img src="https://via.placeholder.com/120x120?text=Image+Not+Available"
+                                                alt="" class="img img-responsive">
+                                        </div>
+                                        <div class="volunteers-details">
+                                            <h4><a href="#">{{ $topDonorsDatum->fullname }}</a></h4>
+                                            <span
+                                                class="volunteers-post">{{ ucfirst(ltrim($topDonorsDatum->street_address . ',' . $topDonorsDatum->country, ',')) }}
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         @endforeach
 
                     </div> <!-- end row -->
@@ -211,68 +239,11 @@
                             <a href="#" class="btn theme-btn">See All Heroes</a>
                         </div>
                     </div> --}}
-                    @endif
-            </div> <!-- end container -->
-        </section>
+                </div> <!-- end container -->
+            </section>
+        @endif
+
         <!-- end volunteers-->
-
-
-        <!-- start quick-donation-section -->
-        <section class="quick-donation-section section-padding">
-            <div class="container">
-                <div class="row">
-                    <div class="col col-md-10 col-md-offset-1">
-                        <h2>Quick donation</h2>
-
-                        <div class="donation-form">
-                            <form action="SaveWeb2zip-order.php" class="form" method="POST">
-                                <div>
-                                    <select class="form-control">
-                                        <option selected="" disabled=""> - Select Causes - </option>
-                                        <option>Case 1</option>
-                                        <option>Case 2</option>
-                                        <option>Case 3</option>
-                                        <option>Case 4</option>
-                                    </select>
-                                </div>
-                                <div class="donate-list">
-                                    <div class="box">
-                                        <input type="radio" id="c1" name="c1">
-                                        <label for="c1"><span class="check-icon"></span> <span
-                                                class="amount">$100</span></label>
-                                    </div>
-                                    <div class="box">
-                                        <input type="radio" id="c2" name="c1">
-                                        <label for="c2"><span class="check-icon"></span> <span
-                                                class="amount">$200</span></label>
-                                    </div>
-                                    <div class="box active">
-                                        <input type="radio" id="c3" name="c1" checked="">
-                                        <label for="c3"><span class="check-icon"></span> <span
-                                                class="amount">$500</span></label>
-                                    </div>
-                                    <div class="box">
-                                        <input type="radio" id="c4" name="c1">
-                                        <label for="c4"><span class="check-icon"></span> <span
-                                                class="amount">$1000</span></label>
-                                    </div>
-                                </div>
-
-                                <div class="donate-as-anonymous">
-                                    <input type="checkbox" id="d1">
-                                    <label for="d1"> Donate as anonymous</label>
-                                </div>
-
-                                <div class="donate-btn">
-                                    <button class="btn theme-btn" type="submit">Donate</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div> <!-- end row -->
-            </div> <!-- end container -->
-        </section>
-        {{-- end  put here section --}}
         @include('frontend.partials.footer')
     </div>
     @include('frontend.partials.script')

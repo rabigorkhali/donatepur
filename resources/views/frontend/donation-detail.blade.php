@@ -1,6 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+@section('header')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.0/dist/sweetalert2.min.js"></script>
+@endsection
 @include('frontend.partials.header')
+
+<style>
+    /* Custom styles for the form */
+    .form-container {
+        background-color: #f9f9f9;
+        padding: 20px;
+        margin-top: 50px;
+        border-radius: 4px;
+    }
+
+    .form-container h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+
+    .form-container label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    .form-container input[type=text],
+    .form-container input[type=email],
+    .form-container input[type=number],
+    .form-container textarea,
+    .form-container select {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+
+    .form-container input[type=file] {
+        margin-top: 8px;
+    }
+
+    .form-container textarea {
+        height: 120px;
+        resize: vertical;
+    }
+
+    .form-container select {
+        height: 40px;
+    }
+
+    .form-container input[type=submit] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        float: right;
+    }
+
+    .form-container input[type=submit]:hover {
+        background-color: #45a049;
+    }
+</style>
 
 <body class="cause-single-page">
     <div class="page-wrapper">
@@ -15,9 +82,10 @@
             <div class="breadcrumb-wrapper">
                 <div class="container">
                     <ol class="breadcrumb">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="causes.html">Causes</a></li>
-                        <li>{{$campaignDetails->title??''}}</li>
+                        <li><a href="{{ url('/') }}">Home</a></li>
+                        <li><a href="{{ url('/') }}">Causes</a></li>
+                        <li>{{ $campaignDetails->title ?? '' }}</li>
+
                     </ol>
                 </div>
             </div>
@@ -32,19 +100,23 @@
                     <div class="col col-md-9">
                         <div class="causes-single">
                             <div class="img-holder">
-                                <img   src="{{ asset('uploads') . '/' . $campaignDetails->cover_image }}" alt class="img img-responsive">
+                                <img src="{{ asset('uploads') . '/' . $campaignDetails->cover_image }}" alt
+                                    class="img img-responsive">
                             </div>
                             <div class="causes-list-box">
                                 <div class="title">
-                                    <h3>{{$campaignDetails->title}}</h3>
+                                    <h3>{{ $campaignDetails->title }}</h3>
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-s1" data-percent="{{calculatePercentageMaxTo100($campaignDetails->total_collection,$campaignDetails->goal_amount)}}"></div>
+                                        <div class="progress-bar progress-bar-s1"
+                                            data-percent="{{ calculatePercentageMaxTo100($campaignDetails->total_collection, $campaignDetails->goal_amount) }}">
+                                        </div>
                                     </div>
-                                    <h4>Raised: <span>Rs.{{$campaignDetails->total_collection??0}}</span> / Rs. {{$campaignDetails->goal_amount??0}}</h4>
+                                    <h4>Raised: <span>Rs.{{ $campaignDetails->total_collection ?? 0 }}</span> / Rs.
+                                        {{ $campaignDetails->goal_amount ?? 0 }}</h4>
                                 </div>
                                 <div class="inner-details">
                                     <p>
-                                        {{$campaignDetails->description}}
+                                        {{ $campaignDetails->description }}
                                     </p>
                                     {{-- <ul>
                                         <h2>Updates</h2>
@@ -53,34 +125,40 @@
                                         <li><i class="fa fa-check"></i> Con se quuntur magni dolores</li>
                                     </ul> --}}
 
-                                    <div class="donation-form quick-donation-section">
-                                        <form action="#" class="form">
-                                            <div class="donate-list">
-                                                <div class="box">
-                                                    <input type="radio" id="c1" name="c1">
-                                                    <label for="c1"><span class="check-icon"></span> <span
-                                                            class="amount">Rs.100</span></label>
-                                                </div>
-                                                <div class="box">
-                                                    <input type="radio" id="c2" name="c1">
-                                                    <label for="c2"><span class="check-icon"></span> <span
-                                                            class="amount">Rs.1000</span></label>
-                                                </div>
-                                                <div class="box active">
-                                                    <input type="radio" id="c3" name="c1" checked>
-                                                    <label for="c3"><span class="check-icon"></span> <span
-                                                            class="amount">Rs.5000</span></label>
-                                                </div>
-                                            </div>
+                                    <div class="form-container">
+                                        <h2>Charity Form</h2>
+                                        <form action="{{ route('getDonation') }}" method="post"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="campaign_id"
+                                                value="{{ $campaignDetails->id }}">
+                                            <label for="fullname">Name:</label>
+                                            <input type="text" id="fullname" name="fullname" required>
 
-                                            <div class="enter-amount">
-                                                <input type="text" placeholder="-- Enter Amount --">
-                                            </div>
-                                            <div class="donate-btn">
-                                                <button class="btn theme-btn" type="submit">Donate</button>
-                                            </div>
+                                            <label for="address">Address:</label>
+                                            <input type="text" id="address" name="address" required>
+
+                                            <label for="email">Email:</label>
+                                            <input type="email" id="email" name="email" required>
+
+                                            <label for="amount">Amount (Rs):</label>
+                                            <input type="number" id="amount"  min='0' name="amount" required>
+
+                                            <label for="payment_receipt">Payment Receipt (Rs):</label>
+                                            <input type="file" id="payment_receipt" name="payment_receipt"
+                                                accept="image/*">
+                                                <div style="display:none;">
+                                                    <label for="honeypot">Email</label>
+                                                    <input type="honeypot" name="honeypot" id="honeypot">
+                                                </div>
+                                            <label for="description">Description:</label>
+                                            <textarea id="description" name="description" rows="4" required maxlength="500"></textarea>
+
+
+                                            <input type="submit" value="Submit">
                                         </form>
-                                    </div> <!-- end donation-form -->
+                                    </div>
+
                                 </div> <!-- end inner-details -->
                             </div> <!-- end causes-list-box -->
                         </div> <!-- end causes-single -->
@@ -89,46 +167,19 @@
 
                     <div class="col col-md-3 sidebar-wrapper">
                         <div class="sidebar">
-                            <div class="widget search-widget">
-                                <form action="#" class="form">
-                                    <div>
-                                        <input type="text" class="form-control" placeholder="Search here" required>
-                                        <button type="submit" class="btn"><i class="fa fa-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
 
                             <div class="widget recent-post">
                                 <h3>Donors</h3>
-                                <div>
-                                    <h4><a href="#">Education program in Uganda</a></h4>
-                                    <a href="#" class="date">November 26, 2016</a> <br>
-                                    <i class="fa fa-map-marker"></i> 221B, Baker Street
-                                </div>
-                                <div>
-                                    <h4><a href="#">Education program in Uganda</a></h4>
-                                    <a href="#" class="date">November 26, 2016</a> <br>
-                                    <i class="fa fa-map-marker"></i> 221B, Baker Street
-                                </div>
-                                <div>
-                                    <h4><a href="#">Education program in Uganda</a></h4>
-                                    <a href="#" class="date">November 26, 2016</a> <br>
-                                    <i class="fa fa-map-marker"></i> 221B, Baker Street
-                                </div>
-                            </div>
+                                @foreach ($topDonors as $datumDonors)
+                                    <div>
+                                        <h4><a href="#">{{ $datumDonors->fullname }}</a></h4>
+                                        <a href="#"
+                                            class="date">{{ $datumDonors->created_at->format('F j, Y') }}
+                                        </a> <br>
+                                        <i class="fa fa-map-marker"></i> {{ $datumDonors->address }}
+                                    </div>
+                                @endforeach
 
-                            <div class="widget recent-causes">
-                                <h3>Recent causes</h3>
-                                <div>
-                                    <h4><a href="#">Education program in Uganda</a></h4>
-                                    <a href="#" class="date">November 26, 2016</a> <br>
-                                    <i class="fa fa-map-marker"></i> 221B, Baker Street
-                                </div>
-                                <div>
-                                    <h4><a href="#">Education program in Uganda</a></h4>
-                                    <a href="#" class="date">November 26, 2016</a> <br>
-                                    <i class="fa fa-map-marker"></i> 221B, Baker Street
-                                </div>
                             </div>
                         </div> <!-- end sidebar -->
                     </div> <!-- end col -->
@@ -137,123 +188,20 @@
         </section>
         <!-- end causes-single-wrapper -->
 
-
-        <!-- start causes-s2 -->
-        <section class="causes-s2 related-causes">
-            <div class="container">
-                <div class="row section-title">
-                    <div class="col col-xs-12">
-                        <h2>Related Causes</h2>
-                    </div>
-                </div> <!-- end section-title -->
-
-                <div class="row causes-s2-grids">
-                    <div class="col col-lg-4 col-xs-6">
-                        <div class="grid">
-                            <div class="img-goal-raised">
-                                <div class="img-holder">
-                                    <img src="images/VFTLLhieVQUJ.jpg" alt class="img img-responsive">
-                                </div>
-                                <div class="goal-raised-meter">
-                                    <div class="hrvr-center">
-                                        <div class="meter-2" data-value="0.9">
-                                            <span></span>
-                                        </div>
-                                        <div class="goal-raised">
-                                            <div>
-                                                <h4>Raised</h4>
-                                                <span>$41,089</span>
-                                            </div>
-                                            <div>
-                                                <h4>Goal</h4>
-                                                <span>$50,000</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="causes-info">
-                                <h3><a href="#">Paint the Boston orphanage</a></h3>
-                                <span class="remaining-days"><i
-                                        class="fi flaticon-calendar-page-with-circular-clock-symbol"></i> 3 days
-                                    remaining</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col col-lg-4 col-xs-6">
-                        <div class="grid">
-                            <div class="img-goal-raised">
-                                <div class="img-holder">
-                                    <img src="images/ozEdN15k8RGW.jpg" alt class="img img-responsive">
-                                </div>
-                                <div class="goal-raised-meter">
-                                    <div class="hrvr-center">
-                                        <div class="meter-2" data-value="0.7">
-                                            <span></span>
-                                        </div>
-                                        <div class="goal-raised">
-                                            <div>
-                                                <h4>Raised</h4>
-                                                <span>$41,089</span>
-                                            </div>
-                                            <div>
-                                                <h4>Goal</h4>
-                                                <span>$50,000</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="causes-info">
-                                <h3><a href="#">Save water for thirsty people</a></h3>
-                                <span class="remaining-days"><i
-                                        class="fi flaticon-calendar-page-with-circular-clock-symbol"></i> 3 days
-                                    remaining</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col col-lg-4 col-xs-6">
-                        <div class="grid">
-                            <div class="img-goal-raised">
-                                <div class="img-holder">
-                                    <img src="images/boyQcykoi2zT.jpg" alt class="img img-responsive">
-                                </div>
-                                <div class="goal-raised-meter">
-                                    <div class="hrvr-center">
-                                        <div class="meter-2" data-value="0.5">
-                                            <span></span>
-                                        </div>
-                                        <div class="goal-raised">
-                                            <div>
-                                                <h4>Raised</h4>
-                                                <span>$41,089</span>
-                                            </div>
-                                            <div>
-                                                <h4>Goal</h4>
-                                                <span>$50,000</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="causes-info">
-                                <h3><a href="#">Flower sale for charity</a></h3>
-                                <span class="remaining-days"><i
-                                        class="fi flaticon-calendar-page-with-circular-clock-symbol"></i> 3 days
-                                    remaining</span>
-                            </div>
-                        </div>
-                    </div>
-                </div> <!-- end row -->
-            </div> <!-- end container -->
-        </section>
-        <!-- end causes-s2 -->
-
         @include('frontend.partials.footer')
     </div>
     @include('frontend.partials.script')
+    <script>
+        let success = "{{ session('successDonation') }}";
+        if (success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Your offline donation has been received. The world need more people like you. Thanks for joining our mission.',
+                confirmButtonText: 'OK'
+            });
+        }
+    </script>
 </body>
 
 </html>

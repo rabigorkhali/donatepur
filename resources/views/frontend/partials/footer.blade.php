@@ -1,10 +1,11 @@
-<footer class="site-footer">
-    <div class="container">
+<footer class="site-footer" style="padding: 10px 0 10px">
+   <center><span class="text-white" style="text-align: center; color:white;"> Copyright © 2023 Donatepur. All rights reserved.</span></center>
+    {{-- <div class="container">
         <div class="row">
             <div class="col col-md-3 col-sm-6">
                 <div class="widget about-widget">
                     <div class="footer-logo">
-                        <img height="60" src="{{asset('uploads').'/'.setting('site.logo')}}" alt="" class="img img-responsive">
+                        <img height="75" src="{{asset('uploads').'/'.setting('site.logo')}}" alt="" class="img img-responsive">
                     </div>
                     <div class="company-info">
                         <p>{{setting('site.footer_short_description')}}</p>
@@ -60,5 +61,6 @@
                 </div>
             </div>
         </div> <!-- end row -->
-    </div> <!-- end container -->
+    </div> <!-- end container --> --}}
 </footer>
+
