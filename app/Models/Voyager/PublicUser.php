@@ -10,19 +10,23 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use TCG\Voyager\Contracts\User as UserContract;
 use TCG\Voyager\Tests\Database\Factories\UserFactory;
 use TCG\Voyager\Traits\VoyagerUser;
+use Illuminate\Notifications\Notifiable;
 
 // class PublicUser extends Authenticatable implements UserContract
 class PublicUser  extends Authenticatable
 {
-      use  HasFactory;
-     protected $table = 'public_users';
+    use Notifiable;
+
+    protected $guard = 'admin';
+
+    protected $table = 'public_users';
 
 
      protected $guarded = ['_token', 'id'];
     // protected $guarded = [];
 
     // public $additional_attributes = ['locale'];
-     protected $fillable = ['username','full_name', 'mobile_number','email'];
+    //  protected $fillable = ['username','full_name', 'mobile_number','email'];
 
     // public function getAvatarAttribute($value)
     // {

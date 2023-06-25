@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Voyager\SystemErrorLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Throwable;
 
 class PasswordController extends Controller
 {
@@ -16,28 +19,30 @@ class PasswordController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        $validated = $request->validateWithBag(
-             [
-            'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
-        ]);
+        try {
+            if (!Hash::check($request->current_password, $request->user()->password)) {
+                Session::flash('error', 'Error! Your  current password is incorrect.');
+                return back()->with('status', 'password-updated');
+            }
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|min:8|confirmed',
+                'password_confirmation' => 'required|min:8',
+            ]);
 
-        $request->user()->update([
-            'password' => Hash::make($validated['password']),
-        ]);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
 
-        return back()->with('status', 'password-updated');
-
-/* 
-        $validated = $request->validate( [
-            'password' => ['required', Password::defaults(), 'confirmed'],
-        ]);
-
-        $request->user()->update([
-            'password' => Hash::make($request->get('password')),
-        ]);
-        Session::flash('success', 'Success! Your password has been changed.');
-        return back()->with('status', 'password-updated'); */
+            $request->user()->update([
+                'password' => Hash::make($request->get('password')),
+            ]);
+            Session::flash('success', 'Success! Your password has been changed.');
+            return back()->with('status', 'password-updated');
+        } catch (Throwable $th) {
+            SystemErrorLog::insert(['message'=>$th->getMessage()]);
+            Session::flash('error', 'Error! Something went wrong with your previous request.');
+            return redirect()->back();
+        }
     }
 
     public function changePassword(Request $request)

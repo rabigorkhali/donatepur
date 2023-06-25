@@ -107,7 +107,7 @@
                                     <h3><a
                                             href="{{ url('campaigns/' . $topCausesDatum->id) }}">{{ $topCausesDatum->title }}</a>
                                     </h3>
-                                    {{-- @if ($topCausesDatum->end_date > date('Y-m-d'))
+                                    @if ($topCausesDatum->end_date > date('Y-m-d'))
                                         <span class="remaining-days"><i
                                                 class="fi flaticon-calendar-page-with-circular-clock-symbol"></i>
                                             {{ getDaysDiffByToday($topCausesDatum->end_date) }} days remaining</span>
@@ -115,10 +115,8 @@
                                         <span class="remaining-days"><i
                                                 class="fi flaticon-calendar-page-with-circular-clock-symbol"></i>
                                             Completed</span>
-                                    @endif --}}
-                                    <span class="remaining-days"><i
-                                        class="fi flaticon-calendar-page-with-circular-clock-symbol"></i>
-                                    Completed</span>
+                                    @endif 
+
                                 </div>
                                 <div class="causes-details">
                                     <p>{{ substr($topCausesDatum->description, 0, 150) }}....<a
