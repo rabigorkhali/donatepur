@@ -10,6 +10,7 @@
 
     {{-- Input --}}
     {{-- {{$attributes}} to take values given in component --}}
+    {{-- {{$attributes['label']}} --}}
     <input type="@if($attributes['type']){{$attributes['type']}}@endif"
         @if ($attributes['required']) required @endif id="{{ $id }}" name="{{ $name }}"
         value="{{ $getOldValue($errorKey, $attributes->get('value')) }}"
