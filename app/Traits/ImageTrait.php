@@ -29,6 +29,7 @@ trait ImageTrait
         $fileThumbnail = $fileName.'-medium.' . Request::file($input)->getClientOriginalExtension(); ;
         $fileName= $fileName.'.' . Request::file($input)->getClientOriginalExtension();
         $image = Image::make(Request::file($input));
+        $image->orientate();
         if ($resize) {
             $image = $image->resize($width, $height, function ($constraint) {
                 $constraint->aspectRatio();
