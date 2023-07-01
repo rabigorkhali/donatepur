@@ -24,6 +24,11 @@ for env set up
 make sure :cache clear
 
 
+## Set up
+1. copy email templates     php artisan vendor:publish --tag=laravel-mail
+
+
+
 
 ## License
 

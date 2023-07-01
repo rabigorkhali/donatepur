@@ -11,7 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', 'throttle:60,1'])->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
@@ -28,15 +28,17 @@ Route::middleware('guest')->group(function () {
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
         ->name('password.email');
 
+    Route::get('verify-email/{token}/{email}', [PasswordResetLinkController::class, 'verifyEmail'])
+        ->name('public.user.verify.email');
     // Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
     //     ->name('password.reset');
     // Route::post('reset-password', [NewPasswordController::class, 'store'])
     //     ->name('password.store');
 
     Route::post('reset-password', [PasswordResetLinkController::class, 'storeResetForm'])
-    ->name('password.store');
+        ->name('password.store');
     Route::get('reset-password/{token}', [PasswordResetLinkController::class, 'createResetForm'])
-    ->name('password.reset');
+        ->name('password.reset');
 });
 
 Route::group(['prefix' => 'profile',], function () {

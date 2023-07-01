@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Mail\NewUserRegistrationEmail;
+use App\Models\Voyager\PublicUser;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use DB;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -26,10 +31,34 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
-        $request->authenticate();
+        $publicUser = PublicUser::where('email', trim($request->email))->first();
 
+        $data['full_name'] = $publicUser->full_name;
+        $data['email'] = $publicUser->email;
+        $data['email_verify_token'] = $publicUser->email_verify_token;
+        
+        $request->authenticate();
+        if ($publicUser->status !== 'active') {
+            Auth::guard('frontend_users')->logout();
+
+            $request->session()->invalidate();
+    
+            $request->session()->regenerateToken();
+            Session::flash('error', 'Your account is disabled.');
+            return redirect()->route('login');
+        }
+        if ($publicUser->is_email_verified == 0) {
+            Auth::guard('frontend_users')->logout();
+
+            $request->session()->invalidate();
+    
+            $request->session()->regenerateToken();
+            Mail::to($publicUser->email)->send(new NewUserRegistrationEmail($data));
+            Session::flash('error', 'Your account is not verified. Check your email for verification link.');
+            return redirect()->route('login');
+        }
         $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);

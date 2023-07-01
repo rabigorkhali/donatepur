@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'Donatepur',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -64,7 +64,7 @@ return [
     */
 
     'logo' => '',
-    'logo_img' => asset('static-images/donatepur_logo.png'),
+    'logo_img' => env('APP_URL').'/static-images/donatepur_logo.png',
     'logo_img_class' => 'brand-image ',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xl',
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => true,
         'img' => [
-            'path' => asset('static-images/donatepur_logo.png'),
+            'path' => env('APP_URL').'/static-images/donatepur_logo.png',
             'alt' => 'Donatepur Logo',
             'class' => '',
             'width' => '200',
@@ -109,7 +109,7 @@ return [
     'preloader' => [
         'enabled' => true,
         'img' => [
-            'path' => asset('static-images/donatepur_logo.png'),
+            'path' => env('APP_URL').'/static-images/donatepur_logo.png',
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
@@ -312,8 +312,15 @@ return [
             'can'  => 'manage-blog',
         ],
         [
-            'text'        => 'pages',
-            'url'         => 'pages',
+            'text'        => 'Dashboard',
+            'url'         => 'dashboard',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => 4,
+            'label_color' => 'success',
+        ],
+        [
+            'text'        => 'Campaigns',
+            'url'         => 'campaigns',
             'icon'        => 'far fa-fw fa-file',
             'label'       => 4,
             'label_color' => 'success',

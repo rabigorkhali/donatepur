@@ -95,6 +95,7 @@
             <span class="fas fa-user-plus"></span>
             {{ __('adminlte::adminlte.register') }}
         </button>
+        
 
     </form>
 @stop

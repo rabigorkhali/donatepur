@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewUserRegistrationEmail;
 use App\Models\User;
 use App\Models\Voyager\PublicUser;
 use App\Models\Voyager\SystemErrorLog;
@@ -13,10 +14,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Throwable;
+use DB;
+use Illuminate\Support\Str;
 
 class RegisteredUserController extends Controller
 {
@@ -46,19 +50,26 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', 'max:100', 'min:6'],
         ]);
         try {
-            $data=[];
-            $data['full_name']=$request->full_name;
-            $data['email']=$request->email;
-            $data['password']=Hash::make($request->password);
+            DB::begintransaction();
+            $data = [];
+            $data['full_name'] = $request->full_name;
+            $data['email'] = $request->email;
+            $token = Str::uuid();
+            $data['email_verify_token']=$token;
+            $data['password'] = Hash::make($request->password);
             if ($request->file('profile_picture')) {
                 $data['profile_picture'] = $this->dirforDb . $this->uploadImage($this->dir, 'profile_picture', true, 300, null);
             }
             $user = PublicUser::create($data);
-
-            // event(new Registered($user));
-            Auth::guard('frontend_users')->login($user, true);
-            return redirect(RouteServiceProvider::HOME);
+            Mail::to($request->only('email'))->send(new NewUserRegistrationEmail($data));
+            DB::commit();
+            Session::flash('success', 'Account created successfullyy. Please check your email for verification before login.');
+            return redirect()->route('login');
+            /* Auth::guard('frontend_users')->login($user, true);
+            return redirect(RouteServiceProvider::HOME); */
         } catch (Throwable $th) {
+            DB::rollback();
+            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             Session::flash('error', 'Error! Something went wrong with your previous request.');
             return redirect()->back();

@@ -44,6 +44,10 @@
             <span class="fas fa-share-square"></span>
             {{ __('adminlte::adminlte.send_password_reset_link') }}
         </button>
+        <a type="submit" class="btn btn-block  btn-info" href="{{route('login')}}">
+            <span class="fas fa-sign-in-alt"></span>
+            Login
+        </a>
 
     </form>
 

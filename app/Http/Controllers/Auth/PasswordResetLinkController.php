@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PublicUserPasswordResetMail;
+use App\Models\PublicUserPasswordReset;
+use App\Models\Voyager\PublicUser;
 use App\Models\Voyager\SystemErrorLog;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
@@ -15,7 +18,10 @@ use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Str;
+use DB;
 use Throwable;
+use Illuminate\Support\Facades\Mail;
+
 
 class PasswordResetLinkController extends Controller
 {
@@ -32,19 +38,46 @@ class PasswordResetLinkController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function verifyEmail($token, $email)
+    {
+        try {
+            $tokenExists = PublicUser::where('email', $email)->first();
+            if ($tokenExists->is_email_verified == 1) {
+                Session::flash('error', 'This email has been already verified.');
+                return redirect()->route('login');
+            }
+            if ($tokenExists->email_verify_token !== $token) {
+                Session::flash('error', 'Invalid token. Try again.');
+                return redirect()->route('login');
+            }
+            $data['email_verified_at']=date('Y-m-d H:i:s');
+            $data['is_email_verified']=1;
+            PublicUser::where('email', $email)->update($data);
+            Session::flash('success', 'Your account has been verified. Please login.');
+            return redirect()->route('login');
+        } catch (Throwable $th) {
+            DB::rollback();
+            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            return redirect()->route('frontend.error.page');
+        }
+    }
+
+    public function store(Request $request)
     {
         $request->validate([
             'email' => ['required', 'email'],
         ]);
-        $status = Password::broker('frontend_users')->sendResetLink(
-            $request->only('email')
-        );
-
-        return $status == Password::RESET_LINK_SENT
-            ? back()->with('status', __($status))
-            : back()->withInput($request->only('email'))
-            ->withErrors(['email' => __($status)]);
+        $token = Str::uuid();
+        $email = $request->get('email');
+        $checkPublicUserPassword = PublicUserPasswordReset::where('email', $email)->wheredate('created_at', date('Y-m-d'))->count();
+        if ($checkPublicUserPassword > 0) {
+            Session::flash('error', 'You have requested more than 5 times. Please try again tomorrow.');
+            return redirect()->route('login');
+        }
+        PublicUserPasswordReset::create(['token' => $token, 'email' => $request->get('email')]);
+        Mail::to($request->only('email'))->send(new PublicUserPasswordResetMail($token));
+        Session::flash('success', 'Password reset link sent successfully.');
+        return redirect()->route('login');
     }
 
     public function createResetForm(Request $request)
@@ -57,35 +90,36 @@ class PasswordResetLinkController extends Controller
     public function storeResetForm(Request $request)
     {
 
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => ['required', 'confirmed', 'min:6'],
-        ]);
-            // Here we will attempt to reset the user's password. If it is successful we
-            // will update the password on an actual user model and persist it to the
-            // database. Otherwise we will parse the error and return the response.
-            $status = Password::broker('frontend_users')->reset(
-                $request->only('email', 'password', 'password_confirmation', 'token'),
-                function ($user) use ($request) {
-                    $user->forceFill([
-                        'password' => Hash::make($request->password),
-                        'remember_token' => Str::random(60),
-                    ])->save();
-                    event(new PasswordReset($user));
-                }
-            );
+        try {
+            $request->validate([
+                'token' => 'required',
+                'email' => 'required|email',
+                'password' => ['required', 'confirmed', 'min:6'],
+            ]);
+            $token = $request->get('token');
+            $password = $request->get('password');
+            $email = $request->get('email');
 
-            // If the password was successfully reset, we will redirect the user back to
-            // the application's home authenticated view. If there is an error we can
-            // redirect them back to where they came from with their error message.
-            if ($status == Password::PASSWORD_RESET) {
-                Session::flash('success', 'Password changed successfully.');
+            DB::begintransaction();
+            $checkPublicUserPassword = PublicUserPasswordReset::where('email', $email)->wheredate('created_at', date('Y-m-d'))->count();
+            if ($checkPublicUserPassword > 6) {
+                Session::flash('error', 'You have requested more than 5 times. Please try again tomorrow.');
                 return redirect()->route('login');
             }
-
-            throw ValidationException::withMessages([
-                'email' => [trans($status)],
-            ]);
+            $checkPublicUserPassword = PublicUserPasswordReset::where('token', $token)->wheredate('created_at', date('Y-m-d'))->count();
+            if (!$checkPublicUserPassword) {
+                Session::flash('error', 'Invalid token. Please try again.');
+                return redirect()->route('login');
+            }
+            PublicUserPasswordReset::where('email', $email)->delete();
+            PublicUser::where('email', $email)->update(['password' => Hash::make($password)]);
+            Session::flash('success', 'Password changed successfully.');
+            DB::commit();
+            return redirect()->route('login');
+        } catch (Throwable $th) {
+            DB::rollback();
+            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            return redirect()->route('frontend.error.page');
+        }
     }
 }
