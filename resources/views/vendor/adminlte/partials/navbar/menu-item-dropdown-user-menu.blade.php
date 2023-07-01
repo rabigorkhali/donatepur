@@ -77,6 +77,7 @@
                 @if(config('adminlte.logout_method'))
                     {{ method_field(config('adminlte.logout_method')) }}
                 @endif
+                @csrf
                 {{ csrf_field() }}
             </form>
         </li>

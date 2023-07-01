@@ -11,6 +11,7 @@ use TCG\Voyager\Contracts\User as UserContract;
 use TCG\Voyager\Tests\Database\Factories\UserFactory;
 use TCG\Voyager\Traits\VoyagerUser;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 // class PublicUser extends Authenticatable implements UserContract
 class PublicUser  extends Authenticatable
@@ -23,6 +24,21 @@ class PublicUser  extends Authenticatable
 
 
      protected $guarded = ['_token', 'id'];
+
+     public function adminlte_image()
+     {
+         return  asset('uploads/' . giveImageName(Auth::guard('frontend_users')->user()->profile_picture, 'small')) ;
+     }
+ 
+     public function adminlte_desc()
+     {
+         return Auth::guard('frontend_users')->user()->full_name;
+     }
+ 
+     public function adminlte_profile_url()
+     {
+         return 'profile';
+     }
     // protected $guarded = [];
 
     // public $additional_attributes = ['locale'];

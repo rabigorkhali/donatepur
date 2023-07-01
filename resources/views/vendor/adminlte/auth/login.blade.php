@@ -86,7 +86,7 @@
     {{-- Password reset link --}}
     @if ($password_reset_url)
         <p class="my-0">
-            <a href="{{ $password_reset_url }}">
+            <a href="{{route('password.request')}}">
                 {{ __('adminlte::adminlte.i_forgot_my_password') }}
             </a>
         </p>
@@ -100,4 +100,14 @@
             </a>
         </p>
     @endif
+   
 @stop
+
+@section('scripts')
+{{-- <script>
+Swal.fire(
+  'Good job!',
+  'You clicked the button!',
+  'success'
+)</script> --}}
+@endsection

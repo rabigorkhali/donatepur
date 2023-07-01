@@ -67,7 +67,6 @@ class HomeController extends FrontendBaseController
             $data['topDonors'] = $this->donation->with('publicUser')->wherein('payment_status', ['successful'])->where('is_verified', 1)->orderby('amount')->get();
             return $this->renderView($this->viewFolder(), $data);
         } catch (Throwable $th) {
-            dd($th);
             return redirect('/');
         }
     }

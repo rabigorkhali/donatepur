@@ -6,6 +6,7 @@
     @else
         @include('adminlte::partials.common.brand-logo-xs')
     @endif
+    <br>
 
     {{-- Sidebar menu --}}
     <div class="sidebar">
@@ -20,6 +21,7 @@
                 @endif>
                 {{-- Configured sidebar links --}}
                 @each('adminlte::partials.sidebar.menu-item', $adminlte->menu('sidebar'), 'item')
+                
             </ul>
         </nav>
     </div>

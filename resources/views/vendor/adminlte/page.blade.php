@@ -25,11 +25,15 @@
         @else
             @include('adminlte::partials.navbar.navbar')
         @endif
+        {{-- @include('adminlte::partials.navbar.menu-item-logout-link') --}}
+        
+        
 
         {{-- Left Main Sidebar --}}
         @if (!$layoutHelper->isLayoutTopnavEnabled())
             @include('adminlte::partials.sidebar.left-sidebar')
         @endif
+        
         @empty($iFrameEnabled)
             @include('adminlte::partials.cwrapper.cwrapper-default')
         @else

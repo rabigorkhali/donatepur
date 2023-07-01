@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Voyager\PublicUser;
+use App\Models\Voyager\SystemErrorLog;
 use App\Traits\ImageTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,11 +12,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Throwable;
 
 class ProfileController extends Controller
 {
     use ImageTrait;
     public $dir = "/uploads/public-users";
+    public $mainDirectory = "/uploads";
     public $dirforDb = "/public-users/";
 
     /**
@@ -34,10 +37,10 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $userDetails = PublicUser::findorfail(Auth::guard('frontend_users')->user()->id);
-        $data = $request->except('_token', 'password', 'user','_method');
+        $data = $request->except('_token', 'password', 'user', '_method');
         if ($request->file('profile_picture')) {
-            if ($userDetails->profile_picture) $this->removeImage($this->dir, $userDetails->profile_picture);
-            $data['profile_picture'] = $this->dirforDb.$this->uploadImage($this->dir, 'profile_picture', true, 1280, null);
+            if ($userDetails->profile_picture) $this->removeImage($this->mainDirectory, $userDetails->profile_picture);
+            $data['profile_picture'] = $this->dirforDb . $this->uploadImage($this->dir, 'profile_picture', true, 1280, null);
         }
         PublicUser::where('id', $userDetails->id)->update($data);
         $userDetails->save($data);
@@ -64,5 +67,20 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+
+    public function logout(Request $request): RedirectResponse
+    {
+        try {
+            Auth::guard('frontend_users')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return Redirect::to('/');
+        } catch (Throwable $th) {
+            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            Session::flash('error', 'Error! Something went wrong with your previous request.');
+            return redirect()->back();
+        }
     }
 }
