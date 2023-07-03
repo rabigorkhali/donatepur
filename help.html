@@ -5,4 +5,26 @@
     return redirect()->route('frontend.error.page');
 </p>
 
+<!-- text editor -->
+<div class="col-md-12">
+    @php $formInputName='description'; @endphp
+    <x-adminlte-text-editor rows="20" label-class="" :row=30 name="{{ $formInputName }}" value="">
+        {{ old($formInputName, $campaignDetail->$formInputName) }}
+        </x-adminlte-textarea>
+        @if ($errors->has($formInputName))
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $errors->first($formInputName) }}</strong>
+            </span>
+    @endif
+
+    @section('js')
+    <script>
+        $('#description').summernote({
+            height: 400
+        });
+    </script>
+    @stop
+</div>
+<!-- text editor -->
+
 </html>

@@ -70,7 +70,7 @@ class PasswordResetLinkController extends Controller
         $token = Str::uuid();
         $email = $request->get('email');
         $checkPublicUserPassword = PublicUserPasswordReset::where('email', $email)->wheredate('created_at', date('Y-m-d'))->count();
-        if ($checkPublicUserPassword > 0) {
+        if ($checkPublicUserPassword > 6) {
             Session::flash('error', 'You have requested more than 5 times. Please try again tomorrow.');
             return redirect()->route('login');
         }

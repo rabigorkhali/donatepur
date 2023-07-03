@@ -542,7 +542,7 @@ More detail and specific examples can be found in the included HTML file.
                 layer.closePath();
                 layer.restore();
 
-                // TODO: add extra shadow inside hole (with a mask) if the pie is tilted.
+                // TODO: add extra shadow inside hole (with a mask) if the pie is titled.
             }
         }
 

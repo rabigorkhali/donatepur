@@ -47,7 +47,7 @@ class PasswordController extends Controller
 
     public function changePassword(Request $request)
     {
-        return view('profile.change-password', [
+        return view('frontend.my.profile.change-password', [
             'user' => $request->user(),
         ]);
     }

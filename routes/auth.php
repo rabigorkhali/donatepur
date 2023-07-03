@@ -41,7 +41,7 @@ Route::middleware(['guest', 'throttle:60,1'])->group(function () {
         ->name('password.reset');
 });
 
-Route::group(['prefix' => 'profile',], function () {
+Route::group(['prefix' => 'my/profile',], function () {
     Route::middleware('frontend_users')->group(function () {
         Route::get('verify-email', EmailVerificationPromptController::class)
             ->name('verification.notice');

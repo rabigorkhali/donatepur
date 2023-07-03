@@ -1,14 +1,21 @@
 {{-- Setup the input group component structure --}}
-
+<style>
+    .required-field::after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="{{ $makeFormGroupClass() }}">
 
     {{-- Input label --}}
     @isset($label)
-        <label for="{{ $id }}" @isset($labelClass) class="{{ $labelClass }}" @endisset>
+        <label for="{{ $id }}"
+            class="@isset($labelClass) {{ $labelClass }} @endisset @if ($attributes['required']) required-field @endif ">
             {{ $label }}
         </label>
     @else
-        <label for="{{ $id }}">
+        <label for="{{ $id }}"
+            class="@isset($labelClass) {{ $labelClass }} @endisset @if ($attributes['required']) required-field @endif ">
             {{ ucwords(str_replace('_', ' ', $name)) }}
         </label>
     @endisset

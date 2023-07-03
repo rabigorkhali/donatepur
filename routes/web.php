@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,20 +16,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['frontend_users', 'verified'])->name('dashboard');
 
-Route::middleware('frontend_users')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::post('/profile/logout', [ProfileController::class, 'logout'])->name('profile.logout');
-});
 
 require __DIR__ . '/auth.php';
-include('frontend.php');
-include('voyager.php');
+include('frontend.php'); //public domains
+include('voyager.php'); //voyager
+include('profile.php'); // users admin
 
 Route::get('/error', function () {
     return view('frontend.errorpage');

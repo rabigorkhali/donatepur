@@ -29,7 +29,9 @@ make sure :cache clear
 
 
 
-
+<!-- plugins for frontend users admin panel-->
+php artisan adminlte:plugins install --plugin=datatables --plugin=datatablesPlugins
+<!-- plugins for frontend users admin panel-->
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
