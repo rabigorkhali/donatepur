@@ -9,7 +9,10 @@
 @section('input_group_item')
 
     {{-- Summernote Textarea --}}
-    <textarea id="{{ $id }}" name="{{ $name }}"
+    <textarea 
+    @isset($attributes['maxlength']) maxlength="{{$attributes['maxlength']}}" @endisset
+    @isset($attributes['minlength']) minlength="{{$attributes['minlength']}}" @endisset
+    id="{{ $id }}" name="{{ $name }}"
         {{ $attributes->merge(['class' => $makeItemClass()]) }}
     >{{ $getOldValue($errorKey, $slot) }}</textarea>
 

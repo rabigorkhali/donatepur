@@ -254,12 +254,12 @@ return [
 
     'use_route_url' => false,
     'dashboard_url' => 'home',
-    'logout_url' => 'profile/logout',
+    'logout_url' => 'my/profile/logout',
     'login_url' => 'login',
     'register_url' => 'register',
     'password_reset_url' => 'reset-password',
     'password_email_url' => 'forgot-password',
-    'profile_url' => false,
+    'profile_url' => 'my/profile',
 
     /*
     |--------------------------------------------------------------------------
@@ -322,7 +322,6 @@ return [
             'text'        => 'Campaigns',
             'url'         => 'my/campaigns',
             'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
             'label_color' => 'success',
         ],
         ['header' => 'account_settings'],

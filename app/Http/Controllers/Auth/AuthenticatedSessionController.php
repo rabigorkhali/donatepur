@@ -35,16 +35,21 @@ class AuthenticatedSessionController extends Controller
     {
         $publicUser = PublicUser::where('email', trim($request->email))->first();
 
+        if (!$publicUser) {
+            Session::flash('error', 'User not found.');
+            return redirect()->route('login');
+        }
+
         $data['full_name'] = $publicUser->full_name;
         $data['email'] = $publicUser->email;
         $data['email_verify_token'] = $publicUser->email_verify_token;
-        
+
         $request->authenticate();
         if ($publicUser->status !== 'active') {
             Auth::guard('frontend_users')->logout();
 
             $request->session()->invalidate();
-    
+
             $request->session()->regenerateToken();
             Session::flash('error', 'Your account is disabled.');
             return redirect()->route('login');
@@ -53,7 +58,7 @@ class AuthenticatedSessionController extends Controller
             Auth::guard('frontend_users')->logout();
 
             $request->session()->invalidate();
-    
+
             $request->session()->regenerateToken();
             Mail::to($publicUser->email)->send(new NewUserRegistrationEmail($data));
             Session::flash('error', 'Your account is not verified. Check your email for verification link.');

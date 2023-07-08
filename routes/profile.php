@@ -17,7 +17,12 @@ Route::prefix('my')->middleware('frontend_users')->group(function () {
 
     /* CAMPAIGNS */
     Route::get('/campaigns', [MyCampaignController::class, 'index'])->name('my.campaigns.list');
-    Route::get('/campaigns/{id}', [MyCampaignController::class, 'edit'])->name('my.campaigns.edit');
+    Route::get('/campaigns/{id}/edit', [MyCampaignController::class, 'edit'])->name('my.campaigns.edit');
+    Route::get('/campaigns/{id}/view', [MyCampaignController::class, 'view'])->name('my.campaigns.view');
     Route::put('/campaigns/{id}', [MyCampaignController::class, 'update'])->name('my.campaigns.update');
+    Route::get('/campaigns/create', [MyCampaignController::class, 'create'])->name('my.campaigns.create');
+    Route::post('/campaigns', [MyCampaignController::class, 'store'])->name('my.campaigns.store');
+    Route::get('/campaigns-delete', [MyCampaignController::class, 'delete'])->name('my.campaigns.delete');
+
     /* END CAMPAIGNS */
 });

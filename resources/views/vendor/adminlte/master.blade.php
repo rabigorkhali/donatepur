@@ -110,9 +110,11 @@
 <script>
     $(document).ready(function() {
     if ($('.message-alert').length) {
+        // Assuming the header element has an ID of 'header'
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(function() {
             $('.message-alert').fadeOut('slow');
-        }, 3000); 
+        }, 4000); 
     }
 });
 </script>
