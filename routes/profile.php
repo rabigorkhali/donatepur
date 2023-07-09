@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Frontend\my\campaigns\MyCampaignController;
 use App\Http\Controllers\Frontend\my\donations\MyDonationController;
+use App\Http\Controllers\Frontend\my\donations\MyDonationReceivedController;
 use App\Http\Controllers\Frontend\my\paymentGateways\MyPublicUserPaymentGatewayController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -41,12 +42,14 @@ Route::prefix('my')->middleware('frontend_users')->group(function () {
     /* DONATIONS */
     Route::prefix('donations')->group(function () {
         Route::get('/', [MyDonationController::class, 'index'])->name('my.donations.list');
-        Route::get('/{id}/edit', [MyDonationController::class, 'edit'])->name('my.donations.edit');
         Route::get('/{id}/view', [MyDonationController::class, 'view'])->name('my.donations.view');
-        Route::put('/{id}', [MyDonationController::class, 'update'])->name('my.donations.update');
-        Route::get('create', [MyDonationController::class, 'create'])->name('my.donations.create');
-        Route::post('/', [MyDonationController::class, 'store'])->name('my.donations.store');
-        Route::get('/payment-gateways-delete', [MyDonationController::class, 'delete'])->name('my.donations.delete');
+    });
+    /* END DONATIONS */
+
+    /* DONATIONS */
+    Route::prefix('donations-received')->group(function () {
+        Route::get('/', [MyDonationReceivedController::class, 'index'])->name('my.donations.received.list');
+        Route::get('/{id}/view', [MyDonationReceivedController::class, 'view'])->name('my.donations.received.view');
     });
     /* END DONATIONS */
 });

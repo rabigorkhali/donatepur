@@ -325,8 +325,14 @@ return [
             'label_color' => 'success',
         ],
         [
-            'text'        => 'Donations',
+            'text'        => 'Donations Given',
             'url'         => 'my/donations',
+            'icon'        => 'far fa-fw fa-file',
+            'label_color' => 'success',
+        ],
+        [
+            'text'        => 'Donations Received',
+            'url'         => 'my/donations-received',
             'icon'        => 'far fa-fw fa-file',
             'label_color' => 'success',
         ],
