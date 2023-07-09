@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\my\campaigns\MyCampaignController;
+use App\Http\Controllers\Frontend\my\paymentGateways\MyPublicUserPaymentGatewayController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,15 @@ Route::prefix('my')->middleware('frontend_users')->group(function () {
     Route::get('/campaigns/create', [MyCampaignController::class, 'create'])->name('my.campaigns.create');
     Route::post('/campaigns', [MyCampaignController::class, 'store'])->name('my.campaigns.store');
     Route::get('/campaigns-delete', [MyCampaignController::class, 'delete'])->name('my.campaigns.delete');
+    /* END CAMPAIGNS */
 
+    /* CAMPAIGNS */
+    Route::get('/payment-gateways', [MyPublicUserPaymentGatewayController::class, 'index'])->name('my.payment.gateways.list');
+    Route::get('/payment-gateways/{id}/edit', [MyPublicUserPaymentGatewayController::class, 'edit'])->name('my.payment.gateways.edit');
+    Route::get('/payment-gateways/{id}/view', [MyPublicUserPaymentGatewayController::class, 'view'])->name('my.payment.gateways.view');
+    Route::put('/payment-gateways/{id}', [MyPublicUserPaymentGatewayController::class, 'update'])->name('my.payment.gateways.update');
+    Route::get('/payment-gateways/create', [MyPublicUserPaymentGatewayController::class, 'create'])->name('my.payment.gateways.create');
+    Route::post('/payment-gateways', [MyPublicUserPaymentGatewayController::class, 'store'])->name('my.payment.gateways.store');
+    Route::get('/payment-gateways-delete', [MyPublicUserPaymentGatewayController::class, 'delete'])->name('my.payment.gateways.delete');
     /* END CAMPAIGNS */
 });

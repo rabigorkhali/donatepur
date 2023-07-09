@@ -91,7 +91,6 @@ class MyCampaignController extends Controller
 
             return $this->renderView('.index', $data);
         } catch (Throwable $th) {
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
