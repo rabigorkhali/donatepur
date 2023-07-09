@@ -120,7 +120,6 @@ class MyPublicUserPaymentGatewayController extends Controller
             Session::flash('success', 'Success! Payment gateway installed successfully.');
             return redirect($this->url);
         } catch (Throwable $th) {
-            dd($th->getMessage());
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
@@ -143,6 +142,11 @@ class MyPublicUserPaymentGatewayController extends Controller
 
     public function view(Request $request, $thisModelId)
     {
+        $thisModelData = UserPaymentGateway::where('public_user_id', $request->user->id)->where('id', $thisModelId)->first();
+        if (!$thisModelData) {
+            Session::flash('error', 'Data not found.');
+            return redirect()->back();
+        }
         $data['page_title'] = 'Payment Gateway Detail';
         $data['thisModelDetail'] = UserPaymentGateway::where('public_user_id', $request->user->id)->where('id', $thisModelId)->first();
         return view('frontend.my.payment-gateways.view', $data);

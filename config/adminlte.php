@@ -325,6 +325,12 @@ return [
             'label_color' => 'success',
         ],
         [
+            'text'        => 'Donations',
+            'url'         => 'my/donations',
+            'icon'        => 'far fa-fw fa-file',
+            'label_color' => 'success',
+        ],
+        [
             'text'        => 'Payment Gateways',
             'url'         => 'my/payment-gateways',
             'icon'        => 'far fa-fw fa-file',

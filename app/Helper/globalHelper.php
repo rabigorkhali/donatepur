@@ -46,6 +46,23 @@ function getDaysDiffByToday($givenDate)
     return $days;
 }
 
+function getDaysDiffByTwoDate($date1, $date2)
+{
+    // Create DateTime objects for today and the given date
+    $fromDate = new DateTime($date1);
+    $toDate = new DateTime($date2);
+
+    // Calculate the difference between the two dates
+    $interval = $fromDate->diff($toDate);
+
+    // Get the number of days from the difference
+    $days = $interval->days;
+
+    if($days<=0) return '0';
+
+    return $days;
+}
+
 function convertToNepaliFormat($number) {
  
     $formattedNumber = number_format($number);

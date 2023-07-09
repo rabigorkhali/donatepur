@@ -14,7 +14,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{{ url('/dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item active"><a>Payment Gateways</a></li>
+            <li class="breadcrumb-item active"><a>{{$page_title}}</a></li>
         </ol>
     </nav>
 @stop
@@ -59,7 +59,7 @@
             }).then((result) => {
                 if (result.value) {
                     // Send request to delete route
-                    const deleteUrl = "{{ route('my.donations.delete') }}" + '?id=' + dataId;
+                    const deleteUrl = "{{ route('my.payment.gateways.delete') }}" + '?id=' + dataId;
                     window.location.href = deleteUrl;
                     // location.reload();
                 }
