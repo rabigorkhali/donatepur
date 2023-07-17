@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Models\Voyager\Campaign;
 use App\Models\Voyager\CampaignCategory;
+use App\Models\Voyager\CampaignView;
 use App\Models\Voyager\Donation;
 use App\Models\Voyager\PaymentGateway;
 use App\Models\Voyager\SystemErrorLog;
@@ -14,6 +15,7 @@ use App\Models\Voyager\Withdrawal;
 use App\Services\frontend\CampaignService;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -83,8 +85,8 @@ class MyWithdrawalsController extends Controller
                     $amountDetails['total_collection'] ?? 0,
                     $amountDetails['service_charge'] ?? 0,
                     $amountDetails['net_collection'] ?? 0,
-                    ucfirst($thisModelDataListDatum->withdrawal_status??'N/A'),
-                    ($thisModelDataListDatum->created_at)?$thisModelDataListDatum->created_at->format('Y-m-d'):'N/A',
+                    ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
+                    ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
                     '<nobr>' . $btnEdit . $btnDelete . $btnDetails . '</nobr>'
                 ];
                 $sn = $sn + 1;
@@ -107,9 +109,10 @@ class MyWithdrawalsController extends Controller
     public function create(Request $request)
     {
         $data['page_title'] = 'Request Withdrawal';
-        $data['campaigns'] = Campaign::where('campaign_status', 'completed')->get();
+        $data['campaigns'] = Campaign::where('campaign_status', 'completed')
+            ->where('public_user_id', $request->user->id)->get();
         // $data['campaigns'] = Campaign::get();
-        $data['paymentGateways'] = UserPaymentGateway::where('status',1)->where('public_user_id', $request->user->id)->get();
+        $data['paymentGateways'] = UserPaymentGateway::where('status', 1)->where('public_user_id', $request->user->id)->get();
         return view('frontend.my.withdrawals.add', $data);
     }
     public function store(Request $request)
@@ -123,22 +126,51 @@ class MyWithdrawalsController extends Controller
             throw new ValidationException($validator);
         }
         try {
-
+            /* TEST CASES */
+            /* 
+            - Already withdrwal requested shouldnt be stored.-done
+            - Completed campaign can only be stored.-done
+            - Check if campaign belongs to login user.-done
+            - Check if payment gateways belongs to login user.-done            
+            - Change to campaign_status to withdraw processing.-done            
+            */
+            /* END TEST CASES */
             $data = $request->only('campaign_id', 'user_payment_gateway_id');
-            $paymentGateways = UserPaymentGateway::find($request->get('user_payment_gateway_id'));
+            $campaignId = $request->get('campaign_id');
+            $alreadyInwithdrawal = Withdrawal::where('campaign_id', $campaignId)->first();
+            if ($alreadyInwithdrawal) {
+                Session::flash('error', 'Bad request.');
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+            $campaignData = CampaignView::where('campaign_status', 'completed')->where('public_user_id', $request->user->id)->find($campaignId);
+            if (!$campaignData) {
+                Session::flash('error', 'Bad request.');
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+            $paymentGateways = UserPaymentGateway::where('public_user_id', $request->user->id)->where('id', $request->get('user_payment_gateway_id'))->first();
+            if (!$paymentGateways) {
+                Session::flash('error', 'Payment gateway invalid.');
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
             $data['withdrawal_mobile_number'] = $paymentGateways->mobile_number;
             $data['created_at'] = date('Y-m-d H:i:s');
             $data['withdrawal_status'] = 'pending';
-            $data['public_user_id'] = $request->user_id;
-            $amountDetails =   $this->campaignService->calculateAllAmount($request->get('campaign_id'));
-
-            $data['withdrawal_amount'] = $amountDetails['net_collection'];
-            $data['withdrawal_service_charge'] = $amountDetails['service_charge'];
+            $data['public_user_id'] = $request->user->id;
+            
+            $data['withdrawal_amount'] = $campaignData->net_amount_collection;
+            $data['withdrawal_service_charge'] = $campaignData->summary_service_charge_amount;
+            // $data['bank_name'] = $paymentGateways->bank_name;
+            // $data['bank_account_number'] = $paymentGateways->bank_account_number;
+            // $data['bank_account_address'] = $paymentGateways->bank_account_address;
+            DB::beginTransaction();
             Withdrawal::insert($data);
-            Session::flash('success', 'Success! Withdrawal request send successfully.');
+            Campaign::where('id', $campaignId)->update(['campaign_status' => 'withdraw-processing']);
+            DB::commit();
+            Session::flash('success', 'Success! Withdrawal request sent successfully.');
             return redirect('/my/withdrawals');
         } catch (Throwable $th) {
-            dd($th);
+            DB::rollback();
+            dd($th->getMessage());
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
@@ -147,7 +179,8 @@ class MyWithdrawalsController extends Controller
     public function delete(Request $request)
     {
         $thisId = $request->get('id');
-        $thisDataDetails = Withdrawal::where('public_user_id', $request->user->id)->where('id', $thisId)->first();
+        $thisDataDetails = Withdrawal::where('public_user_id', $request->user->id)
+            ->where('withdrawal_status', 'pending')->where('id', $thisId)->first();
         // $thisDataDetails = Withdrawal::where('id', $thisId)->first();
         if (!$thisDataDetails) {
             Session::flash('error', 'Data not found.');
@@ -158,8 +191,12 @@ class MyWithdrawalsController extends Controller
             return redirect()->back();
         }
         // $withdrawalRewuest=Withdrawal::where('id', $thisId)->delete();
-        Withdrawal::where('public_user_id', $request->user->id)->where('id', $thisId)->delete();
-        Session::flash('success', 'Withdrawal Request deleted successfully.');
+        $withdrawlDetails = Withdrawal::where('public_user_id', $request->user->id)->where('withdrawal_status', 'pending')->where('id', $thisId)->delete();
+        if (!$withdrawlDetails) {
+            Session::flash('error', 'Bad request.');
+            return redirect()->back();
+        }
+        Session::flash('success', 'Withdrawal Request cancelled successfully.');
         return redirect()->back();
     }
     public function edit(Request $request, $campaignId)
@@ -170,11 +207,26 @@ class MyWithdrawalsController extends Controller
         return view('frontend.my.withdrawals.edit', $data);
     }
 
-    public function view(Request $request, $campaignId)
+    public function view(Request $request, $id)
     {
-        $data['page_title'] = 'Campaign Detail';
-        $data['campaignDetail'] = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
-        return view('frontend.my.withdrawals.view', $data);
+        try {
+            $data['page_title'] = 'Campaign Detail';
+            $withdrawalDetails = Withdrawal::where('id', $id)->where('public_user_id', $request->user->id)->first();
+            if (!$withdrawalDetails) {
+                Session::flash('error', 'Bad request.');
+                return redirect()->back();
+            }
+            $data['campaignDetail'] = CampaignView::where('public_user_id', $request->user->id)->where('id', $withdrawalDetails->campaign_id)->first();
+            if (!$data['campaignDetail']) {
+                Session::flash('error', 'Bad request.');
+                return redirect()->back();
+            }
+            return view('frontend.my.withdrawals.view', $data);
+        } catch (Throwable $th) {
+            dd($th);
+            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            return redirect()->route('frontend.error.page');
+        }
     }
 
     public function update(Request $request, $campaignId)

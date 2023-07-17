@@ -75,7 +75,10 @@ function giveImageName($imageName, $imagegenerateType)
     return  str_replace('.', '-' . $imagegenerateType . '.', $imageName);
 }
 
-function numberPriceFormat($number)
+
+function numberPriceFormat($input)
 {
-    return $number;
+    $formatted = number_format($input);
+    $formatted = 'Rs.' . $formatted;
+    return $formatted;
 }

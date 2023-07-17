@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call(PublicUserAdminSeeder::class);
+        $this->call(ViewTableCampaignSummary::class);
 
     }
 }

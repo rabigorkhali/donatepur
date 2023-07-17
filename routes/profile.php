@@ -27,6 +27,7 @@ Route::prefix('my')->middleware('frontend_users')->group(function () {
     Route::get('/campaigns/create', [MyCampaignController::class, 'create'])->name('my.campaigns.create');
     Route::post('/campaigns', [MyCampaignController::class, 'store'])->name('my.campaigns.store');
     Route::get('/campaigns-delete', [MyCampaignController::class, 'delete'])->name('my.campaigns.delete');
+    Route::get('/campaigns-summary/{id}', [MyCampaignController::class, 'campaignSummary'])->name('my.campaigns.campaignSummary');
     /* END CAMPAIGNS */
 
     /* PAYMENT GATEWAYS */
@@ -63,7 +64,6 @@ Route::prefix('my')->middleware('frontend_users')->group(function () {
         Route::get('/create', [MyWithdrawalsController::class, 'create'])->name('my.withdrawals.create');
         Route::post('/', [MyWithdrawalsController::class, 'store'])->name('my.withdrawals.store');
         Route::get('/payment-gateways-delete', [MyWithdrawalsController::class, 'delete'])->name('my.withdrawals.delete');
-
     });
     /* END WITHDRAWALS */
 });

@@ -40,7 +40,23 @@
                             </tr>
                             <tr>
                                 <th style="width:20%;">Goal Amount</th>
-                                <td>{{ $campaignDetail->goal_amount }}</td>
+                                <td>{{ numberPriceFormat($campaignDetail->goal_amount) }}</td>
+                            </tr>
+                            <tr>
+                                <th style="width:20%;">Total Donation Amount</th>
+                                <td>{{ numberPriceFormat($campaignDetail->summary_total_collection) }}</td>
+                            </tr>
+                            <tr>
+                                <th style="width:20%;">Net Donation Amount</th>
+                                <td>{{ numberPriceFormat($campaignDetail->net_amount_collection) }}</td>
+                            </tr>
+                            <tr>
+                                <th style="width:20%;">Applicable Service charge</th>
+                                <td>{{ numberPriceFormat($campaignDetail->summary_service_charge_amount)}}</td>
+                            </tr>
+                            <tr>
+                                <th style="width:20%;">Number of Donation</th>
+                                <td>{{ $campaignDetail->total_number_donation }}</td>
                             </tr>
                             <tr>
                                 <th style="width:20%;">Start Date</th>
@@ -99,7 +115,10 @@
                         </tbody>
                     </table>
                 </div>
+                
             </div>
+
+
 
         </div>
     </div>

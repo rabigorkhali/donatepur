@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Models\Voyager\Campaign;
 use App\Models\Voyager\CampaignCategory;
+use App\Models\Voyager\CampaignView;
 use App\Models\Voyager\Donation;
 use App\Models\Voyager\SystemErrorLog;
 use App\Traits\ImageTrait;
@@ -187,8 +188,6 @@ class MyCampaignController extends Controller
             'cover_image' => 'image|min:100|max:20480', // Max file size set to 2MB (2048 kilobytes)
             'description' => 'required|string|min:100|max:20000',
         ]);
-
-
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
@@ -208,6 +207,25 @@ class MyCampaignController extends Controller
             Session::flash('success', 'Success! Data saved successfully.');
             return redirect()->back();
         } catch (Throwable $th) {
+            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            return redirect()->route('frontend.error.page');
+        }
+    }
+
+    public function campaignSummary(Request $request, $id)
+    {
+        try {
+            $data = [];
+            $campaignData = CampaignView::select('start_date', 'end_date', 'cover_image', 'goal_amount', 'summary_total_collection', 'net_amount_collection', 'summary_service_charge_amount', 'total_number_donation', 'campaign_status')
+                ->where('public_user_id', $request->user->id)->where('id', $id)->first();
+            if (!$campaignData) {
+                Session::flash('error', 'Bad request.');
+                return redirect()->back()->withInput();
+            }
+            $data['campaign'] = $campaignData;
+            return $data;
+        } catch (Throwable $th) {
+            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }

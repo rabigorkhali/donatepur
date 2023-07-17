@@ -31,16 +31,29 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <th style="width:20%">Name:</th>
-                                <td>{{ $thisModelDetail?->parentPaymentGateway?->name ??'N/A' }}</td>
+                                <th style="width:20%">Payment Gateway:</th>
+                                <td>{{ $thisModelDetail?->payment_gateway_name ?? 'N/A' }}</td>
                             </tr>
- 
                             <tr>
                                 <th style="width:20%;">Mobile Number</th>
                                 <td>{{ $thisModelDetail->mobile_number }}</td>
                             </tr>
-                        
-                            <tr>
+                            @if (strtolower($thisModelDetail?->payment_gateway_name) == 'bank')
+                                <tr>
+                                    <th style="width:20%">Bank Name:</th>
+                                    <td>{{ $thisModelDetail?->bank_name ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width:20%">Bank Account Number:</th>
+                                    <td>{{ $thisModelDetail?->bank_account_number ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width:20%">Bank Address:</th>
+                                    <td>{{ $thisModelDetail?->bank_address ?? 'N/A' }}</td>
+                                </tr>
+                            @endif
+
+                            {{-- <tr>
                                 <th style="width:20%;">Qr Code</th>
                                 <td>
                                     <a href="{{ asset('uploads/' . $thisModelDetail->qr_code) }}" target="_blank">
@@ -49,17 +62,18 @@
                                             height="50">
                                     </a>
                                 </td>
-                            </tr>
+                            </tr> --}}
 
                             <tr>
                                 <th style="width:20%;">Detail</th>
                                 <td>
-                                    <textarea rows="20" readonly style="width: 100%;"> {{ $thisModelDetail->detail }}</textarea>
+                                    <textarea rows="10" readonly style="width: 100%;"> {{ $thisModelDetail->detail }}</textarea>
                                 </td>
                             </tr>
                             <tr>
-                                <th> <a href="{{ route('my.payment.gateways.list') }}" rel="noopener" 
-                                    class="btn btn-default float-left mb-4"><i class="fas fa-backward"></i> Back</a></th>
+                                <th> <a href="{{ route('my.payment.gateways.list') }}" rel="noopener"
+                                        class="btn btn-default float-left mb-4"><i class="fas fa-backward"></i> Back</a>
+                                </th>
                                 <td>
                                 </td>
                             </tr>

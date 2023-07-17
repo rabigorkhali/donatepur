@@ -103,6 +103,13 @@ class MyPublicUserPaymentGatewayController extends Controller
     }
     public function store(Request $request)
     {
+        /* TEST CASES */
+        /* 
+        -user's phone number and payment gateway should not be same at a time--done
+        -above validation doesnt count for deleted_at=null--done
+        -bank with same name or account number cannot be added--done
+        */
+        /* END TEST CASES */
         $validator = Validator::make($request->all(), [
             'mobile_number' => ['required', 'regex:/^\d{10}$/'],
             'payment_gateway_name' => 'required|exists:payment_gateways,name',
@@ -118,7 +125,7 @@ class MyPublicUserPaymentGatewayController extends Controller
             throw new ValidationException($validator);
         }
         try {
-            $data = $request->only('mobile_number', 'payment_gateway_name', 'status', 'detail','bank_account_number','bank_name','bank_address');
+            $data = $request->only('mobile_number','bank_name', 'payment_gateway_name', 'status', 'detail','bank_account_number','bank_name','bank_address');
             if ($request->file('qr_code')) {
                 $data['qr_code'] = $this->dirforDb . $this->uploadImage($this->dir, 'qr_code', true, 1280, null);
             }
@@ -127,6 +134,7 @@ class MyPublicUserPaymentGatewayController extends Controller
             ->where('mobile_number',$data['mobile_number'])
             ->where('payment_gateway_name', $paymentGatewayDetails->name)
             ->where('bank_account_number', $data['bank_account_number'])
+            ->where('bank_name', $data['bank_name'])
             ->whereNull('deleted_at')
             ->count();
             if ($alreadyExists) {
