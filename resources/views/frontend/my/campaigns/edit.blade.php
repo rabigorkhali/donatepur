@@ -32,7 +32,7 @@
                 @php $formInputName='title'; @endphp
                 <x-adminlte-input required name="{{ $formInputName }}"
                     value="{{ old($formInputName, $campaignDetail->$formInputName) }}"
-                    placeholder="{{ ucfirst($formInputName) }}" fgroup-class=" " />
+                    fgroup-class=" " />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -44,7 +44,7 @@
                 @php $formInputName='goal_amount'; @endphp
                 <x-adminlte-input required name="{{ $formInputName }}" label="Goal Amount (Rs.)"
                     value="{{ old($formInputName, $campaignDetail->$formInputName) }}"
-                    placeholder="{{ ucfirst($formInputName) }}" fgroup-class=" " min="1000" type="number" />
+                    fgroup-class=" " min="1000" type="number" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -56,7 +56,7 @@
                 @php $formInputName='start_date'; @endphp
                 <x-adminlte-input required name="{{ $formInputName }}" type='date' class="  "
                     value="{{ old($formInputName, $campaignDetail->$formInputName) }}"
-                    placeholder="{{ ucfirst($formInputName) }}" fgroup-class="" />
+                    fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -68,7 +68,7 @@
                 @php $formInputName='end_date'; @endphp
                 <x-adminlte-input required name="{{ $formInputName }}" type='date' class="  "
                     value="{{ old($formInputName, $campaignDetail->$formInputName) }}"
-                    placeholder="{{ ucfirst($formInputName) }}" fgroup-class="" />
+                    fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -102,7 +102,7 @@
                 <x-adminlte-input required name="{{ $formInputName }}" type='textbox' class="  "
                     label="{{ ucfirst($formInputName) }}"
                     value="{{ old($formInputName, $campaignDetail->$formInputName) }}"
-                    placeholder="{{ ucfirst($formInputName) }}" fgroup-class="" />
+                    fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -129,7 +129,7 @@
                 @php $formInputName='video_url'; @endphp
                 <x-adminlte-input name="{{ $formInputName }}" type='textbox' class="  "
                     value="{{ old($formInputName, $campaignDetail->$formInputName) }}"
-                    placeholder="{{ ucfirst($formInputName) }}" fgroup-class="" />
+                    fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -140,7 +140,7 @@
             <div class="col-md-6">
                 @php $formInputName='cover_image'; @endphp
                 <x-adminlte-input name="{{ $formInputName }}" type='file' accept="image/*" class="  " value=""
-                    placeholder="{{ ucfirst($formInputName) }}" fgroup-class="" />
+                    fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>

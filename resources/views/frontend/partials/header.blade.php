@@ -34,8 +34,6 @@
     <link href="{{asset('frontend/css/1I3l4d3hhwdU.css')}}" rel="stylesheet">
 
 
-
-
     @yield('header')
     @yield('css')
 

@@ -58,20 +58,24 @@ function getDaysDiffByTwoDate($date1, $date2)
     // Get the number of days from the difference
     $days = $interval->days;
 
-    if($days<=0) return '0';
+    if ($days <= 0) return '0';
 
     return $days;
 }
 
-function convertToNepaliFormat($number) {
- 
+function convertToNepaliFormat($number)
+{
+
     $formattedNumber = number_format($number);
     return $formattedNumber;
 }
 
-function giveImageName($imageName,$imagegenerateType)
+function giveImageName($imageName, $imagegenerateType)
 {
-    return  str_replace('.', '-'.$imagegenerateType.'.', $imageName);
+    return  str_replace('.', '-' . $imagegenerateType . '.', $imageName);
 }
 
-
+function numberPriceFormat($number)
+{
+    return $number;
+}

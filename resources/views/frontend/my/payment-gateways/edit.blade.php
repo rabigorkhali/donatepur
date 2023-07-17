@@ -47,7 +47,7 @@
             <div class="col-md-6">
                 @php $formInputName='mobile_number'; @endphp
                 <x-adminlte-input required name="{{ $formInputName }}" value="{{ old($formInputName) }}"
-                    placeholder="{{ ucfirst($formInputName) }}" fgroup-class=" " />
+                    fgroup-class=" " />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -58,7 +58,7 @@
             <div class="col-md-6">
                 @php $formInputName='qr_code'; @endphp
                 <x-adminlte-input name="{{ $formInputName }}" type='file' accept="image/*" class="  " value=""
-                    placeholder="{{ ucfirst($formInputName) }}" fgroup-class="" />
+                    fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>

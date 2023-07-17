@@ -26,7 +26,7 @@ class MyDonationController extends Controller
     public $mainDirectory = "/uploads";
     public $dirforDb = "/donations/";
     public $url = "my/donations";
-    public $pageTitle = "Donations";
+    public $pageTitle = "Donations Given";
     public function __construct()
     {
         $this->model = new Donation();

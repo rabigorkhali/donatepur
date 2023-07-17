@@ -45,6 +45,7 @@ class MyPublicUserPaymentGatewayController extends Controller
                 'SN',
                 'Payment Gateway',
                 'Mobile Number',
+                'Status',
                 ['label' => 'Actions', 'no-export' => true, 'width' => 5],
             ];
 
@@ -54,7 +55,7 @@ class MyPublicUserPaymentGatewayController extends Controller
             $sn = 1;
             $thisArray = [];
             foreach ($paymentGateways as $paymentGatewayskey => $paymentGatewaysDatum) {
-               
+
                 $btnDelete = '<a onclick="deleteBtn(' . $paymentGatewaysDatum->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
                               <i class="fa fa-lg fa-fw fa-trash"></i>
                           </a>';
@@ -64,8 +65,9 @@ class MyPublicUserPaymentGatewayController extends Controller
 
                 $thisArray = [
                     $sn,
-                    $paymentGatewaysDatum?->parentPaymentGateway?->name,
+                    $paymentGatewaysDatum?->payment_gateway_name,
                     $paymentGatewaysDatum->mobile_number,
+                    ($paymentGatewaysDatum->status) ? 'Active' : 'Inactive',
                     '<nobr>'  . $btnDelete . $btnDetails . '</nobr>'
                 ];
                 $sn = $sn + 1;
@@ -75,15 +77,16 @@ class MyPublicUserPaymentGatewayController extends Controller
                 'data' => $paymentGatewaysList,
                 'order' => [[1, 'asc']],
                 'beautify' => true,
-                'buttons'=> [
+                'buttons' => [
                     [
-                      'extend'=> 'excel',
-                      'className'=> 'd-none' // Hide the export button
+                        'extend' => 'excel',
+                        'className' => 'd-none' // Hide the export button
                     ]
-                  ],
-                'columns' => [null, null, null, 
-                ['orderable' => false]
-            ],
+                ],
+                'columns' => [
+                    null, null, null, null,
+                    ['orderable' => false]
+                ],
             ];
             return $this->renderView('.index', $data);
         } catch (Throwable $th) {
@@ -102,24 +105,41 @@ class MyPublicUserPaymentGatewayController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'mobile_number' => ['required', 'regex:/^\d{10}$/'],
-            'payment_gateway_id' => 'required|exists:payment_gateways,id',
+            'payment_gateway_name' => 'required|exists:payment_gateways,name',
             'status' => 'required|in:1,0',
-            'qr_code' => 'image|min:10|max:5480', // Max file size set to 2MB (2048 kilobytes)
-            'detail' => 'required|string|min:50|max:2000',
+            'bank_name' => 'required_if:payment_gateway_name,Bank',
+            'bank_account_number' => 'required_if:payment_gateway_name,Bank',
+            'bank_address' => 'required_if:payment_gateway_name,Bank',
+            'qr_code' => 'nullable|image|min:10|max:5480', // Max file size set to 2MB (2048 kilobytes)
+            'detail' => 'required|max:500',
+
         ]);
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
         try {
-            $data = $request->only('mobile_number', 'payment_gateway_id', 'status', 'detail');
+            $data = $request->only('mobile_number', 'payment_gateway_name', 'status', 'detail','bank_account_number','bank_name','bank_address');
             if ($request->file('qr_code')) {
                 $data['qr_code'] = $this->dirforDb . $this->uploadImage($this->dir, 'qr_code', true, 1280, null);
             }
+            $paymentGatewayDetails = PaymentGateway::where('name', $request->get('payment_gateway_name'))->first();
+            $alreadyExists = UserPaymentGateway::where('public_user_id', $request->user->id)
+            ->where('mobile_number',$data['mobile_number'])
+            ->where('payment_gateway_name', $paymentGatewayDetails->name)
+            ->where('bank_account_number', $data['bank_account_number'])
+            ->whereNull('deleted_at')
+            ->count();
+            if ($alreadyExists) {
+                Session::flash('error', 'Payment gateway already added.');
+                return redirect()->back()->withErrors($validator)->withInput();
+            } 
+            $data['payment_gateway_name'] = $paymentGatewayDetails->name;
             $data['public_user_id'] = $request->user->id;
             UserPaymentGateway::insert($data);
             Session::flash('success', 'Success! Payment gateway installed successfully.');
             return redirect($this->url);
         } catch (Throwable $th) {
+            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
@@ -151,5 +171,4 @@ class MyPublicUserPaymentGatewayController extends Controller
         $data['thisModelDetail'] = UserPaymentGateway::where('public_user_id', $request->user->id)->where('id', $thisModelId)->first();
         return view('frontend.my.payment-gateways.view', $data);
     }
-
 }
