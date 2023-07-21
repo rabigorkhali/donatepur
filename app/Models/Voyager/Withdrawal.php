@@ -15,4 +15,9 @@ class Withdrawal extends Model
     {
         return $this->belongsTo(Campaign::class, 'campaign_id', 'id');
     }
+
+    public function userPaymentGateway()
+    {
+        return $this->belongsTo(UserPaymentGateway::class, 'user_payment_gateway_id', 'id');
+    }
 }

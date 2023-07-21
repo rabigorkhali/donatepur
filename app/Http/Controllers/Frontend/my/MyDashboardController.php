@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\my\withdrawals;
+namespace App\Http\Controllers\Frontend\my;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Frontend\FrontendBaseController;
@@ -22,14 +22,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
-class MyWithdrawalsController extends Controller
+class MyDashboardController extends Controller
 {
     use ImageTrait;
 
-    public $dir = "/uploads/withdrawals";
+    public $dir = "/uploads/dashboard";
     public $mainDirectory = "/uploads";
-    public $dirforDb = "/withdrawals/";
-    public $pageTitle = "Withdrawals";
+    public $dirforDb = "/dashboard/";
+    public $pageTitle = "Dashboard";
 
     public function __construct()
     {
@@ -40,64 +40,19 @@ class MyWithdrawalsController extends Controller
 
     public function renderView($viewFile, $data)
     {
-        return view('frontend.my.withdrawals.' . $viewFile, $data)->render();
+        return view('frontend.my.' . $viewFile, $data)->render();
     }
 
     public function index(Request $request)
-    {   
+    {
         try {
             $data = array();
             $data['page_title'] = $this->pageTitle;
-            $data['heads'] = [
-                'SN',
-                'Campaign',
-                'Goal Amt (Rs.)',
-                'Collected Amt (Rs.)',
-                'Service Charge (Rs.)',
-                'Net Withdrawal Amt (Rs.)',
-                'Withdrawal Status',
-                'Withdrawal Request Date',
-                ['label' => 'Actions', 'no-export' => true, 'width' => 5],
-            ];
-
-            $thisModelDataList = Withdrawal::whereHas('campaign', function ($query) use ($request) {
-                $query->where('public_user_id', $request->user->id);
-            })->orderby('updated_at', 'desc')->get();
-            $thisModelDataListArray = [];
-            $sn = 1;
-            $thisArray = [];
-            foreach ($thisModelDataList as $thisModelDataListKey => $thisModelDataListDatum) {
-                
-                $btnDelete = '<a onclick="deleteBtn(' . $thisModelDataListDatum->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
-                              <i class="fa fa-lg fa-fw fa-trash"></i>
-                          </a>';
-                $btnDetails = '<a target="_blank" href="' . route('my.withdrawals.view', $thisModelDataListDatum->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
-                               <i class="fa fa-lg fa-fw fa-eye"></i>
-                           </a>';
-
-                $amountDetails =   $this->campaignService->calculateAllAmount($thisModelDataListDatum->campaign_id);
-                $thisArray = [
-                    $sn,
-                    $thisModelDataListDatum->campaign->title,
-                    priceToNprFormat($thisModelDataListDatum->campaign->goal_amount),
-                    priceToNprFormat($amountDetails['total_collection'] ?? 0),
-                    priceToNprFormat($amountDetails['service_charge'] ?? 0),
-                    priceToNprFormat($amountDetails['net_collection'] ?? 0),
-                    ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
-                    ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
-                    '<nobr>' . $btnDelete . $btnDetails . '</nobr>'
-                ];
-                $sn = $sn + 1;
-                array_push($thisModelDataListArray, $thisArray);
-            }
-            $data['config'] = [
-                'data' => $thisModelDataListArray,
-                'order' => [[1, 'asc']],
-                'beautify' => true,
-                'columns' => [null, null, null, null, null, null, null, null, ['orderable' => false]],
-            ];
-
-            return $this->renderView('.index', $data);
+            $data['total_campaign'] = Campaign::where('public_user_id', $request->user->id)->count();
+            $data['total_collection'] = CampaignView::where('public_user_id', $request->user->id)->sum('summary_total_collection');
+            $data['net_collection'] = CampaignView::where('public_user_id', $request->user->id)->sum('net_amount_collection');
+            $data['total_donation_made'] = Donation::where('giver_public_user_id', $request->user->id)->where('payment_status', 'successful')->sum('amount');
+            return $this->renderView('.dashboard', $data);
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
@@ -154,7 +109,7 @@ class MyWithdrawalsController extends Controller
             $data['created_at'] = date('Y-m-d H:i:s');
             $data['withdrawal_status'] = 'pending';
             $data['public_user_id'] = $request->user->id;
-            
+
             $data['withdrawal_amount'] = $campaignData->net_amount_collection;
             $data['withdrawal_service_charge'] = $campaignData->summary_service_charge_amount;
             // $data['bank_name'] = $paymentGateways->bank_name;
@@ -218,7 +173,7 @@ class MyWithdrawalsController extends Controller
                 Session::flash('error', 'Bad request.');
                 return redirect()->back();
             }
-            $data['withdrawalDetails']=$withdrawalDetails;
+            $data['withdrawalDetails'] = $withdrawalDetails;
             $data['campaignDetail'] = CampaignView::where('public_user_id', $request->user->id)->where('id', $withdrawalDetails->campaign_id)->first();
             if (!$data['campaignDetail']) {
                 Session::flash('error', 'Bad request.');

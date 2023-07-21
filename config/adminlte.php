@@ -310,9 +310,9 @@ return [
         ],
         [
             'text'        => 'Dashboard',
-            'url'         => 'dashboard',
+            'url'         => 'my/dashboard',
             'icon'        => 'fa fa-tachometer',
-            'label'       => 4,
+            // 'label'       => 4,
             'label_color' => 'success',
         ],
         [

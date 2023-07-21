@@ -39,6 +39,11 @@ class MyDonationController extends Controller
 
     public function index(Request $request)
     {
+        /* TEST CASES */
+        /* 
+        -DO NOT SHOW BANK ACCOUNT DETAILS
+        */
+        /* TEST CASE SEND  */
         try {
             $data = array();
             $data['page_title'] = $this->pageTitle;
@@ -47,9 +52,9 @@ class MyDonationController extends Controller
                 'Donors Name',
                 'Is Anonymous',
                 'Receiver Details',
-                'Mobile Number',
                 'Campaign',
                 'Payment Gateway',
+                'Mobile Number',
                 'Amount(Rs.)',
                 'Service Fee(%)',
                 'Payment Status',
@@ -73,11 +78,11 @@ class MyDonationController extends Controller
                     'Name: '.$thisAllDataDatum?->receiver?->username.
                     '<br> Mobile: '.$thisAllDataDatum->mobile_number
                     ,
-                    $thisAllDataDatum->mobile_number,
                     $thisAllDataDatum?->campaign?->title,
+                    $thisAllDataDatum->mobile_number,
                     $thisAllDataDatum?->paymentGateway?->name,
-                    $thisAllDataDatum?->amount,
-                    $thisAllDataDatum?->service_charge_percentage,
+                    priceToNprFormat($thisAllDataDatum?->amount),
+                    priceToNprFormat($thisAllDataDatum?->service_charge_percentage),
                     ucfirst($thisAllDataDatum?->payment_status),
                     $thisAllDataDatum?->transaction_id,
                     $thisAllDataDatum?->created_at->format('Y-m-d H:i:s'),

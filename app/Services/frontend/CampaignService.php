@@ -25,9 +25,9 @@ class CampaignService
             }
             $totalNetCollection = $totalCollectedAmount - $totalServiceCharge;
             $array=[];
-            $array['total_collection']=numberPriceFormat(floor($totalCollectedAmount));
-            $array['service_charge']=numberPriceFormat(floor($totalServiceCharge));
-            $array['net_collection']=numberPriceFormat(floor($totalNetCollection));
+            $array['total_collection']=floor($totalCollectedAmount);
+            $array['service_charge']=floor($totalServiceCharge);
+            $array['net_collection']=floor($totalNetCollection);
             return $array;
         } catch (Exception $th) {
             SystemErrorLog::insert(['message' => 'Campaign Service=>>>>>calculateNetAmount==>>> ' . $th->getMessage()]);

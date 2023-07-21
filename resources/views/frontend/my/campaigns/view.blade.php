@@ -38,17 +38,14 @@
                                 <th style="width:20%">Category:</th>
                                 <td>{{ $campaignDetail?->category?->title??'N/A' }}</td>
                             </tr>
-                            <tr>
-                                <th style="width:20%;">Goal Amount</th>
-                                <td>{{ $campaignDetail->goal_amount }}</td>
-                            </tr>
+
                             <tr>
                                 <th style="width:20%;">Start Date</th>
                                 <td>{{ $campaignDetail->start_date }}</td>
                             </tr>
                             <tr>
                                 <th style="width:20%;">Goal Amount</th>
-                                <td>{{ $campaignDetail->goal_amount }}</td>
+                                <td>{{ priceToNprFormat($campaignDetail->goal_amount) }}</td>
                             </tr>
                             <tr>
                                 <th style="width:20%;">End Date</th>

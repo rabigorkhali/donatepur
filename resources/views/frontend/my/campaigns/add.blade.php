@@ -149,11 +149,12 @@
             </div>
             <div class="col-md-6">
                 @php $formInputName='status'; @endphp
+                {{old($formInputName)}}
                 <x-adminlte-select2 required name="{{ $formInputName }}"
                     value="{{ old($formInputName) }}" label="Status" label-class=""
                     data-placeholder="Select Status">
                     <option value="1" @if (old($formInputName) == 1) selected @endif>Active</option>
-                    <option value="0" @if (old($formInputName) == 0) selected @endif>Inactive</option>
+                    <option value="0" @if ( old($formInputName) === '0') selected @endif>Inactive</option>
                 </x-adminlte-select2>
 
                 @if ($errors->has($formInputName))

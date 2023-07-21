@@ -38,6 +38,12 @@ class MyCampaignController extends Controller
     public function index(Request $request)
     {
         try {
+            /* TESTCASE */
+            /* 
+            -show delete btn only for campaign_status=pending
+            -show edit btn only for campaign_status=pending
+            */
+            /* TESTCASE */
             $data = array();
             $data['page_title'] = 'Campaigns';
             $data['heads'] = [
@@ -57,13 +63,17 @@ class MyCampaignController extends Controller
 
             $sn = 1;
             $thisArray = [];
+            $btnDelete = '';
+            $btnEdit = '';
             foreach ($campaigns as $keyCampaigns => $datumCampaign) {
                 $btnEdit = '<a href="' . route('my.campaigns.edit', $datumCampaign->id) . '" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                             <i class="fa fa-edit"></i>
                         </a>';
-                $btnDelete = '<a onclick="deleteBtn(' . $datumCampaign->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
+                if (strtolower($datumCampaign->campaign_status == 'pending')) {
+                    $btnDelete = '<a onclick="deleteBtn(' . $datumCampaign->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
                               <i class="fa fa-lg fa-fw fa-trash"></i>
                           </a>';
+                }
                 $btnDetails = '<a target="_blank" href="' . route('my.campaigns.view', $datumCampaign->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
                                <i class="fa fa-lg fa-fw fa-eye"></i>
                            </a>';
@@ -75,8 +85,8 @@ class MyCampaignController extends Controller
                     ucfirst($datumCampaign->campaign_status),
                     $datumCampaign->start_date,
                     $datumCampaign->end_date,
-                    'Rs.' . $datumCampaign->goal_amount,
-                    'Rs.' . $datumCampaign->total_collection,
+                    priceToNprFormat($datumCampaign->goal_amount),
+                     priceToNprFormat($datumCampaign->total_collection),
                     ($datumCampaign->status) ? 'Active' : 'Inactive',
                     '<nobr>' . $btnEdit . $btnDelete . $btnDetails . '</nobr>'
                 ];
@@ -141,6 +151,11 @@ class MyCampaignController extends Controller
 
     public function delete(Request $request)
     {
+        /* TEST CASES */
+        /* 
+        - Delete pending campaign only
+         */
+        /* TEST CASES */
         $campaignId = $request->get('id');
         $campaign = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
         if ($campaign->cover_image) $this->removeImage($this->mainDirectory, $campaign->cover_image);
@@ -205,7 +220,7 @@ class MyCampaignController extends Controller
             }
             Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->update($data);
             Session::flash('success', 'Success! Data saved successfully.');
-            return redirect()->back();
+            return redirect()->back()->withInput();
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
@@ -222,10 +237,13 @@ class MyCampaignController extends Controller
                 Session::flash('error', 'Bad request.');
                 return redirect()->back()->withInput();
             }
+            $campaignData->summary_total_collection=priceToNprFormat($campaignData->summary_total_collection);
+            $campaignData->net_amount_collection=priceToNprFormat($campaignData->net_amount_collection);
+            $campaignData->summary_service_charge_amount=priceToNprFormat($campaignData->summary_service_charge_amount);
+            $campaignData->goal_amount=priceToNprFormat($campaignData->goal_amount);
             $data['campaign'] = $campaignData;
             return $data;
         } catch (Throwable $th) {
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }

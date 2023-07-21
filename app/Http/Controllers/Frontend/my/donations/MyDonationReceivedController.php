@@ -39,6 +39,10 @@ class MyDonationReceivedController extends Controller
 
     public function index(Request $request)
     {
+        /* test cases */
+        /* 
+        -do not show bank details */
+        /* test cases */
         try {
             $data = array();
             $data['page_title'] = $this->pageTitle;
@@ -47,9 +51,9 @@ class MyDonationReceivedController extends Controller
                 'Donors Name',
                 'Is Anonymous',
                 'Receiver Details',
-                'Mobile Number',
                 'Campaign',
                 'Payment Gateway',
+                'Mobile Number',
                 'Amount(Rs.)',
                 'Service Fee(%)',
                 'Payment Status',
@@ -73,11 +77,11 @@ class MyDonationReceivedController extends Controller
                     'Name: '.$thisAllDataDatum?->receiver?->username.
                     '<br> Mobile: '.$thisAllDataDatum->mobile_number
                     ,
-                    $thisAllDataDatum->mobile_number,
                     $thisAllDataDatum?->campaign?->title,
                     $thisAllDataDatum?->paymentGateway?->name,
-                    $thisAllDataDatum?->amount,
-                    $thisAllDataDatum?->service_charge_percentage,
+                    $thisAllDataDatum->mobile_number,
+                    priceToNprFormat($thisAllDataDatum?->amount),
+                    priceToNprFormat($thisAllDataDatum?->service_charge_percentage),
                     ucfirst($thisAllDataDatum?->payment_status),
                     $thisAllDataDatum?->transaction_id,
                     $thisAllDataDatum?->created_at->format('Y-m-d H:i:s'),
@@ -98,7 +102,6 @@ class MyDonationReceivedController extends Controller
             ];
             return $this->renderView('index', $data);
         } catch (Throwable $th) {
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }

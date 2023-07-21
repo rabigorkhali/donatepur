@@ -63,12 +63,7 @@ function getDaysDiffByTwoDate($date1, $date2)
     return $days;
 }
 
-function convertToNepaliFormat($number)
-{
 
-    $formattedNumber = number_format($number);
-    return $formattedNumber;
-}
 
 function giveImageName($imageName, $imagegenerateType)
 {
@@ -81,4 +76,31 @@ function numberPriceFormat($input)
     $formatted = number_format($input);
     $formatted = 'Rs.' . $formatted;
     return $formatted;
+}
+
+
+function priceToNprFormat($string)
+{
+    try {
+        $string = strrev($string);
+        $length = strlen($string);
+        $newCharacter = '';
+        for ($i = 0; $i < $length; $i++) {
+            $character = $string[$i];
+            if ($i == 3) {
+                $newCharacter = $newCharacter . ',' . $character;
+            } else if ($i == 5) {
+                $newCharacter = $newCharacter . ',' . $character;
+            } else if ($i == 7) {
+                $newCharacter = $newCharacter . ',' . $character;
+            } else if ($i == 9) {
+                $newCharacter = $newCharacter . ',' . $character;
+            } else {
+                $newCharacter = $newCharacter . $character;
+            }
+        }
+        return 'Rs.'.strrev($newCharacter);
+    } catch (Throwable $th) {
+        return 0;
+    }
 }

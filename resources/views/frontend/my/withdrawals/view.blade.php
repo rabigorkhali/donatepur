@@ -15,7 +15,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{{ url('/dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item "><a href="{{ url('/my/campaigns') }}">Campaigns</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/my/withdrawals') }}">Withdrawals</a></li>
             <li class="breadcrumb-item active"><a>Detail</a></li>
         </ol>
 
@@ -36,23 +36,48 @@
                             </tr>
                             <tr>
                                 <th style="width:20%">Category:</th>
-                                <td>{{ $campaignDetail?->category?->title??'N/A' }}</td>
+                                <td>{{ $campaignDetail?->category?->title ?? 'N/A' }}</td>
+                            </tr>
+                            <tr>
+                                <th style="width:20%">Payment Details:</th>
+                                <td>
+                                    <table border="2">
+                                        <tr>
+                                            <th>Service</th>
+                                            <th>Mobile Number</th>
+                                            @if ($withdrawalDetails?->userPaymentGateway?->payment_gateway_name == 'Bank')
+                                                <th>Bank Name</th>
+                                                <th>Bank Account Number</th>
+                                                <th>Bank Address</th>
+                                            @endif
+                                        </tr>
+                                        <tr>
+                                            <td>{{ $withdrawalDetails?->userPaymentGateway?->payment_gateway_name }}</td>
+                                            <td>{{ $withdrawalDetails?->userPaymentGateway?->mobile_number }}</td>
+                                            @if ($withdrawalDetails?->userPaymentGateway?->payment_gateway_name == 'Bank')
+                                                <td>{{ $withdrawalDetails->userPaymentGateway->bank_name }}</td>
+                                                <td>{{ $withdrawalDetails?->userPaymentGateway?->bank_account_number }}</td>
+                                                <td>{{ $withdrawalDetails?->userPaymentGateway?->bank_address }}</td>
+                                            @endif
+                                        </tr>
+                                    </table>
+                                </td>
                             </tr>
                             <tr>
                                 <th style="width:20%;">Goal Amount</th>
                                 <td>{{ numberPriceFormat($campaignDetail->goal_amount) }}</td>
                             </tr>
                             <tr>
-                                <th style="width:20%;">Total Donation Amount</th>
+                                <th style="width:20%;">Total Donation Amount Collected</th>
                                 <td>{{ numberPriceFormat($campaignDetail->summary_total_collection) }}</td>
                             </tr>
                             <tr>
-                                <th style="width:20%;">Net Donation Amount</th>
+                                <th style="width:20%;">Withdrawable Amount</th>
                                 <td>{{ numberPriceFormat($campaignDetail->net_amount_collection) }}</td>
                             </tr>
                             <tr>
                                 <th style="width:20%;">Applicable Service charge</th>
-                                <td>{{ numberPriceFormat($campaignDetail->summary_service_charge_amount)}}</td>
+                                <td>{{ numberPriceFormat($campaignDetail->summary_service_charge_amount) }}</td>
                             </tr>
                             <tr>
                                 <th style="width:20%;">Number of Donation</th>
@@ -62,10 +87,7 @@
                                 <th style="width:20%;">Start Date</th>
                                 <td>{{ $campaignDetail->start_date }}</td>
                             </tr>
-                            <tr>
-                                <th style="width:20%;">Goal Amount</th>
-                                <td>{{ $campaignDetail->goal_amount }}</td>
-                            </tr>
+
                             <tr>
                                 <th style="width:20%;">End Date</th>
                                 <td>{{ $campaignDetail->end_date }}</td>
@@ -92,13 +114,14 @@
                                     </a>
                                 </td>
                             </tr>
+
                             <tr>
                                 <th style="width:20%;">Verification Status</th>
-                                <td>{{ ucfirst($campaignDetail->campaign_status) }}</td>
+                                <td>{{ ucwords(str_replace('-', ' ', $campaignDetail->campaign_status)) }}</td>
                             </tr>
                             <tr>
-                                <th style="width:20%;">Campaign Status</th>
-                                <td>{{ ($campaignDetail->campaign_status)?'Active':'Inactive'; }}</td>
+                                <th style="width:20%;">Status</th>
+                                <td>{{ $campaignDetail->status ? 'Active' : 'Inactive' }}</td>
                             </tr>
                             <tr>
                                 <th style="width:20%;">Description</th>
@@ -107,15 +130,16 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th> <a href="{{ route('my.campaigns.list') }}" rel="noopener" 
-                                    class="btn btn-default float-left mb-4"><i class="fas fa-backward"></i> Back</a></th>
+                                <th> <a href="{{ route('my.campaigns.list') }}" rel="noopener"
+                                        class="btn btn-default float-left mb-4"><i class="fas fa-backward"></i> Back</a>
+                                </th>
                                 <td>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                
+
             </div>
 
 

@@ -3,17 +3,21 @@
 use App\Http\Controllers\Frontend\my\campaigns\MyCampaignController;
 use App\Http\Controllers\Frontend\my\donations\MyDonationController;
 use App\Http\Controllers\Frontend\my\donations\MyDonationReceivedController;
+use App\Http\Controllers\Frontend\my\MyDashboardController;
 use App\Http\Controllers\Frontend\my\paymentGateways\MyPublicUserPaymentGatewayController;
 use App\Http\Controllers\Frontend\my\withdrawals\MyWithdrawalsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['frontend_users', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['frontend_users'])->name('dashboard');
+
+
 
 Route::prefix('my')->middleware('frontend_users')->group(function () {
+    Route::get('/dashboard', [MyDashboardController::class, 'index'])->name('my.dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

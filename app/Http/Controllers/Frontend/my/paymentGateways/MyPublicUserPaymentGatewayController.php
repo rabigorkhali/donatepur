@@ -45,6 +45,8 @@ class MyPublicUserPaymentGatewayController extends Controller
                 'SN',
                 'Payment Gateway',
                 'Mobile Number',
+                'Bank Name',
+                'Bank Account Number',
                 'Status',
                 ['label' => 'Actions', 'no-export' => true, 'width' => 5],
             ];
@@ -67,6 +69,8 @@ class MyPublicUserPaymentGatewayController extends Controller
                     $sn,
                     $paymentGatewaysDatum?->payment_gateway_name,
                     $paymentGatewaysDatum->mobile_number,
+                    $paymentGatewaysDatum->bank_name??'N/A',
+                    $paymentGatewaysDatum->bank_account_number??'N/A',
                     ($paymentGatewaysDatum->status) ? 'Active' : 'Inactive',
                     '<nobr>'  . $btnDelete . $btnDetails . '</nobr>'
                 ];
@@ -76,7 +80,7 @@ class MyPublicUserPaymentGatewayController extends Controller
             $data['config'] = [
                 'data' => $paymentGatewaysList,
                 'order' => [[1, 'asc']],
-                'beautify' => true,
+                'beautify' => false,
                 'buttons' => [
                     [
                         'extend' => 'excel',
@@ -84,7 +88,7 @@ class MyPublicUserPaymentGatewayController extends Controller
                     ]
                 ],
                 'columns' => [
-                    null, null, null, null,
+                    null, null, null, null,null,null,
                     ['orderable' => false]
                 ],
             ];

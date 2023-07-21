@@ -77,10 +77,7 @@
                             <tr>
                                 <h5 class="ml-2">Campaign Details</h5>
                             </tr>
-                            <tr>
-                                <th style="width:20%">Title:</th>
-                                <td class="campaign-data" id="labelGoalAmount">Education Counselling1 </td>
-                            </tr>
+                            
                             <tr>
                                 <th style="width:20%">Goal Amount:</th>
                                 <td class="campaign-data" id="goal_amount">N/A</td>
@@ -109,7 +106,10 @@
                                 <th style="width:20%">End Date:</th>
                                 <td class="campaign-data" id="end_date">N/A</td>
                             </tr>
-
+                            <tr>
+                                <th style="width:20%">Campaign Status:</th>
+                                <td class="campaign-data" id="end_date">Completed</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -218,7 +218,11 @@
                 $('#info_bank_account_number').text($('#user_payment_gateway_id option:selected').data(
                     'bank-account-number'));
                 $('#info_payment_type').text($('#user_payment_gateway_id option:selected').text().trim());
-
+                if ($('#user_payment_gateway_id option:selected').text().trim() == 'Bank') {
+                        $('.bank-attr').show();
+                    } else {
+                        $('.bank-attr').hide();
+                    }
             });
 
             $('#user_payment_gateway_id').change(function() {
@@ -234,8 +238,6 @@
                         'bank-account-number'));
                     $('#info_payment_type').text($('#user_payment_gateway_id option:selected').text()
                         .trim());
-
-                        console.log($('#user_payment_gateway_id option:selected').text().trim());
                     if ($('#user_payment_gateway_id option:selected').text().trim() == 'Bank') {
                         $('.bank-attr').show();
                     } else {
