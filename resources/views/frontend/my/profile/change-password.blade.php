@@ -56,7 +56,7 @@
 
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 mb-2">
             <x-adminlte-button label="Primary" type="submit" theme="primary" label="Save" icon="fas fa-save" />
         </div>
     </form>

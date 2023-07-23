@@ -4,7 +4,29 @@
 
 
 @section('content_header')
+<style>
+    /* Hide the main toolbar */
+    .note-toolbar {
+        display: none;
+    }
 
+    /* Hide the air-mode toolbar */
+    .note-air-popover {
+        display: none;
+    }
+
+    /* Hide the popover toolbar */
+    .note-popover {
+        display: none;
+    }
+</style>
+<style>
+    /* CSS to make the textarea fit its container's width */
+    textarea {
+      width: 100%;
+      box-sizing: border-box; /* Ensures the textarea includes padding and border within the 100% width */
+    }
+  </style>
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">
@@ -14,7 +36,7 @@
     </section>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="{{ url('/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/my/dashboard') }}">Home</a></li>
             <li class="breadcrumb-item "><a href="{{ url('/my/campaigns') }}">Campaigns</a></li>
             <li class="breadcrumb-item active"><a>Edit</a></li>
         </ol>
@@ -169,9 +191,11 @@
             </div>
             <div class="col-md-12 mt-2">
                 @php $formInputName='description'; @endphp
-                <x-adminlte-text-editor
-                    label="Descriptions (Mentioning your personal bank account/payment gateway detail is strictly prohibited.)"
-                    maxlength="1" minlength="100" required rows="20" label-class="" cols="10"
+                {{-- <textarea name="{{$formInputName}}" rows="20" required  style="width: 100%;"> {{ old($formInputName, $campaignDetail->$formInputName) }}</textarea> --}}
+                {{-- <textarea cols="200" rows="100">{{ old($formInputName, $campaignDetail->$formInputName) }}</textarea> --}}
+                <x-adminlte-textarea required
+                    label="Descriptions <br> No personal bank account/payment gateway details allowed to prevent fraud and money laundering."
+                    maxlength="2000" minlength="100" required rows="20" label-class="" cols="10"
                     name="{{ $formInputName }}" value="">
                     {{ old($formInputName, $campaignDetail->$formInputName) }}
                     </x-adminlte-textarea>
@@ -182,13 +206,14 @@
                     @endif
 
             </div>
+            <div class="flex items-center gap-4 mb-2">
+                <x-adminlte-button label="Primary" type="submit" theme="primary" label="Save" icon="fas fa-save" />
+                <a href="{{ route('my.campaigns.list') }}" class="btn btn-default">
+                    <i class="fas fa-backward"></i> Back </a>
+            </div>
         </div>
        
-        <div class="flex items-center gap-4">
-            <x-adminlte-button label="Primary" type="submit" theme="primary" label="Save" icon="fas fa-save" />
-            <a href="{{ route('my.campaigns.list') }}" class="btn btn-default">
-                <i class="fas fa-backward"></i> Back </a>
-        </div>
+
     </form>
 @stop
 
@@ -199,10 +224,7 @@
 @section('js')
 
     <script>
-        $('#description').summernote({
-            height: 400, // set editor height
-            width: 1140, // set editor height
-            focus: true
-        });
+
+
     </script>
 @stop

@@ -14,7 +14,7 @@
     </section>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="{{ url('/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/my/dashboard') }}">Home</a></li>
             <li class="breadcrumb-item "><a href="{{ url('/my/payment-gateways') }}">Payment Gateways</a></li>
             <li class="breadcrumb-item active"><a>Add</a></li>
         </ol>
@@ -130,10 +130,11 @@
                 @endif
 
             </div>
+            <div class="flex items-center gap-4 mb-2">
+                <x-adminlte-button label="Primary" type="submit" theme="primary" label="Create" icon="fas fa-save" />
+            </div>
         </div>
-        <div class="flex items-center gap-4">
-            <x-adminlte-button label="Primary" type="submit" theme="primary" label="Create" icon="fas fa-save" />
-        </div>
+
     </form>
 @stop
 

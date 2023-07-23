@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Throwable;
+use DB;
 
 class MyCampaignController extends Controller
 {
@@ -41,7 +42,6 @@ class MyCampaignController extends Controller
             /* TESTCASE */
             /* 
             -show delete btn only for campaign_status=pending
-            -show edit btn only for campaign_status=pending
             */
             /* TESTCASE */
             $data = array();
@@ -66,14 +66,17 @@ class MyCampaignController extends Controller
             $btnDelete = '';
             $btnEdit = '';
             foreach ($campaigns as $keyCampaigns => $datumCampaign) {
-                $btnEdit = '<a href="' . route('my.campaigns.edit', $datumCampaign->id) . '" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
+                if (strtolower($datumCampaign->campaign_status == 'pending')) {
+                    $btnEdit = '<a href="' . route('my.campaigns.edit', $datumCampaign->id) . '" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                             <i class="fa fa-edit"></i>
                         </a>';
+                }
                 if (strtolower($datumCampaign->campaign_status == 'pending')) {
                     $btnDelete = '<a onclick="deleteBtn(' . $datumCampaign->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
                               <i class="fa fa-lg fa-fw fa-trash"></i>
                           </a>';
                 }
+
                 $btnDetails = '<a target="_blank" href="' . route('my.campaigns.view', $datumCampaign->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
                                <i class="fa fa-lg fa-fw fa-eye"></i>
                            </a>';
@@ -81,12 +84,12 @@ class MyCampaignController extends Controller
 
                 $thisArray = [
                     $sn,
-                    $datumCampaign->title,
+                    substr($datumCampaign->title,0,50),
                     ucfirst($datumCampaign->campaign_status),
                     $datumCampaign->start_date,
                     $datumCampaign->end_date,
                     priceToNprFormat($datumCampaign->goal_amount),
-                     priceToNprFormat($datumCampaign->total_collection),
+                    priceToNprFormat($datumCampaign->total_collection),
                     ($datumCampaign->status) ? 'Active' : 'Inactive',
                     '<nobr>' . $btnEdit . $btnDelete . $btnDetails . '</nobr>'
                 ];
@@ -138,12 +141,24 @@ class MyCampaignController extends Controller
             if ($request->file('cover_image')) {
                 $data['cover_image'] = $this->dirforDb . $this->uploadImage($this->dir, 'cover_image', true, 1280, null);
             }
+            $slug = replaceSpacesWithDash(strtolower($request->get('title')));
             $data['public_user_id'] = $request->user->id;
             $data['anonymous'] = 0;
-            Campaign::insert($data);
+            $data['campaign_status'] = 'pending';
+            DB::beginTransaction();
+            $campaignCreateResponse = Campaign::insertGetId($data);
+            $slugExists = Campaign::where('slug', $slug)->count();
+            if ($slugExists) {
+                $data['slug'] = $slug . '-' . $campaignCreateResponse;
+            } else {
+                $data['slug'] = $slug;
+            }
+            Campaign::where('id', $campaignCreateResponse)->update(['slug' => $data['slug']]);
             Session::flash('success', 'Success! Campaign created successfully.');
+            DB::commit();
             return redirect('/my/campaigns');
         } catch (Throwable $th) {
+            DB::rollback();
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
@@ -176,7 +191,16 @@ class MyCampaignController extends Controller
     public function edit(Request $request, $campaignId)
     {
         $data['page_title'] = 'Campaign Edit';
-        $data['campaignDetail'] = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
+        $campaignDetails = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
+        $data['campaignDetail'] = $campaignDetails;
+        if (!$campaignDetails) {
+            Session::flash('error', 'Bad request.');
+            return redirect()->back();
+        }
+        if (strtolower($campaignDetails->campaign_status) !== 'pending') {
+            Session::flash('error', 'Only pending campaign can be edited.');
+            return redirect()->back();
+        }
         $data['campaignCategories'] = CampaignCategory::where('status', 1)->orderby('title', 'asc')->get();
         return view('frontend.my.campaigns.edit', $data);
     }
@@ -190,6 +214,7 @@ class MyCampaignController extends Controller
 
     public function update(Request $request, $campaignId)
     {
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'goal_amount' => 'required|numeric|min:1000|max:10000000',
@@ -213,10 +238,21 @@ class MyCampaignController extends Controller
                 Session::flash('error', 'Campaign not found.');
                 return redirect()->back();
             }
+            if (strtolower($campaign->campaign_status) !== 'pending') {
+                Session::flash('error', 'Only pending campaign can be updated.');
+                return redirect()->back();
+            }
             $data = $request->only('title', 'goal_amount', 'start_date', 'end_date', 'campaign_category_id', 'address', 'country', 'video_url', 'status', 'description');
             if ($request->file('cover_image')) {
                 if ($campaign->cover_image) $this->removeImage($this->mainDirectory, $request->cover_image);
                 $data['cover_image'] = $this->dirforDb . $this->uploadImage($this->dir, 'cover_image', true, 1280, null);
+            }
+            $slug = replaceSpacesWithDash(strtolower($request->get('title')));
+            $slugExists = Campaign::where('slug', $slug)->count();
+            if ($slugExists) {
+                $data['slug'] = $slug . '-' . $campaignId;
+            } else {
+                $data['slug'] = $slug;
             }
             Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->update($data);
             Session::flash('success', 'Success! Data saved successfully.');
@@ -237,10 +273,10 @@ class MyCampaignController extends Controller
                 Session::flash('error', 'Bad request.');
                 return redirect()->back()->withInput();
             }
-            $campaignData->summary_total_collection=priceToNprFormat($campaignData->summary_total_collection);
-            $campaignData->net_amount_collection=priceToNprFormat($campaignData->net_amount_collection);
-            $campaignData->summary_service_charge_amount=priceToNprFormat($campaignData->summary_service_charge_amount);
-            $campaignData->goal_amount=priceToNprFormat($campaignData->goal_amount);
+            $campaignData->summary_total_collection = priceToNprFormat($campaignData->summary_total_collection);
+            $campaignData->net_amount_collection = priceToNprFormat($campaignData->net_amount_collection);
+            $campaignData->summary_service_charge_amount = priceToNprFormat($campaignData->summary_service_charge_amount);
+            $campaignData->goal_amount = priceToNprFormat($campaignData->goal_amount);
             $data['campaign'] = $campaignData;
             return $data;
         } catch (Throwable $th) {

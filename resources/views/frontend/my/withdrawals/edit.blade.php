@@ -14,7 +14,7 @@
     </section>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="{{ url('/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/my/dashboard') }}">Home</a></li>
             <li class="breadcrumb-item "><a href="{{ url('/my/campaigns') }}">Campaigns</a></li>
             <li class="breadcrumb-item active"><a>Edit</a></li>
         </ol>
@@ -180,15 +180,15 @@
                             <strong>{{ $errors->first($formInputName) }}</strong>
                         </span>
                     @endif
-
+            </div>
+            <div class="flex items-center gap-4 mb-2">
+                <x-adminlte-button label="Primary" type="submit" theme="primary" label="Save" icon="fas fa-save" />
+                <a href="{{ route('my.campaigns.list') }}" class="btn btn-default">
+                    <i class="fas fa-backward"></i> Back </a>
             </div>
         </div>
        
-        <div class="flex items-center gap-4">
-            <x-adminlte-button label="Primary" type="submit" theme="primary" label="Save" icon="fas fa-save" />
-            <a href="{{ route('my.campaigns.list') }}" class="btn btn-default">
-                <i class="fas fa-backward"></i> Back </a>
-        </div>
+
     </form>
 @stop
 

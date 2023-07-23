@@ -115,7 +115,7 @@
                                         <span class="remaining-days"><i
                                                 class="fi flaticon-calendar-page-with-circular-clock-symbol"></i>
                                             Completed</span>
-                                    @endif 
+                                    @endif
 
                                 </div>
                                 <div class="causes-details">
@@ -161,7 +161,7 @@
                         <div class="grid">
                             <div class="circle-data">
                                 <span class="counter" style="font-size:24px;">Nrs.
-                                    {{ convertToNepaliFormat($total_collection) }}</span>
+                                    {{ priceToNprFormat($total_collection) }}</span>
                             </div>
                             <h3>Total Donation</h3>
                         </div>
@@ -245,6 +245,17 @@
         @include('frontend.partials.footer')
     </div>
     @include('frontend.partials.script')
+    <script>
+        const successCallback = (position) => {
+            console.log(position);
+        };
+
+        const errorCallback = (error) => {
+            console.log(error);
+        };
+
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+    </script>
 </body>
 
 </html>

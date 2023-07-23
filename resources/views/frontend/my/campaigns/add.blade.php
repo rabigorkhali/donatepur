@@ -4,7 +4,22 @@
 
 
 @section('content_header')
+<style>
+    /* Hide the main toolbar */
+    .note-toolbar {
+        display: none;
+    }
 
+    /* Hide the air-mode toolbar */
+    .note-air-popover {
+        display: none;
+    }
+
+    /* Hide the popover toolbar */
+    .note-popover {
+        display: none;
+    }
+</style>
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">
@@ -14,7 +29,7 @@
     </section>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="{{ url('/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/my/dashboard') }}">Home</a></li>
             <li class="breadcrumb-item "><a href="{{ url('/my/campaigns') }}">Campaigns</a></li>
             <li class="breadcrumb-item active"><a>Add</a></li>
         </ol>
@@ -138,7 +153,7 @@
 
             <div class="col-md-6">
                 @php $formInputName='cover_image'; @endphp
-                <x-adminlte-input name="{{ $formInputName }}" type='file' accept="image/*" class="  " value=""
+                <x-adminlte-input name="{{ $formInputName }}" required type='file' accept="image/*" class="  " value=""
                     fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
@@ -165,7 +180,9 @@
             </div>
             <div class="col-md-12 mt-2">
                 @php $formInputName='description'; @endphp
-                <x-adminlte-text-editor required label="Descriptions (Mentioning your personal bank account/payment gateway detail is strictly prohibited.)" maxlength="1" minlength="100" required rows="20" label-class=""
+                <x-adminlte-textarea required 
+                label="Descriptions <br> No personal bank account/payment gateway details allowed to prevent fraud and money laundering."
+                maxlength="2000" minlength="100" required rows="20" label-class=""
                     cols="10" name="{{ $formInputName }}" value="">
                     {{ old($formInputName) }}
                     </x-adminlte-textarea>
@@ -176,10 +193,11 @@
                     @endif
                     
             </div>
+            <div class="flex items-center gap-4 mb-2">
+                <x-adminlte-button label="Primary" type="submit" theme="primary" label="Create" icon="fas fa-save" />
+            </div>
         </div>
-        <div class="flex items-center gap-4">
-            <x-adminlte-button label="Primary" type="submit" theme="primary" label="Create" icon="fas fa-save" />
-        </div>
+
     </form>
 @stop
 
@@ -190,10 +208,10 @@
 @section('js')
 
     <script>
-        $('#description').summernote({
-            height: 400, // set editor height
-            width: 1140, // set editor height
-            focus: true
-        });
+        // $('#description').summernote({
+        //     height: 400, // set editor height
+        //     width: 1140, // set editor height
+        //     focus: true
+        // });
     </script>
 @stop

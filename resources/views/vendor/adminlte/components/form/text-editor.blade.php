@@ -9,7 +9,7 @@
 @section('input_group_item')
 
     {{-- Summernote Textarea --}}
-    <textarea 
+    <textarea  @isset($attributes['required']) required  @endisset
     @isset($attributes['maxlength']) maxlength="{{$attributes['maxlength']}}" @endisset
     @isset($attributes['minlength']) minlength="{{$attributes['minlength']}}" @endisset
     id="{{ $id }}" name="{{ $name }}"

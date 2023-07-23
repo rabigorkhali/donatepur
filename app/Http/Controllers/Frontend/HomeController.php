@@ -62,11 +62,12 @@ class HomeController extends FrontendBaseController
                 ->take(3)->get();
             $data['total_campaign'] = $this->campaigns->where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->count();
             $data['total_collection'] = $this->campaigns->where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->sum('total_collection');
-            $totalDonars = $this->donation->wherein('payment_status', ['successful'])->distinct('public_user_id')->count();
-            $data['total_donars'] = $totalDonars + $this->donation->wherein('payment_status', ['successful'])->where('is_verified', 1)->where('public_user_id', null)->count();
-            $data['topDonors'] = $this->donation->with('publicUser')->wherein('payment_status', ['successful'])->where('is_verified', 1)->orderby('amount')->get();
+            $totalDonars = $this->donation->wherein('payment_status', ['successful'])->distinct('giver_public_user_id')->count();
+            $data['total_donars'] = $totalDonars + $this->donation->wherein('payment_status', ['successful'])->where('is_verified', 1)->where('giver_public_user_id', null)->count();
+            $data['topDonors'] = $this->donation->with('giver')->wherein('payment_status', ['successful'])->where('is_verified', 1)->orderby('amount')->get();
             return $this->renderView($this->viewFolder(), $data);
         } catch (Throwable $th) {
+            dd($th);
             return redirect('/');
         }
     }

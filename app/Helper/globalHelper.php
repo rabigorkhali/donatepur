@@ -99,8 +99,37 @@ function priceToNprFormat($string)
                 $newCharacter = $newCharacter . $character;
             }
         }
-        return 'Rs.'.strrev($newCharacter);
+        return 'Rs.' . strrev($newCharacter);
     } catch (Throwable $th) {
         return 0;
+    }
+
+
+}
+
+
+function replaceSpacesWithDash($inputString)
+{
+    $result = preg_replace('/\s+/', '-', $inputString);
+    return $result;
+}
+
+function generateUniqueString($size)
+{
+    function generateUniqueID()
+    {
+        // Get the current timestamp with microseconds for finer granularity
+        $timestamp = microtime(true);
+
+        // Convert the timestamp to a string without decimal point
+        $timestampString = str_replace('.', '', (string)$timestamp);
+
+        // Generate a random component (you can use other methods to generate random strings)
+        $randomComponent = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 6);
+
+        // Concatenate the timestamp and random component to form the unique ID
+        $uniqueID = $timestampString . $randomComponent;
+
+        return $uniqueID;
     }
 }

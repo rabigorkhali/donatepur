@@ -146,10 +146,11 @@
                     src="{{ asset('uploads/' . giveImageName($user->profile_picture, 'medium')) }}" height="50">
                 </a>
             </div>
+            <div class="flex items-center gap-4 mb-2">
+                <x-adminlte-button label="Primary" type="submit" theme="primary" label="Save" icon="fas fa-save" />
+            </div>
         </div>
-        <div class="flex items-center gap-4">
-            <x-adminlte-button label="Primary" type="submit" theme="primary" label="Save" icon="fas fa-save" />
-        </div>
+
     </form>
 @stop
 

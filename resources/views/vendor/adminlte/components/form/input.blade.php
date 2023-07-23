@@ -19,5 +19,6 @@
         value="{{ $getOldValue($errorKey, $attributes->get('value')) }}"
         @if (isset($attributes['pattern'])) pattern="{{$attributes['pattern']}}" @endif
         @if (isset($attributes['title'])) title="{{$attributes['title']}}" @endif
-        class="{{ $makeItemClass() . ' ' . $attributes['class'] ?? ' ' }}  @if ($errors->first($name)) is-invalid @endif">
+        class="{{ $makeItemClass() . ' ' . $attributes['class'] ?? ' ' }} 
+         @if ($errors->first($name)) is-invalid @endif">
 @overwrite

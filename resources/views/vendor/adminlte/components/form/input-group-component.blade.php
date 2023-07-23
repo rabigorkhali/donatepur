@@ -11,7 +11,7 @@
     @isset($label)
         <label for="{{ $id }}"
             class="@isset($labelClass) {{ $labelClass }} @endisset @if ($attributes['required']) required-field @endif ">
-            {{ $label }}
+            {!! $label !!}
         </label>
     @else
         <label for="{{ $id }}"
