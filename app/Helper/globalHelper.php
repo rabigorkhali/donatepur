@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Voyager\Post;
+use App\Models\Voyager\Setting;
+use App\Models\Voyager\UsefullLink;
+
 function calculatePercentageMaxTo100($number, $total)
 {
     if ($total != 0) {
@@ -23,8 +27,11 @@ function calculateActualPercentage($number, $total)
     }
 }
 
-function imageName($filename, $imageType)
+function imageName($filename, $imageType = '', $size = '100x100', $text = 'Image not found.')
 {
+    if (!$filename) {
+        return 'https://dummyimage.com/' . $size . '&text=' . $text;
+    }
     $extensionIndex = strrpos($filename, '.');
     $newFilename = substr_replace($filename, $imageType, $extensionIndex, 0);
 
@@ -103,8 +110,6 @@ function priceToNprFormat($string)
     } catch (Throwable $th) {
         return 0;
     }
-
-
 }
 
 
@@ -114,22 +119,42 @@ function replaceSpacesWithDash($inputString)
     return $result;
 }
 
-function generateUniqueString($size)
+function generateUniqueID()
 {
-    function generateUniqueID()
-    {
-        // Get the current timestamp with microseconds for finer granularity
-        $timestamp = microtime(true);
+    // Get the current timestamp with microseconds for finer granularity
+    $timestamp = microtime(true);
 
-        // Convert the timestamp to a string without decimal point
-        $timestampString = str_replace('.', '', (string)$timestamp);
+    // Convert the timestamp to a string without decimal point
+    $timestampString = str_replace('.', '', (string)$timestamp);
 
-        // Generate a random component (you can use other methods to generate random strings)
-        $randomComponent = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 6);
+    // Generate a random component (you can use other methods to generate random strings)
+    $randomComponent = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 6);
 
-        // Concatenate the timestamp and random component to form the unique ID
-        $uniqueID = $timestampString . $randomComponent;
+    // Concatenate the timestamp and random component to form the unique ID
+    $uniqueID = $timestampString . $randomComponent;
 
-        return $uniqueID;
+    return $uniqueID;
+}
+
+function getSiteDetails($siteType = 'Site')
+{
+    $siteDetails = Setting::where('group', $siteType)->get();
+    $siteArray = [];
+    foreach ($siteDetails as $key => $datumSiteDetails) {
+        $siteArray[$datumSiteDetails->key] = $datumSiteDetails->value;
     }
+    return $siteArray;
+}
+
+function getPostsBlogs($limit = '5')
+{
+    $posts = Post::where('status', 'published')->orderby('created_at', 'desc')->limit($limit)->get();
+    return $posts;
+}
+
+
+function usefullLinks($limit='5')
+{
+    $usefulLinks = UsefullLink::orderby('created_at', 'desc')->limit($limit)->get();
+    return $usefulLinks;
 }

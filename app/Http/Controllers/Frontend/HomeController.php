@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Models\Voyager\Campaign;
+use App\Models\Voyager\CampaignView;
 use App\Models\Voyager\ContactUs;
 use App\Models\Voyager\Donation;
 use App\Models\Voyager\Page;
+use App\Models\Voyager\Partner;
 use App\Models\Voyager\PaymentGateway;
+use App\Models\Voyager\PublicUser;
+use App\Models\Voyager\Setting;
 use App\Models\Voyager\SliderBanner;
+use App\Models\Voyager\Testimonial;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -50,10 +55,16 @@ class HomeController extends FrontendBaseController
     {
         try {
             $data = array();
-            $data['topCauses'] = $this->campaigns->where('status', true)
+            $data['featuredCauses'] = CampaignView::where('status', true)
                 ->where('is_featured', false)
-                ->wherein('campaign_status', ['accepted'])
-                ->orderby('total_collection', 'desc')
+                ->wherein('campaign_status', ['running'])
+                ->orderby('summary_total_collection', 'desc')
+                ->take(6)->get();
+
+            $data['recentCauses'] = CampaignView::where('status', true)
+                ->where('is_featured', false)
+                ->wherein('campaign_status', ['running'])
+                ->orderby('summary_total_collection', 'desc')
                 ->take(6)->get();
 
             $data['sliderBanners'] = $this->sliderBanner
@@ -61,14 +72,27 @@ class HomeController extends FrontendBaseController
                 ->orderby('position', 'asc')
                 ->take(3)->get();
             $data['total_campaign'] = $this->campaigns->where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->count();
-            $data['total_collection'] = $this->campaigns->where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->sum('total_collection');
+            $data['total_collection'] = CampaignView::where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->sum('summary_total_collection');
             $totalDonars = $this->donation->wherein('payment_status', ['successful'])->distinct('giver_public_user_id')->count();
             $data['total_donars'] = $totalDonars + $this->donation->wherein('payment_status', ['successful'])->where('is_verified', 1)->where('giver_public_user_id', null)->count();
-            $data['topDonors'] = $this->donation->with('giver')->wherein('payment_status', ['successful'])->where('is_verified', 1)->orderby('amount')->get();
+            $data['total_public_users'] = PublicUser::where('status', 'active')->count();
+            $donationRaw = $this->donation->with('giver')->wherein('payment_status', ['successful'])->where('is_verified', 1)->orderby('amount')->get();
+            $topDonorsList = [];
+            foreach ($donationRaw as $donationRawKey => $donationRawDatum) {
+                $topDonors = [];
+                $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
+                $topDonors['profile_pic'] = asset('uploads') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
+                $topDonors['amount'] = $donationRawDatum->amount;
+                $topDonors['is_anonymous'] = $donationRawDatum->is_anonymous;
+                $topDonors['giver_public_user_id'] = $donationRawDatum->giver_public_user_id;
+                array_push($topDonorsList, $topDonors);
+            }
+            $data['topDonors'] = $topDonorsList;
+            $data['testimonials'] = Testimonial::where('status', 1)->get();;
+            $data['partners'] = Partner::get();
             return $this->renderView($this->viewFolder(), $data);
         } catch (Throwable $th) {
             dd($th);
-            return redirect('/');
         }
     }
 

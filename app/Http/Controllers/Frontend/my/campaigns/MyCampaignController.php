@@ -159,6 +159,7 @@ class MyCampaignController extends Controller
             return redirect('/my/campaigns');
         } catch (Throwable $th) {
             DB::rollback();
+            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }

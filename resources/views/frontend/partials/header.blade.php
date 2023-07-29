@@ -1,40 +1,54 @@
-
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
 <head>
-    <!-- Meta Tags -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="author" content="themexriver">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<!-- Meta Tags -->
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="CharityPress - Nonprofit, Crowdfunding & Charity HTML5 Template" />
+<meta name="keywords" content="building,business,construction,cleaning,transport,workshop" />
+<meta name="author" content="ThemeMascot" />
+<!-- Page Title -->
+<title>CharityPress - Nonprofit, Crowdfunding & Charity HTML5 Template</title>
+	<link rel="canonical" href="https://kodesolution.com" />
+<!-- Favicon and Touch Icons -->
+<link href="{{asset('/images/favicon.png')}}" rel="shortcut icon" type="image/png">
+<link href="{{asset('/images/apple-touch-icon.png')}}" rel="apple-touch-icon">
+<link href="{{asset('/images/apple-touch-icon-72x72.png')}}" rel="apple-touch-icon" sizes="72x72">
+<link href="{{asset('/images/apple-touch-icon-114x114.png')}}" rel="apple-touch-icon" sizes="114x114">
+<link href="{{asset('/images/apple-touch-icon-144x144.png')}}" rel="apple-touch-icon" sizes="144x144">
+<!-- Stylesheet -->
+<!-- Stylesheet -->
+<link href="{{asset('/frontend/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
+<link href="{{asset('/frontend/css/jquery-ui.min.css')}}" rel="stylesheet" type="text/css">
+<link href="{{asset('/frontend/css/animate.css')}}" rel="stylesheet" type="text/css">
+<link href="{{asset('/frontend/css/css-plugin-collections.css')}}" rel="stylesheet"/>
+<!-- CSS | menuzord megamenu skins -->
+<link id="menuzord-menu-skins" href="{{asset('/frontend/css/menuzord-skins/menuzord-boxed.css')}}" rel="stylesheet"/>
+<!-- CSS | Main style file -->
+<link href="{{asset('/frontend/css/style-main.css')}}" rel="stylesheet" type="text/css">
+<!-- CSS | Preloader Styles -->
+<link href="{{asset('/frontend/css/preloader.css')}}" rel="stylesheet" type="text/css">
+<!-- CSS | Custom Margin Padding Collection -->
+<link href="{{asset('/frontend/css/custom-bootstrap-margin-padding.css')}}" rel="stylesheet" type="text/css">
+<!-- CSS | Responsive media queries -->
+<link href="{{asset('/frontend/css/responsive.css')}}" rel="stylesheet" type="text/css">
+<!-- CSS | Style css. This is the file where you can place your own custom css code. Just uncomment it and use it. -->
+<!-- <link href="css/style.css')}}" rel="stylesheet" type="text/css"> -->
+<!-- Revolution Slider 5.x CSS settings -->
+<link  href="{{asset('/frontend/js/revolution-slider/css/settings.css')}}" rel="stylesheet" type="text/css"/>
+<link  href="{{asset('/frontend/js/revolution-slider/css/layers.css')}}" rel="stylesheet" type="text/css"/>
+<link  href="{{asset('/frontend/js/revolution-slider/css/navigation.css')}}" rel="stylesheet" type="text/css"/>
+<!-- CSS | Theme Color -->
+<link href="{{asset('/frontend/css/colors/theme-skin-blue-gary.css')}}" rel="stylesheet" type="text/css">
+<!-- external javascripts -->
+<script src="{{asset('/frontend/js/jquery-2.2.0.min.js')}}"></script>
+<script src="{{asset('/frontend/js/jquery-ui.min.js')}}"></script>
+<script src="{{asset('/frontend/js/bootstrap.min.js')}}"></script>
+<!-- JS | jquery plugin collection for this theme -->
+<script src="{{asset('/frontend/js/jquery-plugin-collection.js')}}"></script>
+<!-- Revolution Slider 5.x SCRIPTS -->
 
-    <!-- Page Title -->
-    <title> {{setting('site.title')}}</title>
-
-    <!-- Favicon and Touch Icons -->
-    <link href="{{asset('frontend/images/s35RlLbXuwI3.png')}}" rel="shortcut icon" type="image/png">
-    <link href="{{asset('frontend/images/FYnvErIYNxrW.png')}}" rel="apple-touch-icon">
-    <link href="{{asset('frontend/images/JlnGSAE2dpZ2.png')}}" rel="apple-touch-icon" sizes="72x72">
-    <link href="{{asset('frontend/images/7JctdEKul8Ac.png')}}" rel="apple-touch-icon" sizes="114x114">
-    <link href="{{asset('frontend/images/6PjfShxL8sHO.png')}}" rel="apple-touch-icon" sizes="144x144">
-
-    <!-- Icon fonts -->
-    <link href="{{asset('frontend/css/NMxbpK1uNkui.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/css/FrXot1XbnXsR.css')}}" rel="stylesheet">
-
-    <!-- Bootstrap core CSS -->
-    <link href="{{asset('frontend/css/SiQDpFDAhglA.css')}}" rel="stylesheet">
-
-    <!-- Plugins for this template -->
-    <link href="{{asset('frontend/css/hzoPGO8OAQyn.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/css/NFPjg6nCpgzq.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/css/svcx0cJmwC9g.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/css/OELQ7WwwdZMB.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/css/oohvBYrEdKqy.css')}}" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="{{asset('frontend/css/1I3l4d3hhwdU.css')}}" rel="stylesheet">
-
-
-    @yield('header')
-    @yield('css')
+<script src="{{asset('frontend/js/revolution-slider/js/jquery.themepunch.tools.min.js')}}"></script>
+<script src="{{asset('frontend/js/revolution-slider/js/jquery.themepunch.revolution.min.js')}}"></script>
 
 </head>
