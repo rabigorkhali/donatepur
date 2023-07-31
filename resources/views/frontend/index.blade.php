@@ -3,81 +3,154 @@
 @section('content')
     <!-- Start main-content -->
     <div class="main-content">
-        <!-- SLIDER -->
+        <!-- Section: home -->
         <section id="home">
             <div class="container-fluid p-0">
                 <!-- Slider Revolution Start -->
                 <div class="rev_slider_wrapper">
                     <div class="rev_slider" data-version="5.0">
                         <ul>
-                            <!-- SLIDE 1 -->
+                            <?php $islider = 1; ?>
                             @foreach ($sliderBanners as $sliderBannersKey => $sliderBannersDatum)
-                                <li data-index="rs-1" data-transition="slidingoverlayhorizontal" data-slotamount="default"
-                                    data-easein="default" data-easeout="default" data-masterspeed="default"
-                                    data-thumb="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}"
-                                    data-rotate="0" data-saveperformance="off" data-title="Wow Factor" data-description="">
-                                    <!-- MAIN IMAGE -->
-                                    <img src="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}"
-                                        alt="" data-bgposition="center center" data-bgfit="cover"
-                                        data-bgrepeat="no-repeat" class="rev-slidebg" data-bgparallax="10" data-no-retina>
-                                    <!-- LAYERS -->
-                                    <!-- LAYER NR. 1 -->
-                                    <div class="tp-caption NotGeneric-Title tp-resizeme text-uppercase" id="rs-1-layer-1"
-                                        data-x="['left','left','left','left']" data-hoffset="['50','50','50','50']"
-                                        data-y="['top','top','top','top']" data-voffset="['150','150','170','168']"
-                                        data-fontsize="['72','72','64','48']" data-lineheight="['100','90','60','60']"
-                                        data-width="none" data-height="none" data-whitespace="nowrap"
-                                        data-transform_idle="o:1;"
-                                        data-transform_in="x:-50px;opacity:0;s:500;e:Power1.easeInOut;"
-                                        data-transform_out="x:50px;opacity:0;s:500;e:Power1.easeInOut;" data-start="500"
-                                        data-splitin="chars" data-splitout="none" data-basealign="slide"
-                                        data-responsive_offset="on" data-elementdelay="0.03"
-                                        style="z-index: 5; white-space: nowrap; font-size: 40px; line-height: 40px;">
-                                        {{ $sliderBannersDatum->title }}
-                                    </div>
-                                    <!-- LAYER NR. 2 -->
-                                    <div class="tp-caption NotGeneric-SubTitle tp-resizeme text-uppercase" id="rs-1-layer-2"
-                                        data-x="['left','left','left','left']" data-hoffset="['55','55','55','55']"
-                                        data-y="['top','top','top','top']" data-voffset="['160','160','160','160']"
-                                        data-width="none" data-height="none" data-whitespace="nowrap"
-                                        data-transform_idle="o:1;"
-                                        data-transform_in="x:-50px;opacity:0;s:500;e:Power1.easeInOut;"
-                                        data-transform_out="x:50px;opacity:0;s:500;e:Power1.easeInOut;" data-start="500"
-                                        data-splitin="chars" data-splitout="none" data-basealign="slide"
-                                        data-responsive_offset="on" data-elementdelay="0.03"
-                                        style="z-index: 6; white-space: nowrap; color: rgba(255, 255, 255, 0.50);">
-                                        {{ $sliderBannersDatum->sub_title ?? '' }}
-                                    </div>
-                                    <!-- LAYER NR. 3 -->
-                                    <div class="tp-caption Photography-Textblock tp-resizeme" id="rs-1-layer-3"
-                                        data-x="['left','left','left','left']" data-hoffset="['55','55','55','55']"
-                                        data-y="['top','top','top','top']" data-voffset="['250','250','250','250']"
-                                        data-width="380" data-height="150" data-whitespace="normal"
-                                        data-transform_idle="o:1;"
-                                        data-transform_in="x:-50px;opacity:0;s:500;e:Power1.easeInOut;"
-                                        data-transform_out="x:50px;opacity:0;s:500;e:Power1.easeInOut;" data-start="500"
-                                        data-splitin="chars" data-splitout="none" data-basealign="slide"
-                                        data-responsive_offset="on" data-elementdelay="0.01"
-                                        style="z-index: 7; min-width: 380px; max-width: 380px; max-width: 180px; max-width: 180px; white-space: normal; font-size: 15px; line-height: 25px;">
-                                        {{ substr($sliderBannersDatum->description, 0, 150) }}....
-                                    </div>
-                                    <!-- LAYER NR. 4 -->
-                                    <div class="tp-caption BigBold-Button rev-btn text-uppercase" id="rs-1-layer-4"
-                                        data-x="['left']" data-hoffset="['50']" data-y="['top']" data-voffset="['350']"
-                                        data-width="none" data-height="none" data-whitespace="nowrap"
-                                        data-transform_idle="o:1;"
-                                        data-transform_in="x:-50px;opacity:0;s:500;e:Power1.easeInOut;"
-                                        data-transform_out="x:50px;opacity:0;s:500;e:Power1.easeInOut;" data-start="1000"
-                                        data-splitin="none" data-splitout="none" data-basealign="slide"
-                                        data-responsive_offset="on" data-responsive="on"
-                                        style="z-index: 8; white-space: nowrap;text-transform:left;border-color:rgba(255, 255, 255, 0.25);outline:none;box-shadow:none;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;cursor:pointer;">
-                                        <a
-                                            href="{{ $sliderBannersDatum->go_to_link }}">{{ $sliderBannersDatum->btn_text }}</a>
-                                            <i
-                                            style="font-size: .8rem; vertical-align: middle;"
-                                            class="fa fa-arrow-circle-right text-white ml-5"></i>
-                                    </div>
-                                </li>
+                                @if ($islider % 2 === 0)
+                                    <li data-index="rs-2" data-transition="slidingoverlayhorizontal" data-slotamount="default"
+                                        data-easein="default" data-easeout="default" data-masterspeed="default"
+                                        data-thumb="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}" data-rotate="0"
+                                        data-saveperformance="off" data-title="Slide 2" data-description="">
+                                        <!-- MAIN IMAGE -->
+                                        <img src="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}" alt=""
+                                            data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat"
+                                            class="rev-slidebg" data-bgparallax="10" data-no-retina>
+                                        <!-- LAYERS -->
+                                        <!-- LAYER NR. 1 -->
+                                        <div class="tp-caption tp-resizeme text-uppercase text-white font-raleway"
+                                            id="rs-2-layer-1" data-x="['left']" data-hoffset="['30']" data-y="['middle']"
+                                            data-voffset="['-110']" data-fontsize="['110']" data-lineheight="['120']"
+                                            data-width="none" data-height="none" data-whitespace="nowrap"
+                                            data-transform_idle="o:1;s:500"
+                                            data-transform_in="y:100;scaleX:1;scaleY:1;opacity:0;"
+                                            data-transform_out="x:left(R);s:1000;e:Power3.easeIn;s:1000;e:Power3.easeIn;"
+                                            data-mask_in="x:0px;y:0px;s:inherit;e:inherit;"
+                                            data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1000"
+                                            data-splitin="none" data-splitout="none" data-responsive_offset="on"
+                                            style="z-index: 7; white-space: nowrap; font-weight:700;">Donate
+                                        </div>
+                                        <!-- LAYER NR. 2 -->
+                                        <div class="tp-caption tp-resizeme text-uppercase text-white font-raleway bg-theme-colored-transparent pl-20 pr-20"
+                                            id="rs-2-layer-2" data-x="['left']" data-hoffset="['35']" data-y="['middle']"
+                                            data-voffset="['-25']" data-fontsize="['35']" data-lineheight="['54']"
+                                            data-width="none" data-height="none" data-whitespace="nowrap"
+                                            data-transform_idle="o:1;s:500"
+                                            data-transform_in="y:100;scaleX:1;scaleY:1;opacity:0;"
+                                            data-transform_out="x:left(R);s:1000;e:Power3.easeIn;s:1000;e:Power3.easeIn;"
+                                            data-mask_in="x:0px;y:0px;s:inherit;e:inherit;"
+                                            data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1000"
+                                            data-splitin="none" data-splitout="none" data-responsive_offset="on"
+                                            style="z-index: 7; white-space: nowrap; font-weight:600; border-radius: 30px;">
+                                            {{ $sliderBannersDatum->title }}
+                                        </div>
+                                        <!-- LAYER NR. 3 -->
+                                        <div class="tp-caption tp-resizeme text-white" id="rs-2-layer-3" data-x="['left']"
+                                            data-hoffset="['35']" data-y="['middle']" data-voffset="['30']"
+                                            data-fontsize="['16']" data-lineheight="['28']" data-width="none"
+                                            data-height="none" data-whitespace="nowrap" data-transform_idle="o:1;s:500"
+                                            data-transform_in="y:100;scaleX:1;scaleY:1;opacity:0;"
+                                            data-transform_out="x:left(R);s:1000;e:Power3.easeIn;s:1000;e:Power3.easeIn;"
+                                            data-mask_in="x:0px;y:0px;s:inherit;e:inherit;"
+                                            data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1400"
+                                            data-splitin="none" data-splitout="none" data-responsive_offset="on"
+                                            style="z-index: 5; white-space: nowrap; letter-spacing:0px; font-weight:400;">
+                                            {{substr($sliderBannersDatum->description,0,50)}} <br>
+                                            {{substr($sliderBannersDatum->description,51,100)}} <br>
+                                            {{substr($sliderBannersDatum->description,101,150)}}....
+                                        </div>
+                                        <!-- LAYER NR. 4 -->
+                                        <div class="tp-caption tp-resizeme" id="rs-2-layer-4" data-x="['left']"
+                                            data-hoffset="['35']" data-y="['middle']" data-voffset="['95']"
+                                            data-width="none" data-height="none" data-whitespace="nowrap"
+                                            data-transform_idle="o:1;"
+                                            data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;"
+                                            data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;"
+                                            data-mask_in="x:0px;y:[100%];s:inherit;e:inherit;"
+                                            data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1400"
+                                            data-splitin="none" data-splitout="none" data-responsive_offset="on"
+                                            style="z-index: 5; white-space: nowrap; letter-spacing:1px;"><a
+                                                class="btn btn-colored btn-lg btn-theme-colored pl-20 pr-20"
+                                                href="#">{{$sliderBannersDatum->btn_text??'Donate Now'}}</a>
+                                        </div>
+                                    </li>
+                                @else
+                                    <!-- SLIDE 3 -->
+                                    <li data-index="rs-3" data-transition="slidingoverlayhorizontal"
+                                        data-slotamount="default" data-easein="default" data-easeout="default"
+                                        data-masterspeed="default"
+                                        data-thumb="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}" data-rotate="0"
+                                        data-saveperformance="off" data-title="Slide 3" data-description="">
+                                        <!-- MAIN IMAGE -->
+                                        <img src="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}" alt=""
+                                            data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat"
+                                            class="rev-slidebg" data-bgparallax="10" data-no-retina>
+                                        <!-- LAYERS -->
+                                        <!-- LAYER NR. 1 -->
+                                        <div class="tp-caption tp-resizeme text-uppercase text-white font-raleway bg-theme-colored-transparent pr-20 pl-20"
+                                            id="rs-3-layer-1" data-x="['right']" data-hoffset="['30']"
+                                            data-y="['middle']" data-voffset="['-90']" data-fontsize="['64']"
+                                            data-lineheight="['72']" data-width="none" data-height="none"
+                                            data-whitespace="nowrap" data-transform_idle="o:1;s:500"
+                                            data-transform_in="y:100;scaleX:1;scaleY:1;opacity:0;"
+                                            data-transform_out="x:left(R);s:1000;e:Power3.easeIn;s:1000;e:Power3.easeIn;"
+                                            data-mask_in="x:0px;y:0px;s:inherit;e:inherit;"
+                                            data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1000"
+                                            data-splitin="none" data-splitout="none" data-responsive_offset="on"
+                                            style="z-index: 7; white-space: nowrap; font-weight:600;">
+                                            {{-- <span class="">Help</span> The Poor --}}
+                                            <span class="">{{$sliderBannersDatum->title}}</span>
+                                        </div>
+                                        <!-- LAYER NR. 2 -->
+                                        <div class="tp-caption tp-resizeme text-uppercase text-white font-raleway"
+                                            id="rs-3-layer-2" data-x="['right']" data-hoffset="['35']"
+                                            data-y="['middle']" data-voffset="['-25']" data-fontsize="['32']"
+                                            data-lineheight="['54']" data-width="none" data-height="none"
+                                            data-whitespace="nowrap" data-transform_idle="o:1;s:500"
+                                            data-transform_in="y:100;scaleX:1;scaleY:1;opacity:0;"
+                                            data-transform_out="x:left(R);s:1000;e:Power3.easeIn;s:1000;e:Power3.easeIn;"
+                                            data-mask_in="x:0px;y:0px;s:inherit;e:inherit;"
+                                            data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1000"
+                                            data-splitin="none" data-splitout="none" data-responsive_offset="on"
+                                            style="z-index: 7; white-space: nowrap; font-weight:600;">{{$sliderBannersDatum->sub_title}}
+                                        </div>
+                                        <!-- LAYER NR. 3 -->
+                                        <div class="tp-caption tp-resizeme text-white text-right" id="rs-3-layer-3"
+                                            data-x="['right']" data-hoffset="['35']" data-y="['middle']"
+                                            data-voffset="['30']" data-fontsize="['16']" data-lineheight="['28']"
+                                            data-width="none" data-height="none" data-whitespace="nowrap"
+                                            data-transform_idle="o:1;s:500"
+                                            data-transform_in="y:100;scaleX:1;scaleY:1;opacity:0;"
+                                            data-transform_out="x:left(R);s:1000;e:Power3.easeIn;s:1000;e:Power3.easeIn;"
+                                            data-mask_in="x:0px;y:0px;s:inherit;e:inherit;"
+                                            data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1400"
+                                            data-splitin="none" data-splitout="none" data-responsive_offset="on"
+                                            style="z-index: 5; white-space: nowrap; letter-spacing:0px; font-weight:400;">
+                                            {{substr($sliderBannersDatum->description,0,50)}} <br>
+                                            {{substr($sliderBannersDatum->description,51,100)}} <br>
+                                            {{substr($sliderBannersDatum->description,101,150)}}....                                        </div>
+                                        <!-- LAYER NR. 4 -->
+                                        <div class="tp-caption tp-resizeme" id="rs-3-layer-4" data-x="['right']"
+                                            data-hoffset="['35']" data-y="['middle']" data-voffset="['95']"
+                                            data-width="none" data-height="none" data-whitespace="nowrap"
+                                            data-transform_idle="o:1;"
+                                            data-transform_in="y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;s:2000;e:Power4.easeInOut;"
+                                            data-transform_out="y:[100%];s:1000;e:Power2.easeInOut;s:1000;e:Power2.easeInOut;"
+                                            data-mask_in="x:0px;y:[100%];s:inherit;e:inherit;"
+                                            data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1400"
+                                            data-splitin="none" data-splitout="none" data-responsive_offset="on"
+                                            style="z-index: 5; white-space: nowrap; letter-spacing:1px;"><a
+                                                class="btn btn-colored btn-lg btn-flat btn-theme-colored pl-20 pr-20"
+                                                href="#">{{$sliderBannersDatum->btn_text??'Donate Now'}}</a>
+                                        </div>
+                                    </li>
+                                @endif
+                                <?php $islider = $islider + 1; ?>
                             @endforeach
                         </ul>
                     </div>
@@ -88,13 +161,13 @@
                     $(document).ready(function(e) {
                         $(".rev_slider").revolution({
                             sliderType: "standard",
-                            sliderLayout: "fullscreen",
+                            sliderLayout: "auto",
                             dottedOverlay: "none",
-                            delay: 3000,
+                            delay: 5000,
                             navigation: {
-                                keyboardNavigation: "on",
+                                keyboardNavigation: "off",
                                 keyboard_direction: "horizontal",
-                                mouseScrollNavigation: "on",
+                                mouseScrollNavigation: "off",
                                 onHoverStop: "off",
                                 touch: {
                                     touchenabled: "on",
@@ -103,43 +176,47 @@
                                     swipe_direction: "horizontal",
                                     drag_block_vertical: false
                                 },
+                                arrows: {
+                                    style: "zeus",
+                                    enable: true,
+                                    hide_onmobile: true,
+                                    hide_under: 600,
+                                    hide_onleave: true,
+                                    hide_delay: 200,
+                                    hide_delay_mobile: 1200,
+                                    tmp: '<div class="tp-title-wrap">    <div class="tp-arr-imgholder"></div> </div>',
+                                    left: {
+                                        h_align: "left",
+                                        v_align: "center",
+                                        h_offset: 30,
+                                        v_offset: 0
+                                    },
+                                    right: {
+                                        h_align: "right",
+                                        v_align: "center",
+                                        h_offset: 30,
+                                        v_offset: 0
+                                    }
+                                },
                                 bullets: {
                                     enable: true,
                                     hide_onmobile: true,
-                                    style: "zeus",
+                                    hide_under: 600,
+                                    style: "metis",
                                     hide_onleave: true,
-                                    direction: "vertical",
-                                    h_align: "bottom",
-                                    v_align: "center",
-                                    h_offset: 30,
-                                    v_offset: 0,
-                                    space: 10,
-                                    tmp: ''
-                                },
-                                thumbnails: {
-                                    style: "gyges",
-                                    enable: true,
-                                    width: 60,
-                                    height: 60,
-                                    min_width: 60,
-                                    wrapper_padding: 0,
-                                    wrapper_color: "#000000",
-                                    wrapper_opacity: "0",
-                                    tmp: '<span class="tp-thumb-img-wrap">  <span class="tp-thumb-image"></span></span>',
-                                    visibleAmount: 10,
-                                    hide_onmobile: true,
-                                    hide_onleave: true,
+                                    hide_delay: 200,
+                                    hide_delay_mobile: 1200,
                                     direction: "horizontal",
-                                    span: false,
-                                    position: "inner",
-                                    space: 10,
-                                    h_align: "left",
+                                    h_align: "center",
                                     v_align: "bottom",
-                                    h_offset: 30,
-                                    v_offset: 30
+                                    h_offset: 0,
+                                    v_offset: 30,
+                                    space: 5,
+                                    tmp: '<span class="tp-bullet-img-wrap">  <span class="tp-bullet-image"></span></span><span class="tp-bullet-title"></span>'
                                 }
                             },
-                            responsiveLevels: [1240, 1024, 778, 480],
+                            responsiveLevels: [1240, 1024, 778],
+                            visibilityLevels: [1240, 1024, 778],
                             gridwidth: [1170, 1024, 778, 480],
                             gridheight: [600, 768, 960, 720],
                             lazyType: "none",
@@ -156,6 +233,10 @@
                             stopAtSlide: -1,
                             shuffle: "off",
                             autoHeight: "off",
+                            fullScreenAutoWidth: "off",
+                            fullScreenAlignForce: "off",
+                            fullScreenOffsetContainer: "",
+                            fullScreenOffset: "0",
                             hideThumbsOnMobile: "off",
                             hideSliderAtLimit: 0,
                             hideCaptionAtLimit: 0,
@@ -164,7 +245,7 @@
                             fallbacks: {
                                 simplifyAll: "off",
                                 nextSlideOnWindowFocus: "off",
-                                disableFocusListener: false
+                                disableFocusListener: false,
                             }
                         });
                     });
@@ -172,7 +253,6 @@
                 <!-- Slider Revolution Ends -->
             </div>
         </section>
-        {{-- END SLIDER --}}
 
         <!-- Section: Featured Projects  -->
         @if ($featuredCauses->count())
@@ -259,14 +339,16 @@
                         <div class="owl-carousel-6col" data-nav="true">
                             @foreach ($topDonors as $topDonorsKey => $topDonorsDatum)
                                 <div class="item text-center">
-                                  <img alt="" src="{{ $topDonorsDatum['profile_pic']??''}}">
-                                  <div class="donor-details bg-white">
-                                      <h4 class="m-0 pt-10 text-theme-colored">{{ $topDonorsDatum['name']??''}}</h4>
-                                      <p class="font-12 pb-10">Donated : {{ priceToNprFormat($topDonorsDatum['amount']??'')}}<br>Rank : {{ $topDonorsKey}}</p>
+                                    <img alt="" src="{{ $topDonorsDatum['profile_pic'] ?? '' }}">
+                                    <div class="donor-details bg-white">
+                                        <h4 class="m-0 pt-10 text-theme-colored">{{ $topDonorsDatum['name'] ?? '' }}</h4>
+                                        <p class="font-12 pb-10">Donated :
+                                            {{ priceToNprFormat($topDonorsDatum['amount'] ?? '') }}<br>Rank :
+                                            {{ $topDonorsKey }}</p>
 
-                                  </div>
+                                    </div>
                                 </div>
-                                @endforeach
+                            @endforeach
 
                         </div>
                     </div>
@@ -282,8 +364,8 @@
                         <div class="funfact">
                             <i class="pe-7s-smile text-black-light mt-20 font-48 pull-left flip"></i>
                             <div class="ml-60">
-                                <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom" data-value="{{$total_donars}}"
-                                    data-animation-duration="1500">0</h2>
+                                <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom"
+                                    data-value="{{ $total_donars }}" data-animation-duration="1500">0</h2>
                                 <div class="clearfix"></div>
                                 <h4 class="font-14">Happy Donators</h4>
                             </div>
@@ -293,8 +375,8 @@
                         <div class="funfact">
                             <i class="pe-7s-rocket text-black-light mt-20 font-48 pull-left flip"></i>
                             <div class="ml-60">
-                                <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom" data-value="{{$total_campaign}}"
-                                    data-animation-duration="1500">0</h2>
+                                <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom"
+                                    data-value="{{ $total_campaign }}" data-animation-duration="1500">0</h2>
                                 <div class="clearfix"></div>
                                 <h4 class="font-14">Successful Campaigns</h4>
                             </div>
@@ -304,8 +386,8 @@
                         <div class="funfact">
                             <i class="pe-7s-add-user text-black-light mt-20 font-48 pull-left flip"></i>
                             <div class="ml-60">
-                                <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom" data-value="{{$total_public_users}}"
-                                    data-animation-duration="1200">0</h2>
+                                <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom"
+                                    data-value="{{ $total_public_users }}" data-animation-duration="1200">0</h2>
                                 <div class="clearfix"></div>
                                 <h4 class="font-14">Total Users</h4>
                             </div>
@@ -315,8 +397,8 @@
                         <div class="funfact">
                             <i class="pe-7s-cash text-black-light mt-20 font-48 pull-left flip"></i>
                             <div class="ml-60">
-                                <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom" data-value="{{$total_collection}}"
-                                    data-animation-duration="1500">Rs.</h2>
+                                <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom"
+                                    data-value="{{ $total_collection }}" data-animation-duration="1500">Rs.</h2>
                                 <div class="clearfix"></div>
                                 <h4 class="font-14">Total Collection</h4>
                             </div>
@@ -344,40 +426,40 @@
                 <div class="section-content">
                     <div class="row">
                         @foreach ($recentCauses as $recentCausesKey => $recentCausesDatum)
-
-                        <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
-                            <div class="image-box-thum">
-                                <img height="239" class="img-fullwidth" alt=""
-                                    src="{{ asset('uploads') . '/' . imageName($recentCausesDatum->cover_image) }}">
-                            </div>
-                            <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
-                                <h3 class="title mt-0 mb-5"><a href="#">{{ $recentCausesDatum->category->title }}</a></h3>
-                                <div class="project-meta mb-10 font-12">
-                                    <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                            href="#">{{ $recentCausesDatum->category->title }}</a></span>
+                            <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
+                                <div class="image-box-thum">
+                                    <img height="239" class="img-fullwidth" alt=""
+                                        src="{{ asset('uploads') . '/' . imageName($recentCausesDatum->cover_image) }}">
                                 </div>
-                                <p class="desc mb-10">
-                                    {{ substr($recentCausesDatum->description, 0, 140) }}...</p>
-                                <div class="progress-item mt-0">
-                                    <div class="progress mb-10">
-                                        <div data-percent="{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}"
-                                            class="progress-bar"><span class="percent">0</span></div>
+                                <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
+                                    <h3 class="title mt-0 mb-5"><a
+                                            href="#">{{ $recentCausesDatum->category->title }}</a></h3>
+                                    <div class="project-meta mb-10 font-12">
+                                        <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
+                                                href="#">{{ $recentCausesDatum->category->title }}</a></span>
                                     </div>
+                                    <p class="desc mb-10">
+                                        {{ substr($recentCausesDatum->description, 0, 140) }}...</p>
+                                    <div class="progress-item mt-0">
+                                        <div class="progress mb-10">
+                                            <div data-percent="{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}"
+                                                class="progress-bar"><span class="percent">0</span></div>
+                                        </div>
+                                    </div>
+                                    <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
+                                        <li class="current-fund">
+                                            <strong>{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}%</strong>funded
+                                        </li>
+                                        <li class="target-fund">
+                                            <strong>{{ priceToNprFormat($recentCausesDatum->goal_amount) }}</strong>target
+                                        </li>
+                                        <li class="remaining-days">
+                                            <strong>{{ getDaysDiffByToday($recentCausesDatum->end_date) }}</strong>days
+                                            to go
+                                        </li>
+                                    </ul>
                                 </div>
-                                <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
-                                    <li class="current-fund">
-                                        <strong>{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}%</strong>funded
-                                    </li>
-                                    <li class="target-fund">
-                                        <strong>{{ priceToNprFormat($recentCausesDatum->goal_amount) }}</strong>target
-                                    </li>
-                                    <li class="remaining-days">
-                                        <strong>{{ getDaysDiffByToday($recentCausesDatum->end_date) }}</strong>days
-                                        to go
-                                    </li>
-                                </ul>
                             </div>
-                        </div>
                         @endforeach
 
                         {{-- <div class="col-md-12">
@@ -396,21 +478,22 @@
                 <div class="row">
                     <div class="col-md-12 mb-30">
                         <div class="owl-carousel-2col boxed" data-dots="true">
-                            @foreach($testimonials as $testimonialsKey => $testimonialsDatum)
-                            <div class="item">
-                                <div class="testimonial pt-10">
-                                    <div class="thumb pull-left mb-0 mr-0 pr-20">
-                                        <img width="75" class="img-circle" alt=""
-                                            src="{{ asset('uploads') . '/' . imageName($testimonialsDatum->profile_picture,'-cropped') }}">
-                                    </div>
-                                    <div class="ml-100 ">
-                                        <h4 class="mt-0 font-weight-300">{{$testimonialsDatum->message}}</h4>
-                                        <p class="author mt-20">- <span class="text-black-333">{{$testimonialsDatum->name}},</span>
-                                            <small><em>{{$testimonialsDatum->designation}}</em></small>
-                                        </p>
+                            @foreach ($testimonials as $testimonialsKey => $testimonialsDatum)
+                                <div class="item">
+                                    <div class="testimonial pt-10">
+                                        <div class="thumb pull-left mb-0 mr-0 pr-20">
+                                            <img width="75" class="img-circle" alt=""
+                                                src="{{ asset('uploads') . '/' . imageName($testimonialsDatum->profile_picture, '-cropped') }}">
+                                        </div>
+                                        <div class="ml-100 ">
+                                            <h4 class="mt-0 font-weight-300">{{ $testimonialsDatum->message }}</h4>
+                                            <p class="author mt-20">- <span
+                                                    class="text-black-333">{{ $testimonialsDatum->name }},</span>
+                                                <small><em>{{ $testimonialsDatum->designation }}</em></small>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             @endforeach
 
                         </div>
@@ -425,12 +508,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="owl-carousel-6col clients-logo text-center">
-                                @foreach($partners as $partnersKey => $partnersDatum)
-                                <div class="item"> <a href="#"><img class="img-responsive"
-                                            src="{{ asset('uploads') . '/' . imageName($partnersDatum->logo,'-cropped') }}" alt=""></a>
-                                </div>
+                                @foreach ($partners as $partnersKey => $partnersDatum)
+                                    <div class="item"> <a href="#"><img class="img-responsive"
+                                                src="{{ asset('uploads') . '/' . imageName($partnersDatum->logo, '-cropped') }}"
+                                                alt=""></a>
+                                    </div>
                                 @endforeach
-                                
+
                             </div>
                         </div>
                     </div>
