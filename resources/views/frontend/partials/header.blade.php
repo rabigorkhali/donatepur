@@ -26,6 +26,7 @@
 <link id="menuzord-menu-skins" href="{{asset('/frontend/css/menuzord-skins/menuzord-boxed.css')}}" rel="stylesheet"/>
 <!-- CSS | Main style file -->
 <link href="{{asset('/frontend/css/style-main.css')}}" rel="stylesheet" type="text/css">
+<link href="{{asset('/frontend/css/custom.css')}}" rel="stylesheet" type="text/css">
 <!-- CSS | Preloader Styles -->
 <link href="{{asset('/frontend/css/preloader.css')}}" rel="stylesheet" type="text/css">
 <!-- CSS | Custom Margin Padding Collection -->
@@ -50,5 +51,6 @@
 
 <script src="{{asset('frontend/js/revolution-slider/js/jquery.themepunch.tools.min.js')}}"></script>
 <script src="{{asset('frontend/js/revolution-slider/js/jquery.themepunch.revolution.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 
 </head>

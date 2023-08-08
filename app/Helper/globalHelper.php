@@ -29,6 +29,7 @@ function calculateActualPercentage($number, $total)
 
 function imageName($filename, $imageType = '', $size = '100x100', $text = 'Image not found.')
 {
+    // http://placehold.it/430x240
     if (!$filename) {
         return 'https://dummyimage.com/' . $size . '&text=' . $text;
     }
@@ -105,6 +106,11 @@ function priceToNprFormat($string)
             } else {
                 $newCharacter = $newCharacter . $character;
             }
+        }
+        if(!$newCharacter)
+        {
+            return 'Rs. 0';
+
         }
         return 'Rs.' . strrev($newCharacter);
     } catch (Throwable $th) {

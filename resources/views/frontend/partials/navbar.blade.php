@@ -3,7 +3,7 @@
       <div class="header-nav-wrapper">
         <div class="container">
           <nav id="menuzord-right" class="menuzord default no-bg">
-            <a class="menuzord-brand pull-left flip" href="html/2016/charitypress-html/demo/index-mp-layout1.html"><img src="html/2016/charitypress-html/demo/images/logo-wide.png" alt=""></a>
+            <a class="menuzord-brand pull-left flip" href="{{url('/')}}"><img src="{{ asset('uploads') . '/' . imageName(setting('site.logo')) }}" alt=""></a>
             <ul class="menuzord-menu">
               <li class="active"><a href="{{route('fontendDefaultPage')}}">Home</a>
               </li>

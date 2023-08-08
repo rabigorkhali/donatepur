@@ -284,10 +284,10 @@
                                             </div>
                                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
                                                 <h3 class="title mt-0 mb-5"><a
-                                                        href="#">{{ $featuredCausesDatum->title }}</a></h3>
+                                                        href="{{route('campaignDetailPage',$featuredCausesDatum->slug)}}">{{ $featuredCausesDatum->title }}</a></h3>
                                                 <div class="project-meta mb-10 font-12">
                                                     <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                                            href="#">{{ $featuredCausesDatum->category->title }}</a></span>
+                                                            href="{{route('campaignDetailPage',$featuredCausesDatum->slug )}}">{{ $featuredCausesDatum->category->title }}</a></span>
                                                 </div>
                                                 <p class="desc mb-10">
                                                     {{ substr($featuredCausesDatum->description, 0, 140) }}...</p>
