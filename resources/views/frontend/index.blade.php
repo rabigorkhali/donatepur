@@ -15,12 +15,13 @@
                                 @if ($islider % 2 === 0)
                                     <li data-index="rs-2" data-transition="slidingoverlayhorizontal" data-slotamount="default"
                                         data-easein="default" data-easeout="default" data-masterspeed="default"
-                                        data-thumb="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}" data-rotate="0"
-                                        data-saveperformance="off" data-title="Slide 2" data-description="">
+                                        data-thumb="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}"
+                                        data-rotate="0" data-saveperformance="off" data-title="Slide 2" data-description="">
                                         <!-- MAIN IMAGE -->
-                                        <img src="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}" alt=""
-                                            data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat"
-                                            class="rev-slidebg" data-bgparallax="10" data-no-retina>
+                                        <img src="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}"
+                                            alt="" data-bgposition="center center" data-bgfit="cover"
+                                            data-bgrepeat="no-repeat" class="rev-slidebg" data-bgparallax="10"
+                                            data-no-retina>
                                         <!-- LAYERS -->
                                         <!-- LAYER NR. 1 -->
                                         <div class="tp-caption tp-resizeme text-uppercase text-white font-raleway"
@@ -60,9 +61,9 @@
                                             data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1400"
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:0px; font-weight:400;">
-                                            {{substr($sliderBannersDatum->description,0,50)}} <br>
-                                            {{substr($sliderBannersDatum->description,51,100)}} <br>
-                                            {{substr($sliderBannersDatum->description,101,150)}}....
+                                            {{ substr($sliderBannersDatum->description, 0, 50) }} <br>
+                                            {{ substr($sliderBannersDatum->description, 51, 100) }} <br>
+                                            {{ substr($sliderBannersDatum->description, 101, 150) }}....
                                         </div>
                                         <!-- LAYER NR. 4 -->
                                         <div class="tp-caption tp-resizeme" id="rs-2-layer-4" data-x="['left']"
@@ -76,7 +77,7 @@
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:1px;"><a
                                                 class="btn btn-colored btn-lg btn-theme-colored pl-20 pr-20"
-                                                href="#">{{$sliderBannersDatum->btn_text??'Donate Now'}}</a>
+                                                href="#">{{ $sliderBannersDatum->btn_text ?? 'Donate Now' }}</a>
                                         </div>
                                     </li>
                                 @else
@@ -84,12 +85,14 @@
                                     <li data-index="rs-3" data-transition="slidingoverlayhorizontal"
                                         data-slotamount="default" data-easein="default" data-easeout="default"
                                         data-masterspeed="default"
-                                        data-thumb="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}" data-rotate="0"
-                                        data-saveperformance="off" data-title="Slide 3" data-description="">
+                                        data-thumb="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}"
+                                        data-rotate="0" data-saveperformance="off" data-title="Slide 3"
+                                        data-description="">
                                         <!-- MAIN IMAGE -->
-                                        <img src="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}" alt=""
-                                            data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat"
-                                            class="rev-slidebg" data-bgparallax="10" data-no-retina>
+                                        <img src="{{ asset('uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}"
+                                            alt="" data-bgposition="center center" data-bgfit="cover"
+                                            data-bgrepeat="no-repeat" class="rev-slidebg" data-bgparallax="10"
+                                            data-no-retina>
                                         <!-- LAYERS -->
                                         <!-- LAYER NR. 1 -->
                                         <div class="tp-caption tp-resizeme text-uppercase text-white font-raleway bg-theme-colored-transparent pr-20 pl-20"
@@ -104,7 +107,7 @@
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 7; white-space: nowrap; font-weight:600;">
                                             {{-- <span class="">Help</span> The Poor --}}
-                                            <span class="">{{$sliderBannersDatum->title}}</span>
+                                            <span class="">{{ $sliderBannersDatum->title }}</span>
                                         </div>
                                         <!-- LAYER NR. 2 -->
                                         <div class="tp-caption tp-resizeme text-uppercase text-white font-raleway"
@@ -117,7 +120,8 @@
                                             data-mask_in="x:0px;y:0px;s:inherit;e:inherit;"
                                             data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1000"
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
-                                            style="z-index: 7; white-space: nowrap; font-weight:600;">{{$sliderBannersDatum->sub_title}}
+                                            style="z-index: 7; white-space: nowrap; font-weight:600;">
+                                            {{ $sliderBannersDatum->sub_title }}
                                         </div>
                                         <!-- LAYER NR. 3 -->
                                         <div class="tp-caption tp-resizeme text-white text-right" id="rs-3-layer-3"
@@ -131,9 +135,9 @@
                                             data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1400"
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:0px; font-weight:400;">
-                                            {{substr($sliderBannersDatum->description,0,50)}} <br>
-                                            {{substr($sliderBannersDatum->description,51,100)}} <br>
-                                            {{substr($sliderBannersDatum->description,101,150)}}....                                        </div>
+                                            {{ substr($sliderBannersDatum->description, 0, 50) }} <br>
+                                            {{ substr($sliderBannersDatum->description, 51, 100) }} <br>
+                                            {{ substr($sliderBannersDatum->description, 101, 150) }}.... </div>
                                         <!-- LAYER NR. 4 -->
                                         <div class="tp-caption tp-resizeme" id="rs-3-layer-4" data-x="['right']"
                                             data-hoffset="['35']" data-y="['middle']" data-voffset="['95']"
@@ -146,7 +150,7 @@
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:1px;"><a
                                                 class="btn btn-colored btn-lg btn-flat btn-theme-colored pl-20 pr-20"
-                                                href="#">{{$sliderBannersDatum->btn_text??'Donate Now'}}</a>
+                                                href="#">{{ $sliderBannersDatum->btn_text ?? 'Donate Now' }}</a>
                                         </div>
                                     </li>
                                 @endif
@@ -284,18 +288,24 @@
                                             </div>
                                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
                                                 <h3 class="title mt-0 mb-5"><a
-                                                        href="{{route('campaignDetailPage',$featuredCausesDatum->slug)}}">{{ $featuredCausesDatum->title }}</a></h3>
+                                                        href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ $featuredCausesDatum->title }}</a>
+                                                </h3>
                                                 <div class="project-meta mb-10 font-12">
                                                     <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                                            href="{{route('campaignDetailPage',$featuredCausesDatum->slug )}}">{{ $featuredCausesDatum->category->title }}</a></span>
+                                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ $featuredCausesDatum->category->title }}</a></span>
                                                 </div>
                                                 <p class="desc mb-10">
-                                                    {{ substr($featuredCausesDatum->description, 0, 140) }}...</p>
+                                                    {{ substr($featuredCausesDatum->description, 0, 100) }}... <br> <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}" class="text-info"> Read More...</a>
+                                                </p>
                                                 <div class="progress-item mt-0">
                                                     <div class="progress mb-10">
                                                         <div data-percent="{{ calculatePercentageMaxTo100($featuredCausesDatum->summary_total_collection, $featuredCausesDatum->goal_amount) }}"
-                                                            class="progress-bar"><span class="percent">0</span></div>
+                                                            class="progress-bar"><span class="percent">0</span>
+                                                        </div>
                                                     </div>
+                                                    <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
+                                                        href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">Donate
+                                                        Now</a>
                                                 </div>
                                                 <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
                                                     <li class="current-fund">
@@ -344,7 +354,7 @@
                                         <h4 class="m-0 pt-10 text-theme-colored">{{ $topDonorsDatum['name'] ?? '' }}</h4>
                                         <p class="font-12 pb-10">Donated :
                                             {{ priceToNprFormat($topDonorsDatum['amount'] ?? '') }}<br>Rank :
-                                            {{ $topDonorsKey }}</p>
+                                            {{ $topDonorsKey + 1 }}</p>
 
                                     </div>
                                 </div>
@@ -439,12 +449,16 @@
                                                 href="#">{{ $recentCausesDatum->category->title }}</a></span>
                                     </div>
                                     <p class="desc mb-10">
-                                        {{ substr($recentCausesDatum->description, 0, 140) }}...</p>
+                                        {{ substr($recentCausesDatum->description, 0, 100) }}... <br> <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}" class="text-info"> Read More...</a>
+                                    </p>
                                     <div class="progress-item mt-0">
                                         <div class="progress mb-10">
                                             <div data-percent="{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}"
                                                 class="progress-bar"><span class="percent">0</span></div>
                                         </div>
+                                        <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
+                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">Donate
+                                            Now</a>
                                     </div>
                                     <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
                                         <li class="current-fund">

@@ -17,6 +17,7 @@ use App\Models\Voyager\SliderBanner;
 use App\Models\Voyager\Testimonial;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Throwable;
 use Illuminate\Support\Facades\Validator;
@@ -76,15 +77,22 @@ class HomeController extends FrontendBaseController
                 ->take(3)->get();
             $data['total_campaign'] = $this->campaigns->where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->count();
             $data['total_collection'] = CampaignView::where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->sum('summary_total_collection');
-            $totalDonars = $this->donation->wherein('payment_status', ['successful'])->distinct('giver_public_user_id')->count();
-            $data['total_donars'] = $totalDonars + $this->donation->wherein('payment_status', ['successful'])->where('is_verified', 1)->where('giver_public_user_id', null)->count();
+            $totalDonars = $this->donation->wherein('payment_status', ['completed'])->distinct('giver_public_user_id')->count();
+            $data['total_donars'] = $totalDonars + $this->donation->wherein('payment_status', ['completed'])->where('is_verified', 1)->where('giver_public_user_id', null)->count();
             $data['total_public_users'] = PublicUser::where('status', 'active')->count();
-            $donationRaw = $this->donation->with('giver')->wherein('payment_status', ['successful'])->where('is_verified', 1)->orderby('amount')->get();
+            $donationRaw = $this->donation->with('giver')->wherein('payment_status', ['completed'])->where('is_verified', 1)->orderby('amount')->get();
             $topDonorsList = [];
             foreach ($donationRaw as $donationRawKey => $donationRawDatum) {
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
-                $topDonors['profile_pic'] = asset('uploads') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
+
+                if ($donationRawDatum?->giver?->profile_picture) {
+                    $topDonors['profile_pic'] = asset('uploads') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
+                } else {
+                    $topDonors['profile_pic'] = asset('static-images/images/usernotfound.png');
+                }
+
+                // $topDonors['profile_pic'] = asset('uploads') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
                 $topDonors['amount'] = $donationRawDatum->amount;
                 $topDonors['is_anonymous'] = $donationRawDatum->is_anonymous;
                 $topDonors['giver_public_user_id'] = $donationRawDatum->giver_public_user_id;
@@ -132,37 +140,43 @@ class HomeController extends FrontendBaseController
 
     public function getDonation(Request $request)
     {
-        try {
-            $data = $request->except('_token');
-            $insertData = $request->except('_token', 'campaign_slug', 'payment_mode', 'payment_gateway');
-            $validator = Validator::make($request->all(), [
-                'fullname' => 'required|string|max:255',
-                'country' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'address' => 'required|string|max:255',
-                'amount' => 'required|numeric|min:10|max:100000',
-                'description' => 'required|string|max:500|min:10',
-                'payment_receipt' => 'required_if:payment_mode,offline|mimes:jpeg,png,pdf|max:2048',
-                'payment_gateway' => 'required_if:payment_mode,online',
-                'payment_mode' => 'required|in:online,offline',
-                'mobile_number' => 'required_if:payment_mode,offline|string|max:15',
-            ]);
+        $data = $request->except('_token');
+        $insertData = $request->except('_token', 'campaign_slug', 'payment_mode', 'payment_gateway');
+        $validator = Validator::make($request->all(), [
+            'fullname' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'address' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:10|max:100000',
+            'description' => 'required|string|max:500|min:10',
+            'payment_receipt' => 'required_if:payment_gateway,bank|mimes:jpeg,png,pdf|max:2048',
+            'payment_gateway' => 'required',
+            'mobile_number' => 'required_if:payment_gateway,bank|string|max:15',
+        ]);
 
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-            $campaignDetails = CampaignView::where('slug', $data['campaign_slug'])->where('status', 1)->first();
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        try {
+
+            $campaignDetails = CampaignView::where('id', $data['campaign_id'])->where('status', 1)->first();
             if (!$campaignDetails) {
                 Session::flash('error', 'Error! Campaign not found.');
                 return redirect()->back();
             }
+
             if ($campaignDetails->campaign_status !== 'running') {
                 Session::flash('error', 'Error! Only active campaigns can receive donation.');
                 return redirect()->back();
             }
 
-            if ($data['payment_mode'] == 'offline') {
-                $paymentGateWayDetails = PaymentGateway::where('slug', 'offline')->first();
+            if ($campaignDetails->end_date < date('Y-m-d')) {
+                Session::flash('error', 'Sorry. This campaign has expired.');
+                return redirect()->back();
+            }
+
+            if ($data['payment_gateway'] == 'bank') {
+                $paymentGateWayDetails = PaymentGateway::where('slug', 'bank')->first();
             } else {
                 $paymentGateWayDetails = PaymentGateway::where('slug', $data['payment_gateway'])->first();
             }
@@ -183,7 +197,7 @@ class HomeController extends FrontendBaseController
             Session::flash('success', 'Congratulations. Your donation has been successfully received. Please wait for the verification.');
             return redirect()->back();
         } catch (Throwable $th) {
-            Session::flash('error', 'Sorry. Something wnet wrong. Please try again later or contact our support team.');
+            Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->back();
         }
     }
@@ -197,9 +211,9 @@ class HomeController extends FrontendBaseController
                 ->where('slug', $slug)->first();
             $data['campaignDetails'] = $campaignDetails;
             $data['countries'] = Country::orderby('name', 'asc')->get();
-            $data['paymentGateways'] = PaymentGateway::orderby('name', 'asc')->where('status', 1)->where('show_in_frontend', 1)->get();
+            $data['paymentGateways'] = PaymentGateway::orderby('position', 'asc')->where('status', 1)->where('show_in_frontend', 1)->get();
             $topDonorsList = [];
-            $donationRaw = $this->donation->with('giver')->where('campaign_id', $campaignDetails->id)->wherein('payment_status', ['successful'])->where('is_verified', 1)->orderby('amount')->get();
+            $donationRaw = $this->donation->with('giver')->where('campaign_id', $campaignDetails->id)->wherein('payment_status', ['completed'])->where('is_verified', 1)->orderby('amount')->get();
             foreach ($donationRaw as $donationRawKey => $donationRawDatum) {
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
@@ -217,7 +231,85 @@ class HomeController extends FrontendBaseController
             return $this->renderView($this->parentViewFolder() . '.campaign-detail', $data);
         } catch (Throwable $th) {
             dd($th);
-            Session::flash('error', 'Sorry. Something wnet wrong. Please try again later or contact our support team.');
+            Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+            return redirect()->back();
+        }
+    }
+
+    public function khaltiPaymentVerification(Request $request)
+    {
+        //hit the khalit server
+
+        try {
+            $args = http_build_query(array(
+                'token' => $request->input('trans_token'),
+                'amount' => $request->input('amount')
+            ));
+            $url = 'https://khalti.com/api/v2/payment/verify/';
+            # Make the call using API.
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $headers = ['Authorization: Key ' . env('KHALTI_SECRET_KEY')];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            // Response
+            $response = curl_exec($ch);
+            $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $response = json_decode($response);
+            curl_close($ch);
+
+            /* LOG */
+            $form_data = $request->input('form_data');
+            $formDataArray = [];
+            foreach ($form_data as $item) {
+                $formDataArray[$item['name']] = $item['value'];
+            }
+            $paymentGateWayDetails = PaymentGateway::where('slug', 'khalti')->where('status', 1)->first();
+            $campaignDetails = CampaignView::where('status', 1)->first();
+
+            if (!$campaignDetails) {
+                Session::flash('error', 'Campaign not found.');
+                return redirect()->back();
+            }
+
+            if (!$paymentGateWayDetails) {
+                Session::flash('error', 'Invalid payment gateway.');
+                return redirect()->back();
+            }
+            if ($status_code == 200) {
+                /* donateaoro */
+                $insertData = [];
+                $insertData['amount'] = $response->amount / 100;
+                $insertData['fullname'] = trim($formDataArray['fullname']);
+                $insertData['country'] = trim($formDataArray['country']);
+                $insertData['email'] = trim($formDataArray['email']);
+                $insertData['address'] = trim($formDataArray['address']);
+                $insertData['description'] = trim($formDataArray['description']);
+                $insertData['payment_gateway_id'] = $paymentGateWayDetails->id;
+                $insertData['campaign_id'] = $request->input('campaign_id');
+                $insertData['receiver_public_user_id'] = $campaignDetails->public_user_id;
+                $insertData['giver_public_user_id'] = $request->user?->id ?? null;
+                $insertData['created_at'] = date('Y-m-d H:i:s');
+                $insertData['transaction_id'] = $response->idx ?? null;
+                $insertData['service_charge_percentage'] = 7;
+                $insertData['payment_status'] = strtolower($response?->state?->name ?? '');
+                $insertData['is_anonymous'] = 0;
+                $insertData['payment_gateway_all_response'] = json_encode($response);
+                $insertData['is_verified'] = 1; //by system admin manually
+                $resp = Donation::insert($insertData);
+                Session::flash('success', 'Congratulations. Your donation has been successfully received. Please wait for the verification.');
+                return redirect()->back();
+                /* donateaoro */
+            } else {
+                Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+                return redirect()->back();
+            }
+            dump($status_code);
+            dump($response);
+        } catch (Throwable $th) {
+            Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->back();
         }
     }

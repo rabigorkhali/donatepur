@@ -15,5 +15,6 @@ Route::get('/contact-us', [HomeController::class, 'contactUsView'])->name('front
 Route::post('/contact-us', [HomeController::class, 'contactUsCreate'])->name('frontendContactusCreate');
 Route::get('/page/{pageType}', [HomeController::class, 'getPage'])->name('frontendPage');
 Route::post('/donation', [HomeController::class, 'getDonation'])->name('getDonation');
+Route::get('/payment/khalti/verfication', [HomeController::class, 'khaltiPaymentVerification'])->name('khaltiPaymentVerification');
 
 

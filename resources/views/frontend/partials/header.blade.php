@@ -52,5 +52,6 @@
 <script src="{{asset('frontend/js/revolution-slider/js/jquery.themepunch.tools.min.js')}}"></script>
 <script src="{{asset('frontend/js/revolution-slider/js/jquery.themepunch.revolution.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+@yield('header')
 
 </head>

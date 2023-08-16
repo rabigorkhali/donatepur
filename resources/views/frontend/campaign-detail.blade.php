@@ -1,8 +1,9 @@
 @extends('frontend.master')
+@section('header')
+    <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
+@endsection
 @section('title', 'Home')
 @section('content')
-    @dump($campaignDetails->start_date)
-    @dump($campaignDetails->end_date)
     <div class="main-content">
         <!-- Section: inner-header -->
         <section class="inner-header divider parallax layer-overlay overlay-dark-5" data-stellar-background-ratio="0.5"
@@ -13,6 +14,7 @@
                 <div class="section-content">
                     <div class="row">
                         <div class="col-md-12">
+
                             <h3 class="title text-white">{{ $campaignDetails->title }}</h3>
 
                         </div>
@@ -21,6 +23,7 @@
             </div>
         </section>
         <section>
+
             <div class="container">
                 <div class="section-content">
                     <div class="row">
@@ -50,9 +53,15 @@
                                                         class="font-weight-700">{{ priceToNprFormat($campaignDetails->goal_amount) }}</span>
                                                 </li>
                                             </ul>
-                                            <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
-                                                href="#donationForm" onclick="scrollToElement('donationForm')">Donate
-                                                Now</a>
+
+                                            @if ($campaignDetails->campaign_status == 'running')
+                                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
+                                                    href="#donationForm" onclick="scrollToElement('donationForm')">Donate
+                                                    Now</a>
+                                            @else
+                                                <a href="#"
+                                                    class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -79,8 +88,14 @@
                                     </div>
                                     <div id="legacy-clock" class="flip sm-text-center font-14 mt-10 pt-5 mb-sm-20"></div>
 
-                                    <a href="#donationForm" onclick="scrollToElement('donationForm')"
-                                        class="btn btn-theme-colored mt-20">Donate Now</a>
+                                    @if ($campaignDetails->campaign_status == 'running')
+                                        <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
+                                            href="#donationForm" onclick="scrollToElement('donationForm')">Donate
+                                            Now</a>
+                                    @else
+                                        <a href="#"
+                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -96,186 +111,185 @@
                 </div>
             </div>
         </section>
-
-        <section id="donationForm" class="divider parallax"
-            data-bg-img="{{ asset('uploads') . '/' . $campaignDetails->cover_image }}" data-parallax-ratio="0.7"
-            style="background-image: url('{{ asset('uploads') . '/' . $campaignDetails->cover_image }}'); background-position: 50% 76px;">
-            <div class="container pt-0 pb-0">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="bg-light-transparent p-40">
-                            <h3 class="mt-0 line-bottom">Make a Donation<span class="font-weight-300"> Now!</span></h3>
-                            <form action="{{ route('getDonation') }}" method="post" enctype="multipart/form-data">
-                                @csrf
-                                <div class="row">
-                                    <div class="col-md-12 @if ($errors->first('payment_mode')) has-error @endif">
-                                        <div class="form-group mb-20 ">
-                                            <input type="hidden" value="{{ $campaignDetails->slug }}"
-                                                name="campaign_slug">
-                                            <label><strong>Payment Type</strong></label> <br>
-                                            <label class="radio-inline  ">
-                                                <input onchange="paymentTypeChange('online')" type="radio"
-                                                    @if (old('payment_mode') == 'online' || !old('payment_mode')) checked @endif value="online"
-                                                    name="payment_mode">
-                                                Online
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input onchange="paymentTypeChange('offline')" type="radio"
-                                                    value="offline" name="payment_mode"
-                                                    @if (old('payment_mode') == 'offline') checked @endif>
-                                                Offline
-                                            </label>
-                                            @if ($errors->first('payment_mode'))
-                                                <span
-                                                    class="text-danger display-block">{{ $errors->first('payment_mode') }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="col-sm-12 online  @if (old('payment_mode') == 'offline') d-none @endif @if ($errors->first('payment_gateway')) has-error @endif">
-                                        <div class="form-group mb-20">
-                                            <label><strong>Payment Gateway</strong></label> <br>
-
-
-                                            @foreach ($paymentGateways as $keyPaymentGateways => $datumPaymentGateways)
-                                                <label class="radio-inline">
-                                                    <input type="radio" @if (!old('payment_gateway') && $datumPaymentGateways->slug == 'khalti') checked @endif
-                                                        @if (old('payment_gateway') == $datumPaymentGateways->slug) checked @endif
-                                                        value="{{ $datumPaymentGateways->slug }}" name="payment_gateway">
-                                                    {{ $datumPaymentGateways->name }}
-                                                </label>
-                                            @endforeach
-                                            @if ($errors->first('payment_gateway'))
-                                                <span
-                                                    class="text-danger display-block">{{ $errors->first('payment_gateway') }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-12 @if ($errors->first('fullname')) has-error @endif">
-                                        <div class="form-group mb-20">
-                                            <label><strong>Full Name</strong></label>
-                                            <input type="text" maxlength="100" name="fullname"
-                                                value="{{ old('fullname') }}" placeholder="Rama Namaya"
-                                                class="form-control">
-                                            @if ($errors->first('fullname'))
-                                                <span
-                                                    class="text-danger display-block">{{ $errors->first('fullname') }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div
-                                        class="col-sm-12 offline   @if (old('payment_mode') == 'online') d-none @endif  @if ($errors->first('mobile_number')) has-error @endif">
-                                        <div class="form-group mb-20">
-                                            <label><strong>Mobile Number</strong></label>
-                                            <input type="text" maxlength="15" name="mobile_number"
-                                                value="{{ old('mobile_number') }}" placeholder="9841000000"
-                                                class="form-control">
-                                            @if ($errors->first('mobile_number'))
-                                                <span
-                                                    class="text-danger display-block">{{ $errors->first('mobile_number') }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-12 @if ($errors->first('country')) has-error @endif">
-                                        <div class="form-group mb-20">
-                                            <label><strong>Country</strong></label>
-                                            <select name="country" class="form-control">
-                                                @foreach ($countries as $keyCountries => $datumCountries)
-                                                    <option
-                                                        @if (!old('country')) @if ($datumCountries->name == 'Nepal') selected @endif
-                                                        @endif
-                                                        @if (old('country') == strtolower($datumCountries->name)) selected @endif
-                                                        value="{{ strtolower($datumCountries->name) }}">{{ $datumCountries->name }}
-                                                    </option>
+        @if ($campaignDetails->campaign_status == 'running')
+            <section id="donationForm" class="divider parallax"
+                data-bg-img="{{ asset('uploads') . '/' . $campaignDetails->cover_image }}" data-parallax-ratio="0.7"
+                style="background-image: url('{{ asset('uploads') . '/' . $campaignDetails->cover_image }}'); background-position: 50% 76px;">
+                <div class="container pt-0 pb-0">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="bg-light-transparent p-40">
+                                <h3 class="mt-0 line-bottom">Make a Donation<span class="font-weight-300"> Now!</span></h3>
+                                <form id="donateForm" action="{{ route('getDonation') }}" method="post"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="row">
+                                        <input type="hidden" name="campaign_id" value="{{ $campaignDetails->id }}">
+                                        {{Auth::guard('frontend_users')->user()}}
+                                        <div class="col-sm-12  @if ($errors->first('payment_gateway')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Payment Gateway/Mode</strong></label> <br>
+                                                @foreach ($paymentGateways as $keyPaymentGateways => $datumPaymentGateways)
+                                                    <label class="radio-inline">
+                                                        <input
+                                                            onchange="paymentGateway('{{ $datumPaymentGateways->slug }}')"
+                                                            type="radio" @if (!old('payment_gateway') && $datumPaymentGateways->slug == 'khalti') checked @endif
+                                                            @if (old('payment_gateway') == $datumPaymentGateways->slug) checked @endif
+                                                            value="{{ $datumPaymentGateways->slug }}"
+                                                            name="payment_gateway">
+                                                        {{ $datumPaymentGateways->name }}
+                                                    </label>
                                                 @endforeach
-                                            </select>
-                                            @if ($errors->first('country'))
-                                                <span
-                                                    class="text-danger display-block">{{ $errors->first('country') }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-12 @if ($errors->first('address')) has-error @endif">
-                                        <div class="form-group mb-20">
-                                            <label><strong>Address</strong></label>
-                                            <input type="text" maxlength="200" value="{{ old('address') }}"
-                                                name="address" placeholder="Tinkune-7,Kathmandu" class="form-control">
-                                            @if ($errors->first('address'))
-                                                <span
-                                                    class="text-danger display-block">{{ $errors->first('address') }}</span>
-                                            @endif
+                                                @if ($errors->first('payment_gateway'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('payment_gateway') }}</span>
+                                                @endif
+                                            </div>
                                         </div>
 
-                                    </div>
+                                        <div class="col-md-12 d-none bank-details"
+                                            style="border: 1px solid #000; margin: 10px;">
+                                            <div class="form-group mb-20 ">
+                                                <label>Account Name: </label>{{ setting('bank.bank_account_name') }}<br>
+                                                <label>Account No: </label>{{ setting('bank.bank_account_number') }}</br>
+                                                <label>Bank Name: </label>{{ setting('bank.bank_name') }}</br>
+                                                <label>QR: </label><br> <img height="100"
+                                                    src="{{ asset('uploads') . '/' . setting('bank.bank_qr') }}">
+                                            </div>
+                                        </div>
 
-                                    <div class="col-sm-12 @if ($errors->first('email')) has-error @endif">
-                                        <div class="form-group mb-20">
-                                            <label><strong>Email</strong></label>
-                                            <input type="email" value="{{ old('email') }}" name="email"
-                                                placeholder="example@example.com" class="form-control">
-                                            @if ($errors->first('email'))
-                                                <span
-                                                    class="text-danger display-block">{{ $errors->first('email') }}</span>
-                                            @endif
+                                        <div class="col-sm-12 @if ($errors->first('fullname')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Full Name</strong></label>
+                                                <input type="text" maxlength="100" name="fullname"
+                                                    value="{{ old('fullname')??Auth::guard('frontend_users')->user()?->full_name }}" placeholder="Rama Namaya"
+                                                    class="form-control">
+                                                @if ($errors->first('fullname'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('fullname') }}</span>
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-sm-12 @if ($errors->first('amount')) has-error @endif">
-                                        <div class="form-group mb-20">
-                                            <label><strong>Amount (Rs.)</strong></label>
-                                            <input type="text" min="10" max="500000"
-                                                value="{{ old('amount') }}" placeholder="1000" name="amount"
-                                                class="form-control">
-                                            @if ($errors->first('amount'))
-                                                <span
-                                                    class="text-danger display-block">{{ $errors->first('amount') }}</span>
-                                            @endif
+                                        <div
+                                            class="col-sm-12 bank-details   @if (old('payment_mode') == 'online') d-none @endif  @if ($errors->first('mobile_number')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Mobile Number</strong></label>
+                                                <input type="text" maxlength="15" name="mobile_number"
+                                                    value="{{ old('mobile_number')??Auth::guard('frontend_users')->user()?->mobile_number }}" placeholder="9841000000"
+                                                    class="form-control">
+                                                @if ($errors->first('mobile_number'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('mobile_number') }}</span>
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div
-                                        class="col-sm-12 offline @if (old('payment_mode') == 'online') d-none @endif @if ($errors->first('payment_receipt')) has-error @endif">
-                                        <div class="form-group mb-20">
-                                            <label><strong>Payment Receipt</strong></label>
-                                            <input type="file" name="payment_receipt" placeholder=""
-                                                class="form-control">
-                                            @if ($errors->first('payment_receipt'))
-                                                <span
-                                                    class="text-danger display-block">{{ $errors->first('payment_receipt') }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 @if ($errors->first('description')) has-error @endif">
-                                        <div class="form-group mb-20">
-                                            <label><strong>Description</strong></label>
-                                            <textarea rows="6" name="description" class="form-control" value="description" placeholder="Description">{{ old('description') }} </textarea>
-                                            @if ($errors->first('description'))
-                                                <span
-                                                    class="text-danger display-block">{{ $errors->first('description') }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <button type="submit"
-                                                class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
-                                                data-loading-text="Please wait...">Donate Now</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
 
+                                        <div class="col-sm-12 @if ($errors->first('country')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Country</strong></label>
+                                                <select name="country" class="form-control">
+                                                    @foreach ($countries as $keyCountries => $datumCountries)
+                                                        <option
+                                                            @if (!old('country')) @if ($datumCountries->name == 'Nepal') selected @endif
+                                                            @endif
+                                                            @if (strtolower(old('country')??Auth::guard('frontend_users')->user()?->country) == strtolower($datumCountries->name)) selected @endif
+                                                            value="{{ strtolower($datumCountries->name) }}">{{ $datumCountries->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @if ($errors->first('country'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('country') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 @if ($errors->first('address')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Address</strong></label>
+                                                <input type="text" maxlength="200" value="{{ old('address')??Auth::guard('frontend_users')->user()?->address }}"
+                                                    name="address" placeholder="Tinkune-7,Kathmandu"
+                                                    class="form-control">
+                                                @if ($errors->first('address'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('address') }}</span>
+                                                @endif
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-sm-12 @if ($errors->first('email')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Email</strong></label>
+                                                <input type="email" value="{{ old('email')??Auth::guard('frontend_users')->user()?->email }}" name="email"
+                                                    placeholder="example@example.com" class="form-control">
+                                                @if ($errors->first('email'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('email') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 @if ($errors->first('amount')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Amount (Rs.)</strong></label>
+                                                <input id="donationAmount" type="text" min="10" max="500000"
+                                                    value="{{ old('amount') }}" placeholder="1000" name="amount"
+                                                    class="form-control">
+                                                @if ($errors->first('amount'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('amount') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="col-sm-12 bank-details @if (old('payment_mode') == 'online') d-none @endif @if ($errors->first('payment_receipt')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Payment Receipt</strong></label>
+                                                <input type="file" name="payment_receipt" placeholder=""
+                                                    class="form-control">
+                                                @if ($errors->first('payment_receipt'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('payment_receipt') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 @if ($errors->first('description')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Description</strong></label>
+                                                <textarea rows="6" name="description" class="form-control" value="description" placeholder="Description">{{ old('description') }} </textarea>
+                                                @if ($errors->first('description'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('description') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <button id="offlineDonateBtn" type="submit"
+                                                    class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
+                                                    data-loading-text="Please wait...">Donate Now</button>
+
+                                                <button
+                                                    class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30 d-none"
+                                                    data-loading-text="Please wait..." id="khaltiDonateBtn">Donate with
+                                                    Khalti</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        @endif
 
         @if (count($topDonors))
-            <section class="bg-lighter">
+            <section class="bg-lighter" id="donors">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
@@ -313,87 +327,145 @@
         @endif
     </div>
 @endsection
-
-@section('scripts')
-    <script>
-        function paymentTypeChange(value) {
-            if (value == 'offline') {
-                $('.offline').removeClass('d-none');
-                $('.online').addClass('d-none');
-            } else {
-                $('.online').removeClass('d-none');
-                $('.offline').addClass('d-none');
-            }
-        }
-    </script>
-
-    <script>
-        /*         $(document).ready(function() {
-                    const targetDate = new Date();
-                    targetDate.setHours(targetDate.getHours() + 23);
-                    targetDate.setMinutes(targetDate.getMinutes() + 59);
-                    targetDate.setSeconds(targetDate.getSeconds() + 59);
-                    let targetDateTimer = targetDate.getTime();
-
-                    function updateTimer() {
-                        const now = new Date("{{ $campaignDetails->start_date }}");
-                        now.setHours(now.getHours() + 00);
-                        now.setMinutes(now.getMinutes() + 00);
-                        now.setSeconds(now.getSeconds() + 00);
-                        let startTimer = now.getTime();
-
-                        const timeDifference = targetDateTimer - startTimer;
-                        console.log(targetDateTimer);
-                        console.log(startTimer, 'sdfsdf');
-                        console.log(timeDifference, 'sdfsdf');
-
-                        if (timeDifference > 0) {
-                            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-                            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-                            const timerDisplay = `${days}D ${hours}H ${minutes}M ${seconds}S`;
-                            $('#legacy-clock').text(timerDisplay);
-                        } else {
-                            $('#legacy-clock').text('This campaign has expired!');
-                            clearInterval(timerInterval);
-                        }
-                    }
-
-                    updateTimer();
-                    const timerInterval = setInterval(updateTimer, 1000);
-                }); */
-
-        $(document).ready(function() {
-
-            // Set your target end date and time (year, month - 1, day, hour, minute, second)
-            const targetDate = new Date("{{ $campaignDetails->end_date }}");
-            targetDate.setHours(targetDate.getHours() + 23);
-            targetDate.setMinutes(targetDate.getMinutes() + 59);
-            targetDate.setSeconds(targetDate.getSeconds() + 59);
-            let targetDateTimer = targetDate.getTime();
-
-            function updateTimer() {
-                const now = new Date();
-                const timeDifference = targetDate - now;
-
-                if (timeDifference > 0) {
-                    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-                    const timerDisplay = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-                    $('#legacy-clock').text(timerDisplay);
+@if ($campaignDetails->campaign_status == 'running')
+    @section('scripts')
+        <script>
+            function paymentGateway(value) {
+                if (value == 'bank') {
+                    $('.bank-details').removeClass('d-none');
+                    $('#khaltiDonateBtn').addClass('d-none');
+                    $('#offlineDonateBtn').removeClass('d-none');
                 } else {
-                    $('#legacy-clock').text('Timer Expired!');
-                    clearInterval(timerInterval);
+                    $('.bank-details').addClass('d-none');
+                    $('#khaltiDonateBtn').removeClass('d-none');
+                    $('#offlineDonateBtn').addClass('d-none');
                 }
             }
+        </script>
 
-            updateTimer();
-            const timerInterval = setInterval(updateTimer, 1000);
-        });
-    </script>
-@endsection
+        <script>
+            $(document).ready(function() {
+
+                // Set your target end date and time (year, month - 1, day, hour, minute, second)
+                const targetDate = new Date("{{ $campaignDetails->end_date }}");
+                targetDate.setHours(targetDate.getHours() + 23);
+                targetDate.setMinutes(targetDate.getMinutes() + 59);
+                targetDate.setSeconds(targetDate.getSeconds() + 59);
+                let targetDateTimer = targetDate.getTime();
+
+                function updateTimer() {
+                    const now = new Date();
+                    const timeDifference = targetDate - now;
+
+                    if (timeDifference > 0) {
+                        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                        const timerDisplay = `${days}d ${hours}h ${minutes}m ${seconds}s remaining`;
+                        $('#legacy-clock').text(timerDisplay);
+                    } else {
+                        $('#legacy-clock').text('Timer Expired!');
+                        clearInterval(timerInterval);
+                    }
+                }
+
+                updateTimer();
+                const timerInterval = setInterval(updateTimer, 1000);
+                const oldPaymentGateway = "{{ old('payment_gateway') }}";
+                paymentGateway(oldPaymentGateway);
+
+            });
+        </script>
+
+        <script>
+            var price = 0;
+            var public_key = "{{ env('KHALTI_PUBLIC_KEY') }}";
+            var app_url = "{{ env('APP_URL') }}";
+            var app_name = "{{ env('APP_NAME') }}";
+
+            var config = {
+                // replace the publicKey with yours
+                "publicKey": public_key,
+                "productIdentity": "{{ $campaignDetails->id }}",
+                "productName": '{{ $campaignDetails->slug }}',
+                "productUrl": "{{ route('campaignDetailPage', $campaignDetails->slug) }}",
+                "paymentPreference": [
+                    "KHALTI",
+                    "EBANKING",
+                    "MOBILE_BANKING",
+                    "CONNECT_IPS",
+                    "SCT",
+                ],
+                "eventHandler": {
+                    onSuccess(payload) {
+                        console.log(payload, 'payloadpayload');
+                        $.ajax({
+                            url: app_url + '/payment/khalti/verfication',
+                            type: 'GET',
+                            data: {
+                                amount: payload.amount,
+                                trans_token: payload.token,
+                                form_data: $("#donateForm").serializeArray(),
+                                campaign_id: "{{ $campaignDetails->id }}",
+                                donor_id: "{{ $campaignDetails->id }}",
+                            },
+                            success: function(responseSuccess) {
+                                $("#preloader").hide();
+                                Swal.fire('Success!',
+                                    'Thank you. You donation has been received. God bless you.',
+                                    'success');
+                                let currentUrl = window.location.href;
+                                currentUrl = currentUrl.split("#")[0]
+                                $('html, body').animate({
+                                    scrollTop: $("#donors").offset().top
+                                }, 1000);
+                            },
+                            error: function(error) {
+                                $("#preloader").hide();
+                                Swal.fire('Error!', 'Error. Please try again.', 'error');
+                            },
+                            complete: function() {
+                                // Hide the loader when the request is complete (regardless of success or error)
+                                $("#preloader").hide();
+                            }
+
+                        })
+
+                    },
+                    onError(error) {
+                        $("#preloader").hide();
+                        Swal.fire('Error!', 'Error. Please try again.', 'error');
+                    },
+                    onClose() {
+                        $("#preloader").hide();
+                    }
+                }
+            };
+
+            var checkout = new KhaltiCheckout(config);
+            var btn = document.getElementById('khaltiDonateBtn');
+            btn.onclick = function() {
+                event.preventDefault();
+                let donationAmount = $('#donationAmount').val();
+                let showKhaltiForm = true;
+                if (donationAmount == '') {
+                    showKhaltiForm = false;
+                    Swal.fire('Error!', 'Please input donation amount.', 'error');
+                }
+                donationAmount = parseInt(donationAmount);
+                if (donationAmount < 10) {
+                    showKhaltiForm = false;
+                    Swal.fire('Error!', 'Amount must be greater than Rs.10.', 'error');
+                }
+                if (showKhaltiForm) {
+                    $("#preloader").show();
+                    checkout.show({
+                        amount: donationAmount * 100
+                    });
+                }
+            }
+        </script>
+    @endsection
+@endif

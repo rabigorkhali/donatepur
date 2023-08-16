@@ -3,6 +3,7 @@
 use App\Models\Voyager\Post;
 use App\Models\Voyager\Setting;
 use App\Models\Voyager\UsefullLink;
+use Illuminate\Support\Facades\Route;
 
 function calculatePercentageMaxTo100($number, $total)
 {
@@ -11,7 +12,11 @@ function calculatePercentageMaxTo100($number, $total)
         if ($percentage > 100) {
             return 100;
         }
-        return $percentage;
+        $res = round($percentage, 3);
+        if ($res <= 1) {
+            return 1;
+        }
+        return $res;
     } else {
         return 0;
     }
@@ -107,10 +112,8 @@ function priceToNprFormat($string)
                 $newCharacter = $newCharacter . $character;
             }
         }
-        if(!$newCharacter)
-        {
+        if (!$newCharacter) {
             return 'Rs. 0';
-
         }
         return 'Rs.' . strrev($newCharacter);
     } catch (Throwable $th) {
@@ -159,8 +162,17 @@ function getPostsBlogs($limit = '5')
 }
 
 
-function usefullLinks($limit='5')
+function usefullLinks($limit = '5')
 {
     $usefulLinks = UsefullLink::orderby('created_at', 'desc')->limit($limit)->get();
     return $usefulLinks;
+}
+
+function frontendActiveButton($routeNameParam = '')
+{
+    $routeName = Route::currentRouteName();
+    if ($routeName == $routeNameParam) {
+        return 'active';
+    }
+    return '';
 }

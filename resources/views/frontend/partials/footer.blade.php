@@ -25,25 +25,28 @@
         let errorMsg = "{{ session('error') }}"
         if (successMsg) {
             Swal.fire('Success!', successMsg, 'success');
+            $('html, body').animate({
+                scrollTop: $("#donors").offset().top
+            }, 1000);
         }
         if (errorMsg) {
             Swal.fire('Error!', errorMsg, 'error');
         }
 
-        
+
     });
 
     function scrollToElement(elementId) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                const offsetTop = element.getBoundingClientRect().top + window.pageYOffset;
+        const element = document.getElementById(elementId);
+        if (element) {
+            const offsetTop = element.getBoundingClientRect().top + window.pageYOffset;
 
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth' // "smooth" for smooth scrolling, "auto" for instant scrolling
-                });
-            }
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth' // "smooth" for smooth scrolling, "auto" for instant scrolling
+            });
         }
+    }
 </script>
 
 

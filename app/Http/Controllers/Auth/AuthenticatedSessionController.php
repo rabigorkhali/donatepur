@@ -23,7 +23,7 @@ class AuthenticatedSessionController extends Controller
     public function create()
     {
         if (Auth::guard('frontend_users')->user()) {
-            return redirect('/dashboard');
+            return redirect()->route('my.dashboard');
         }
         return view('auth.login');
     }
@@ -66,7 +66,8 @@ class AuthenticatedSessionController extends Controller
         }
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->back();
     }
 
     /**
