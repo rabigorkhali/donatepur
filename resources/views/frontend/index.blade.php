@@ -283,8 +283,11 @@
                                     @foreach ($featuredCauses as $featuredCausesKey => $featuredCausesDatum)
                                         <div class="item mb-10">
                                             <div class="image-box-thum">
-                                                <img height="239" class="img-fullwidth" alt=""
-                                                    src="{{ asset('uploads') . '/' . imageName($featuredCausesDatum->cover_image) }}">
+                                                <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">
+                                                    <img height="239" style=" border-radius:5px 5px 0 0;"
+                                                        class="img-fullwidth" alt=""
+                                                        src="{{ asset('uploads') . '/' . imageName($featuredCausesDatum->cover_image) }}">
+                                                </a>
                                             </div>
                                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
                                                 <h3 class="title mt-0 mb-5"><a
@@ -295,7 +298,9 @@
                                                             href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ $featuredCausesDatum->category->title }}</a></span>
                                                 </div>
                                                 <p class="desc mb-10">
-                                                    {{ substr($featuredCausesDatum->description, 0, 100) }}... <br> <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}" class="text-info"> Read More...</a>
+                                                    {{ substr($featuredCausesDatum->description, 0, 100) }}... <br> <a
+                                                        href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}"
+                                                        class="text-info"> Read More...</a>
                                                 </p>
                                                 <div class="progress-item mt-0">
                                                     <div class="progress mb-10">
@@ -303,9 +308,17 @@
                                                             class="progress-bar"><span class="percent">0</span>
                                                         </div>
                                                     </div>
-                                                    <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
-                                                        href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">Donate
-                                                        Now</a>
+                                                    @if ($featuredCausesDatum->campaign_status == 'running')
+                                                        <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
+                                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">Donate
+                                                            Now</a>
+                                                    @elseif ($featuredCausesDatum->campaign_status == 'completed')
+                                                        <a href="#"
+                                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
+                                                    @else
+                                                        <a href="#"
+                                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired</a>
+                                                    @endif
                                                 </div>
                                                 <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
                                                     <li class="current-fund">
@@ -438,27 +451,41 @@
                         @foreach ($recentCauses as $recentCausesKey => $recentCausesDatum)
                             <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
                                 <div class="image-box-thum">
-                                    <img height="239" class="img-fullwidth" alt=""
-                                        src="{{ asset('uploads') . '/' . imageName($recentCausesDatum->cover_image) }}">
+                                    <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">
+                                        <img height="239" class="img-fullwidth" style=" border-radius:5px 5px 0 0;"
+                                            alt=""
+                                            src="{{ asset('uploads') . '/' . imageName($recentCausesDatum->cover_image) }}">
+                                    </a>
                                 </div>
                                 <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
                                     <h3 class="title mt-0 mb-5"><a
-                                            href="#">{{ $recentCausesDatum->category->title }}</a></h3>
+                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ substr($recentCausesDatum->title, 0, 100) }}</a>
+                                    </h3>
                                     <div class="project-meta mb-10 font-12">
                                         <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
                                                 href="#">{{ $recentCausesDatum->category->title }}</a></span>
                                     </div>
                                     <p class="desc mb-10">
-                                        {{ substr($recentCausesDatum->description, 0, 100) }}... <br> <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}" class="text-info"> Read More...</a>
+                                        {{ substr($recentCausesDatum->description, 0, 100) }}... <br> <a
+                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}"
+                                            class="text-info"> Read More...</a>
                                     </p>
                                     <div class="progress-item mt-0">
                                         <div class="progress mb-10">
                                             <div data-percent="{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}"
                                                 class="progress-bar"><span class="percent">0</span></div>
                                         </div>
-                                        <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
-                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">Donate
-                                            Now</a>
+                                        @if ($recentCausesDatum->campaign_status == 'running')
+                                            <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
+                                                href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">Donate
+                                                Now</a>
+                                        @elseif ($recentCausesDatum->campaign_status == 'completed')
+                                            <a href="#"
+                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
+                                        @else
+                                            <a href="#"
+                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired</a>
+                                        @endif
                                     </div>
                                     <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
                                         <li class="current-fund">

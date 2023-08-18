@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Models\Country;
 use App\Models\Voyager\Campaign;
+use App\Models\Voyager\CampaignCategory;
 use App\Models\Voyager\CampaignView;
 use App\Models\Voyager\ContactUs;
 use App\Models\Voyager\Donation;
@@ -50,7 +51,7 @@ class HomeController extends FrontendBaseController
             }
             return $this->renderView($this->parentViewFolder() . '.page', $data);
         } catch (Throwable $th) {
-            dd($th);
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             return redirect('/');
         }
     }
@@ -103,7 +104,38 @@ class HomeController extends FrontendBaseController
             $data['partners'] = Partner::get();
             return $this->renderView($this->viewFolder(), $data);
         } catch (Throwable $th) {
-            dd($th);
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
+        }
+    }
+
+    public function campaignList(Request $request)
+    {
+        try {
+            $data = array();
+            $keyword = trim($request->get('title'));
+            $category = trim($request->get('category'));
+            if ($category) {
+                $categoryDetails = CampaignCategory::where('slug', $category)->where('status', 1)->first();
+            }
+            $campaignQuery = CampaignView::where('status', true);
+            if ($keyword) {
+                $campaignQuery = $campaignQuery->where('title', 'LIKE', '%' . $keyword . '%');
+            }
+            if ($category && $categoryDetails) {
+                $campaignQuery = $campaignQuery->where('campaign_category_id', $categoryDetails->id);
+            }
+            $campaignQuery = $campaignQuery->wherenotin('campaign_status', ['pending']);
+            $campaignQuery = $campaignQuery->orderby('id', 'desc')
+                ->orderby('summary_total_collection', 'desc')
+                ->where('campaign_status', '!=', 'pending')->where('status', 1)
+                ->paginate(15);
+
+            $data['causesList'] = $campaignQuery;
+            $data['campaignCategories'] = CampaignCategory::where('status', 1)->orderby('title', 'asc')->get();
+            return $this->renderView($this->parentViewFolder() . '.campaign-list', $data);
+        } catch (Throwable $th) {
+
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
     }
 
@@ -134,6 +166,7 @@ class HomeController extends FrontendBaseController
             return false;
             return $this->renderView($this->parentViewFolder() . '.contact-us', $data);
         } catch (Throwable $th) {
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             return false;
         }
     }
@@ -183,7 +216,7 @@ class HomeController extends FrontendBaseController
             $insertData['payment_gateway_id'] = $paymentGateWayDetails->id;
             $insertData['campaign_id'] = $campaignDetails->id;
             $insertData['receiver_public_user_id'] = $campaignDetails->public_user_id;
-            $insertData['giver_public_user_id'] = $request->user->id ?? null;
+            $insertData['giver_public_user_id'] = Auth::guard('frontend_users')->user()?->id ?? null;
             $insertData['created_at'] = date('Y-m-d H:i:s');
             $insertData['transaction_id'] = 'testest';
             $insertData['service_charge_percentage'] = 7;
@@ -197,6 +230,7 @@ class HomeController extends FrontendBaseController
             Session::flash('success', 'Congratulations. Your donation has been successfully received. Please wait for the verification.');
             return redirect()->back();
         } catch (Throwable $th) {
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->back();
         }
@@ -230,9 +264,8 @@ class HomeController extends FrontendBaseController
             $data['topDonors'] = $topDonorsList;
             return $this->renderView($this->parentViewFolder() . '.campaign-detail', $data);
         } catch (Throwable $th) {
-            dd($th);
-            Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
-            return redirect()->back();
+            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
     }
 
@@ -306,11 +339,10 @@ class HomeController extends FrontendBaseController
                 Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
                 return redirect()->back();
             }
-            dump($status_code);
-            dump($response);
         } catch (Throwable $th) {
-            Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
-            return redirect()->back();
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
+            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+            // return redirect()->back();
         }
     }
 }

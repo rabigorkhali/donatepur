@@ -58,6 +58,9 @@
                                                 <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
                                                     href="#donationForm" onclick="scrollToElement('donationForm')">Donate
                                                     Now</a>
+                                            @elseif ($campaignDetails->campaign_status == 'completed')
+                                                <a href="#"
+                                                    class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
                                             @else
                                                 <a href="#"
                                                     class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired</a>
@@ -125,7 +128,6 @@
                                     @csrf
                                     <div class="row">
                                         <input type="hidden" name="campaign_id" value="{{ $campaignDetails->id }}">
-                                        {{Auth::guard('frontend_users')->user()}}
                                         <div class="col-sm-12  @if ($errors->first('payment_gateway')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Payment Gateway/Mode</strong></label> <br>
@@ -162,8 +164,8 @@
                                             <div class="form-group mb-20">
                                                 <label><strong>Full Name</strong></label>
                                                 <input type="text" maxlength="100" name="fullname"
-                                                    value="{{ old('fullname')??Auth::guard('frontend_users')->user()?->full_name }}" placeholder="Rama Namaya"
-                                                    class="form-control">
+                                                    value="{{ old('fullname') ?? Auth::guard('frontend_users')->user()?->full_name }}"
+                                                    placeholder="Rama Namaya" class="form-control">
                                                 @if ($errors->first('fullname'))
                                                     <span
                                                         class="text-danger display-block">{{ $errors->first('fullname') }}</span>
@@ -176,8 +178,8 @@
                                             <div class="form-group mb-20">
                                                 <label><strong>Mobile Number</strong></label>
                                                 <input type="text" maxlength="15" name="mobile_number"
-                                                    value="{{ old('mobile_number')??Auth::guard('frontend_users')->user()?->mobile_number }}" placeholder="9841000000"
-                                                    class="form-control">
+                                                    value="{{ old('mobile_number') ?? Auth::guard('frontend_users')->user()?->mobile_number }}"
+                                                    placeholder="9841000000" class="form-control">
                                                 @if ($errors->first('mobile_number'))
                                                     <span
                                                         class="text-danger display-block">{{ $errors->first('mobile_number') }}</span>
@@ -193,7 +195,7 @@
                                                         <option
                                                             @if (!old('country')) @if ($datumCountries->name == 'Nepal') selected @endif
                                                             @endif
-                                                            @if (strtolower(old('country')??Auth::guard('frontend_users')->user()?->country) == strtolower($datumCountries->name)) selected @endif
+                                                            @if (strtolower(old('country') ?? Auth::guard('frontend_users')->user()?->country) == strtolower($datumCountries->name)) selected @endif
                                                             value="{{ strtolower($datumCountries->name) }}">{{ $datumCountries->name }}
                                                         </option>
                                                     @endforeach
@@ -208,7 +210,8 @@
                                         <div class="col-sm-12 @if ($errors->first('address')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Address</strong></label>
-                                                <input type="text" maxlength="200" value="{{ old('address')??Auth::guard('frontend_users')->user()?->address }}"
+                                                <input type="text" maxlength="200"
+                                                    value="{{ old('address') ?? Auth::guard('frontend_users')->user()?->address }}"
                                                     name="address" placeholder="Tinkune-7,Kathmandu"
                                                     class="form-control">
                                                 @if ($errors->first('address'))
@@ -222,8 +225,10 @@
                                         <div class="col-sm-12 @if ($errors->first('email')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Email</strong></label>
-                                                <input type="email" value="{{ old('email')??Auth::guard('frontend_users')->user()?->email }}" name="email"
-                                                    placeholder="example@example.com" class="form-control">
+                                                <input type="email"
+                                                    value="{{ old('email') ?? Auth::guard('frontend_users')->user()?->email }}"
+                                                    name="email" placeholder="example@example.com"
+                                                    class="form-control">
                                                 @if ($errors->first('email'))
                                                     <span
                                                         class="text-danger display-block">{{ $errors->first('email') }}</span>

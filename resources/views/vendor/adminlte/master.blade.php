@@ -124,12 +124,14 @@
     });
 </script>
 @yield('scripts')
-<footer class="main-footer">
-    <strong>Copyright © 2023 <a href="https://donatepur.com/">Donatepur</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-        {{-- <b>Version</b> 3.2.0 --}}
-    </div>
-</footer>
+@if (strpos(url()->current(), '/my/') !== false)
+    <footer class="main-footer">
+        <strong>Copyright © 2023 <a href="https://donatepur.com/">Donatepur, Nepal</a>.</strong>
+        All rights reserved.
+        <div class="float-right d-none d-sm-inline-block">
+            {{-- <b>Version</b> 3.2.0 --}}
+        </div>
+    </footer>
+@endif
 
 </html>

@@ -1,5 +1,6 @@
 @extends('adminlte::master')
-
+@include('frontend.partials.header')
+@include('frontend.partials.navbar')
 @php( $dashboard_url = View::getSection('dashboard_url') ?? config('adminlte.dashboard_url', 'home') )
 
 @if (config('adminlte.use_route_url', false))
@@ -16,13 +17,12 @@
 @section('classes_body'){{ ($auth_type ?? 'login') . '-page' }}@stop
 
 @section('body')
-    <div class="{{ $auth_type ?? 'login' }}-box">
+    <div class="@if($auth_type=='register') mt-150 @endif {{ $auth_type ?? 'login' }}-box">
 
         {{-- Logo --}}
-        <div class="{{ $auth_type ?? 'login' }}-logo">
+{{--         <div class="{{ $auth_type ?? 'login' }}-logo">
             <a href="{{ $dashboard_url }}">
 
-                {{-- Logo Image --}}
                 @if (config('adminlte.auth_logo.enabled', false))
                     <img src="{{ asset(config('adminlte.auth_logo.img.path')) }}"
                          alt="{{ config('adminlte.auth_logo.img.alt') }}"
@@ -40,11 +40,10 @@
                          alt="{{ config('adminlte.logo_img_alt') }}" height="50">
                 @endif
 
-                {{-- Logo Label --}}
                 {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
 
             </a>
-        </div>
+        </div> --}}
 
         {{-- Card Box --}}
         <div class="card {{ config('adminlte.classes_auth_card', 'card-outline card-primary') }}">
@@ -80,3 +79,5 @@
     @stack('js')
     @yield('js')
 @stop
+
+@include('frontend.partials.footer')

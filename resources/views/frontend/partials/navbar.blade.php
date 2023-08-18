@@ -9,32 +9,25 @@
                     <ul class="menuzord-menu">
                         <li class="{{ frontendActiveButton('fontendDefaultPage') }}"><a
                                 href="{{ route('fontendDefaultPage') }}">Home</a></li>
-                        
-                        @if (Auth::guard('frontend_users')->user())
-                            <li class="{{ frontendActiveButton('my.dashboard') }}"><a href="{{ route('my.dashboard') }}">My Account</a>
-                            </li>
-                        @endif
                         <li class=""><a href="{{ route('my.campaigns.create') }}">Raise Fund</a></li>
-                        <li class=""><a href="{{ route('fontendDefaultPage') }}">Donate</a></li>
-                        {{-- <li><a href="#">Get Involved</a>
-                            <ul class="dropdown">
-                                <li><a href="html/2016/charitypress-html/demo/page-fundraise.html">Fundraise</a></li>
-                                <li><a href="html/2016/charitypress-html/demo/page-donate.html">Donate</a></li>
-                                <li><a href="html/2016/charitypress-html/demo/page-run-a-race.html">Run a Race</a></li>
-                                <li><a href="html/2016/charitypress-html/demo/page-campaign.html">Campaign</a></li>
-                                <li><a href="html/2016/charitypress-html/demo/page-philanthropy.html">Philanthropy</a>
-                                </li>
-                            </ul>
-                        </li> --}}
-
+                        <li class="{{ frontendActiveButton('campaignList') }}"><a
+                                href="{{ route('campaignList') }}">Donate</a></li>
                         @if (Auth::guard('frontend_users')->user())
-                            <li class="{{ frontendActiveButton('logout') }}"><a
-                                    href="{{ route('logout') }}">Logout</a>
+                            <li><a href="#">My Account (Hi, {{explode(' ',Auth::guard('frontend_users')->user()->full_name)[0]??'-'}})</a>
+                                <ul class="dropdown">
+                                    <li class="{{ frontendActiveButton('logout') }}"><a
+                                            href="{{ route('logout') }}">Logout</a>
+                                    </li>
+                                    <li class="{{ frontendActiveButton('my.dashboard') }}"><a
+                                            href="{{ route('my.dashboard') }}">Dashboard</a>
+                                    </li>
+                                </ul>
                             </li>
                         @endif
 
                         @if (!Auth::guard('frontend_users')->user())
-                            <li class="{{ frontendActiveButton('login') }}"><a href="{{ route('login') }}">Login</a>
+                            <li class="{{ frontendActiveButton('login') }}"><a
+                                    href="{{ route('login') }}">Login/Create Account</a>
                             </li>
                         @endif
 

@@ -4,5 +4,5 @@
         <div class="cssload-loading">Processing.. <i></i><i></i><i></i><i></i></div>
       </div>
     </div>
-    <div id="disable-preloader" class="btn btn-default btn-sm">Disable Preloader</div>
+    {{-- <div id="disable-preloader" class="btn btn-default btn-sm">Disable Preloader</div> --}}
   </div>
