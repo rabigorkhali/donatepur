@@ -93,7 +93,7 @@
                                     <strong style="color: #555;">Name: </strong>
                                     {{ $thisModelDetail->fullname }}<br>
                                     <strong style="color: #555;">Username: </strong>
-                                    {{ $thisModelDetail->giver->username }}<br>
+                                    {{ $thisModelDetail?->giver?->username }}<br>
                                     <strong style="color: #555;">Email: </strong>
                                     {{ $thisModelDetail->email }}<br>
                                     <strong style="color: #555;">Mobile Number: </strong>
@@ -101,7 +101,7 @@
                                     <strong style="color: #555;">Address: </strong>
                                     {{ $thisModelDetail->address }}<br>
                                     <strong style="color: #555;">Country: </strong>
-                                    {{ $thisModelDetail->country }}<br>
+                                    {{ ucfirst($thisModelDetail->country) }}<br>
 
                                 </td>
                             </tr>
@@ -109,17 +109,17 @@
                                 <th style="width:20%;">Receiver Details</th>
                                 <td>
                                     <strong style="color: #555;">Name: </strong>
-                                    {{ $thisModelDetail->receiver->full_name }}<br>
+                                    {{ $thisModelDetail->receiver?->full_name }}<br>
                                     <strong style="color: #555;">Username: </strong>
-                                    {{ $thisModelDetail->receiver->username }}<br>
+                                    {{ $thisModelDetail->receiver?->username }}<br>
                                     <strong style="color: #555;">Email: </strong>
-                                    {{ $thisModelDetail->receiver->email }}<br>
+                                    {{ $thisModelDetail->receiver?->email }}<br>
                                     <strong style="color: #555;">Mobile Number: </strong>
-                                    {{ $thisModelDetail->receiver->mobile_number }}<br>
+                                    {{ $thisModelDetail->receiver?->mobile_number }}<br>
                                     <strong style="color: #555;">Address: </strong>
-                                    {{ $thisModelDetail->receiver->address }}<br>
+                                    {{ $thisModelDetail->receiver?->address }}<br>
                                     <strong style="color: #555;">Country: </strong>
-                                    {{ $thisModelDetail->receiver->country }}<br>
+                                    {{ ucfirst($thisModelDetail->receiver?->country) }}<br>
 
                                 </td>
                             </tr>

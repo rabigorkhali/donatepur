@@ -7,11 +7,14 @@ use App\Models\Country;
 use App\Models\Voyager\Campaign;
 use App\Models\Voyager\CampaignCategory;
 use App\Models\Voyager\CampaignView;
+use App\Models\Voyager\CampaignVisit;
+use App\Models\Voyager\Category;
 use App\Models\Voyager\ContactUs;
 use App\Models\Voyager\Donation;
 use App\Models\Voyager\Page;
 use App\Models\Voyager\Partner;
 use App\Models\Voyager\PaymentGateway;
+use App\Models\Voyager\Post;
 use App\Models\Voyager\PublicUser;
 use App\Models\Voyager\Setting;
 use App\Models\Voyager\SliderBanner;
@@ -121,8 +124,8 @@ class HomeController extends FrontendBaseController
             if ($keyword) {
                 $campaignQuery = $campaignQuery->where('title', 'LIKE', '%' . $keyword . '%');
             }
-            if ($category && $categoryDetails) {
-                $campaignQuery = $campaignQuery->where('campaign_category_id', $categoryDetails->id);
+            if ($category) {
+                $campaignQuery = $campaignQuery->where('campaign_category_id', $categoryDetails?->id);
             }
             $campaignQuery = $campaignQuery->wherenotin('campaign_status', ['pending']);
             $campaignQuery = $campaignQuery->orderby('id', 'desc')
@@ -135,6 +138,53 @@ class HomeController extends FrontendBaseController
             return $this->renderView($this->parentViewFolder() . '.campaign-list', $data);
         } catch (Throwable $th) {
 
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
+        }
+    }
+
+    public function postList(Request $request)
+    {
+        try {
+            $data = array();
+            $keyword = trim($request->get('title'));
+            $category = trim($request->get('category'));
+            if ($category) {
+                $categoryDetails = Category::where('slug', $category)->first();
+            }
+            $postQuery = Post::where('status', true);
+            if ($keyword) {
+                $postQuery = $postQuery->where('title', 'LIKE', '%' . $keyword . '%');
+            }
+            if ($category) {
+                $postQuery = $postQuery->where('category_id', $categoryDetails?->id);
+            }
+            $postQuery = $postQuery->orderby('id', 'desc')
+                ->where('status', 1)
+                ->paginate(3);
+
+            $data['postList'] = $postQuery;
+            $data['postCategories'] = Category::orderby('name', 'asc')->get();
+            return $this->renderView($this->parentViewFolder() . '.blog-list', $data);
+        } catch (Throwable $th) {
+
+            dd($th);
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
+        }
+    }
+
+    public function postDetailPage(Request $request, $slug)
+    {
+        try {
+            $data = array();
+            $postDetails = Post::where('status', 'published')
+                ->where('slug', $slug)->first();
+            $data['postDetails'] = $postDetails;
+            $data['postCategories'] = Category::orderby('name', 'asc')->get();
+            $data['latestPosts'] = Post::orderby('id', 'desc')->where('status', 'PUBLISHED')->get();
+            return $this->renderView($this->parentViewFolder() . '.blog-detail', $data);
+        } catch (Throwable $th) {
+            dd($th);
+            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
     }
@@ -343,6 +393,25 @@ class HomeController extends FrontendBaseController
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             // return redirect()->back();
+        }
+    }
+
+    function saveLocation(Request $request)
+    {
+        try {
+            $data = [];
+            $data['ip'] = $request->input('ip');
+            $data['latitude'] = $request->input('latitude')??null;
+            $data['longitude'] = $request->input('longitude')??null;
+            $data['campaign_id'] = $request->input('campaign_id')??null;
+            $data['created_at'] = date('Y-m-d');
+            $ifExists = CampaignVisit::where('ip', $data['ip'])->where('campaign_id',$data['campaign_id'])->wheredate('created_at', date('Y-m-d'))->count();
+            if (!$ifExists) {
+                CampaignVisit::insert($data);
+            }
+            return 'true';
+        } catch (Throwable $th) {
+            return 'false';
         }
     }
 }

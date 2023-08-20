@@ -63,9 +63,10 @@ class MyCampaignController extends Controller
 
             $sn = 1;
             $thisArray = [];
-            $btnDelete = '';
-            $btnEdit = '';
+
             foreach ($campaigns as $keyCampaigns => $datumCampaign) {
+                $btnDelete = '';
+                $btnEdit = '';
                 if (strtolower($datumCampaign->campaign_status == 'pending')) {
                     $btnEdit = '<a href="' . route('my.campaigns.edit', $datumCampaign->id) . '" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                             <i class="fa fa-edit"></i>
@@ -159,7 +160,6 @@ class MyCampaignController extends Controller
             return redirect('/my/campaigns');
         } catch (Throwable $th) {
             DB::rollback();
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }

@@ -46,7 +46,9 @@
                             <div class="icon">
                                 <i class="fa fa-hospital-o"></i>
                             </div> --}}
-                            <h2 class="mt-0 text-uppercase font-28">Campaigns </h2>
+                            @if ($causesList->count())
+                                <h2 class="mt-0 text-uppercase font-28">Campaigns </h2>
+                            @endif
                         </div>
                     </div>
 
@@ -69,6 +71,13 @@
                                     <div class="project-meta mb-10 font-12">
                                         <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
                                                 href="#">{{ $causesListDatum->category->title }}</a></span>
+                                        <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
+                                                class="fa fa-money mr-5 text-theme-colored"></i>
+                                            {{ $causesListDatum->total_number_donation }}
+                                            Donations</span>
+                                        <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
+                                                class="fa fa-eye mr-5 text-theme-colored"></i>
+                                            {{ $causesListDatum->total_visits }} Views</span>
                                     </div>
                                     <p class="desc mb-10">
                                         {{ substr($causesListDatum->description, 0, 100) }}... <br> <a

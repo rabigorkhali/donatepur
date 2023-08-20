@@ -15,7 +15,10 @@ Route::get('/campaigns', [HomeController::class, 'campaignList'])->name('campaig
 Route::get('/contact-us', [HomeController::class, 'contactUsView'])->name('frontendContactus');
 Route::post('/contact-us', [HomeController::class, 'contactUsCreate'])->name('frontendContactusCreate');
 Route::get('/page/{pageType}', [HomeController::class, 'getPage'])->name('frontendPage');
+Route::get('/blogs', [HomeController::class, 'postList'])->name('postList');
+Route::get('/blogs/{slug}', [HomeController::class, 'postDetailPage'])->name('postDetailPage');
 Route::post('/donation', [HomeController::class, 'getDonation'])->name('getDonation');
 Route::get('/payment/khalti/verfication', [HomeController::class, 'khaltiPaymentVerification'])->name('khaltiPaymentVerification');
+Route::post('/save-location/{campaign}', [HomeController::class, 'saveLocation'])->name('saveLocation');
 
 

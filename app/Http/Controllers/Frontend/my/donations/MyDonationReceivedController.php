@@ -72,7 +72,7 @@ class MyDonationReceivedController extends Controller
                            </a>';
                 $thisArray = [
                     $sn,
-                    $thisAllDataDatum?->giver?->username,
+                    $thisAllDataDatum?->fullname,
                     ($thisAllDataDatum?->is_anonymous)?'Yes':'No',
                     'Name: '.$thisAllDataDatum?->receiver?->username.
                     '<br> Mobile: '.$thisAllDataDatum->mobile_number

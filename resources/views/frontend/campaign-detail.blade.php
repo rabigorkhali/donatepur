@@ -45,13 +45,27 @@
                                             <p>Even the smallest acts of kindness and support can have a significant impact
                                                 on someone's life. By coming together and joining your mission to help
                                                 others, you can make a positive difference in the world.. </p>
-                                            <ul class="list-inline clearfix mt-20 mb-20">
+                                            <ul class="list-inline clearfix mt-20 ">
                                                 <li class="pull-left flip pr-0">Raised: <span
                                                         class="font-weight-700">{{ priceToNprFormat($campaignDetails->summary_total_collection) }}</span>
                                                 </li>
                                                 <li class="text-theme-colored pull-right flip pr-0">Goal: <span
                                                         class="font-weight-700">{{ priceToNprFormat($campaignDetails->goal_amount) }}</span>
                                                 </li>
+                                                
+                                            </ul>
+                                            <ul class="list-inline clearfix  mb-20">
+                                               
+                                                <li class="text-theme-colored pull-right flip pr-0">Views: <span
+                                                        class="font-weight-700">{{ $campaignDetails->total_visits }}</span>
+                                                </li>
+                                                @if($campaignDetails->total_number_donation)
+                                                <li class="pull-left flip pr-0">Donation Made By: <span
+                                                    class="font-weight-700">{{ $campaignDetails->total_number_donation }} beautiful  @if($campaignDetails->total_number_donation)souls @else soul @endif.</span>
+                                           
+                                                </li>
+                                                @endif
+                                                
                                             </ul>
 
                                             @if ($campaignDetails->campaign_status == 'running')
@@ -301,7 +315,7 @@
                             <div class="section-title">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h5 class="font-weight-300 m-0">Happy Donate</h5>
+                                        <h5 class="font-weight-300 m-0">Thankful for the positivity and inspiration beautiful souls bring. Cheers to those selfless donors.</h5>
                                         <h2 class="mt-0 text-uppercase font-28">Our <span
                                                 class="font-30 text-theme-colored">Donors.</span></h2>
                                         <div class="icon">
@@ -472,5 +486,71 @@
                 }
             }
         </script>
+
+        {{-- LOCATION TRACCER --}}
+        <script>
+            // Get user's IP address
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    // Get user's latitude and longitude using Geolocation API
+                    navigator.geolocation.getCurrentPosition(
+                        position => {
+                            const latitude = position.coords.latitude;
+                            const longitude = position.coords.longitude;
+                            /* save location */
+                            let url = "{{ url('/save-location/') . '/' . $campaignDetails->id }}";
+                            var postData = {
+                                ip: data.ip,
+                                campaign_id: "{{ $campaignDetails->id }}",
+                                latitude: latitude,
+                                longitude: longitude,
+                                _token: "{{ csrf_token() }}"
+                            };
+                            $.ajax({
+                                url: url,
+                                method: "POST",
+                                data: JSON.stringify(postData),
+                                contentType: "application/json",
+                                success: function(data) {
+                                    console.log(data);
+                                },
+                                error: function(xhr, status, error) {
+                                    console.log("An error occurred: " + error);
+                                }
+                            });
+                            /* end save location */
+
+                        },
+                        error => {
+                            /* save location */
+                            let url = "{{ url('/save-location/') . '/' . $campaignDetails->id }}";
+                            var postData = {
+                                ip: data.ip,
+                                campaign_id: "{{ $campaignDetails->id }}",
+                                _token: "{{ csrf_token() }}"
+                            };
+                            $.ajax({
+                                url: url,
+                                method: "POST",
+                                data: JSON.stringify(postData),
+                                contentType: "application/json",
+                                success: function(data) {
+                                    console.log(data);
+                                },
+                                error: function(xhr, status, error) {
+                                    console.log("An error occurred: " + error);
+                                }
+                            });
+                            /* end save location */
+                            console.error('Error getting location:', error);
+                        }
+                    );
+                })
+                .catch(error => {
+                    console.error('Error getting IP:', error);
+                });
+        </script>
+        {{-- END LOCATION TRACCER --}}
     @endsection
 @endif

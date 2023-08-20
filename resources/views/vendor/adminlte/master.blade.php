@@ -10,6 +10,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Custom Meta Tags --}}
+    <link href="{{ asset('uploads') . '/' . imageName(setting('site.fav_icon')) }}" rel="shortcut icon" type="image/png">
+
     @yield('meta_tags')
 
     {{-- Title --}}

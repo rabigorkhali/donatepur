@@ -10,17 +10,33 @@
                         <li class="{{ frontendActiveButton('fontendDefaultPage') }}"><a
                                 href="{{ route('fontendDefaultPage') }}">Home</a></li>
                         <li class=""><a href="{{ route('my.campaigns.create') }}">Raise Fund</a></li>
-                        <li class="{{ frontendActiveButton('campaignList') }}"><a
-                                href="{{ route('campaignList') }}">Donate</a></li>
+                        <li class="{{ frontendActiveButton('campaignList') }}">
+                            <a href="{{ route('campaignList') }}">Donate</a>
+                        </li>
+                        <li><a href="#">Learn More</a>
+                            <ul class="dropdown">
+                                <li class="{{ frontendActiveButton('postList') }}"><a
+                                        href="{{ route('postList') }}">Blogs</a>
+                                </li>
+                                <li class="{{ frontendActiveButton('frontendPage') }}"><a
+                                        href="{{ route('frontendPage', 'how-it-works') }}">How it works?</a>
+                                </li>
+                                <li class="{{ frontendActiveButton('frontendPage') }}"><a
+                                        href="{{ route('frontendPage', 'faq') }}">FAQ</a>
+                                </li>
+                            </ul>
+                        </li>
                         @if (Auth::guard('frontend_users')->user())
-                            <li><a href="#">My Account (Hi, {{explode(' ',Auth::guard('frontend_users')->user()->full_name)[0]??'-'}})</a>
+                            <li><a href="#">My Account (Hi,
+                                    {{ explode(' ', Auth::guard('frontend_users')->user()->full_name)[0] ?? '-' }})</a>
                                 <ul class="dropdown">
-                                    <li class="{{ frontendActiveButton('logout') }}"><a
-                                            href="{{ route('logout') }}">Logout</a>
-                                    </li>
                                     <li class="{{ frontendActiveButton('my.dashboard') }}"><a
                                             href="{{ route('my.dashboard') }}">Dashboard</a>
                                     </li>
+                                    <li class="{{ frontendActiveButton('logout') }}"><a
+                                            href="{{ route('logout') }}">Logout</a>
+                                    </li>
+
                                 </ul>
                             </li>
                         @endif

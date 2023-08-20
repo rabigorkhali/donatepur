@@ -53,9 +53,13 @@
                     @foreach ($paymentGateways as $paymentGatewaysDatum)
                         <option data-bank-account-number="{{ $paymentGatewaysDatum->bank_account_number }}"
                             data-bank-name="{{ $paymentGatewaysDatum->bank_name }}"
+                            data-payment-gateway-name="{{ $paymentGatewaysDatum->payment_gateway_name }}"
                             data-mobile-number="{{ $paymentGatewaysDatum->mobile_number }}"
                             value="{{ $paymentGatewaysDatum->id }}" @if (old($formInputName) == $paymentGatewaysDatum->campaign_id) selected @endif>
-                            {{ $paymentGatewaysDatum->payment_gateway_name }}
+                            {{ $paymentGatewaysDatum->payment_gateway_name }} 
+                            @if(strtolower($paymentGatewaysDatum->payment_gateway_name) =='bank') 
+                            ({{$paymentGatewaysDatum->bank_name}}) @else
+                            ({{$paymentGatewaysDatum->mobile_number}})@endif
                         </option>
                     @endforeach
                 </x-adminlte-select2>
@@ -219,7 +223,7 @@
                 $('#info_bank_account_number').text($('#user_payment_gateway_id option:selected').data(
                     'bank-account-number'));
                 $('#info_payment_type').text($('#user_payment_gateway_id option:selected').text().trim());
-                if ($('#user_payment_gateway_id option:selected').text().trim() == 'Bank') {
+                if ($('#user_payment_gateway_id option:selected').data('payment-gateway-name').trim() == 'Bank') {
                         $('.bank-attr').show();
                     } else {
                         $('.bank-attr').hide();
@@ -239,7 +243,7 @@
                         'bank-account-number'));
                     $('#info_payment_type').text($('#user_payment_gateway_id option:selected').text()
                         .trim());
-                    if ($('#user_payment_gateway_id option:selected').text().trim() == 'Bank') {
+                    if ($('#user_payment_gateway_id option:selected').data('payment-gateway-name').trim() == 'Bank') {
                         $('.bank-attr').show();
                     } else {
                         $('.bank-attr').hide();

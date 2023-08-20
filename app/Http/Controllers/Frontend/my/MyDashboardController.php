@@ -7,6 +7,7 @@ use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Models\Voyager\Campaign;
 use App\Models\Voyager\CampaignCategory;
 use App\Models\Voyager\CampaignView;
+use App\Models\Voyager\CampaignVisit;
 use App\Models\Voyager\Donation;
 use App\Models\Voyager\PaymentGateway;
 use App\Models\Voyager\SystemErrorLog;
@@ -52,8 +53,24 @@ class MyDashboardController extends Controller
             $data['total_collection'] = CampaignView::where('public_user_id', $request->user->id)->sum('summary_total_collection');
             $data['net_collection'] = CampaignView::where('public_user_id', $request->user->id)->sum('net_amount_collection');
             $data['total_donation_made'] = Donation::where('giver_public_user_id', $request->user->id)->where('payment_status', 'successful')->sum('amount');
+            $dataRelatedIds = Campaign::where('public_user_id', $request->user->id)->pluck('id')->toArray();
+            $uniqueCoordinates = CampaignVisit::whereIn('campaign_id', $dataRelatedIds)
+                ->groupBy('latitude', 'longitude')
+                ->select('latitude', 'longitude')
+                ->get();
+            $locationArray = [];
+            foreach ($uniqueCoordinates as $key => $uniqueCoordinatesDatum) {
+                $locationArrayDatum = [];
+                if ($uniqueCoordinatesDatum->latitude) {
+                    $locationArrayDatum['latitude'] = $uniqueCoordinatesDatum->latitude;
+                    $locationArrayDatum['longitude'] = $uniqueCoordinatesDatum->longitude;
+                    array_push($locationArray, $locationArrayDatum);
+                }
+            }
+            $data['locationArray'] = json_encode($locationArray);
             return $this->renderView('.dashboard', $data);
         } catch (Throwable $th) {
+            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }

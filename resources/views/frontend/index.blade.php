@@ -296,6 +296,13 @@
                                                 <div class="project-meta mb-10 font-12">
                                                     <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
                                                             href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ $featuredCausesDatum->category->title }}</a></span>
+                                                    <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
+                                                            class="fa fa-money mr-5 text-theme-colored"></i>
+                                                        {{ $featuredCausesDatum->total_number_donation }}
+                                                        Donations</span>
+                                                    <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
+                                                            class="fa fa-eye mr-5 text-theme-colored"></i>
+                                                        {{ $featuredCausesDatum->total_visits }} Views</span>
                                                 </div>
                                                 <p class="desc mb-10">
                                                     {{ substr($featuredCausesDatum->description, 0, 100) }}... <br> <a
@@ -464,6 +471,13 @@
                                     <div class="project-meta mb-10 font-12">
                                         <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
                                                 href="#">{{ $recentCausesDatum->category->title }}</a></span>
+                                        <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
+                                                class="fa fa-money mr-5 text-theme-colored"></i>
+                                            {{ $featuredCausesDatum->total_number_donation }}
+                                            Donations</span>
+                                        <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
+                                                class="fa fa-eye mr-5 text-theme-colored"></i>
+                                            {{ $featuredCausesDatum->total_visits }} Views</span>
                                     </div>
                                     <p class="desc mb-10">
                                         {{ substr($recentCausesDatum->description, 0, 100) }}... <br> <a

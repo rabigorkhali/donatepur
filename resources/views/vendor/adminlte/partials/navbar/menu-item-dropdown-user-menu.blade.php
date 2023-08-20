@@ -13,6 +13,9 @@
     @php( $logout_url = $logout_url ? url($logout_url) : '' )
 @endif
 
+<li>
+    <div class="d-inline-flex p-2"><a href="{{url('/')}}"> Visit Website</a></div>
+</li>
 <li class="nav-item dropdown user-menu">
 
     {{-- User menu toggler --}}
