@@ -52,20 +52,23 @@
                                                 <li class="text-theme-colored pull-right flip pr-0">Goal: <span
                                                         class="font-weight-700">{{ priceToNprFormat($campaignDetails->goal_amount) }}</span>
                                                 </li>
-                                                
+
                                             </ul>
                                             <ul class="list-inline clearfix  mb-20">
-                                               
+
                                                 <li class="text-theme-colored pull-right flip pr-0">Views: <span
                                                         class="font-weight-700">{{ $campaignDetails->total_visits }}</span>
                                                 </li>
-                                                @if($campaignDetails->total_number_donation)
-                                                <li class="pull-left flip pr-0">Donation Made By: <span
-                                                    class="font-weight-700">{{ $campaignDetails->total_number_donation }} beautiful  @if($campaignDetails->total_number_donation)souls @else soul @endif.</span>
-                                           
-                                                </li>
+                                                @if ($campaignDetails->total_number_donation)
+                                                    <li class="pull-left flip pr-0">Donation Made By: <span
+                                                            class="font-weight-700">{{ $campaignDetails->total_number_donation }}
+                                                            beautiful @if ($campaignDetails->total_number_donation)souls
+                                                            @else
+                                                                soul @endif.</span>
+
+                                                    </li>
                                                 @endif
-                                                
+
                                             </ul>
 
                                             @if ($campaignDetails->campaign_status == 'running')
@@ -77,7 +80,8 @@
                                                     class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
                                             @else
                                                 <a href="#"
-                                                    class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired</a>
+                                                    class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired
+                                                </a>
                                             @endif
                                         </div>
                                     </div>
@@ -111,7 +115,8 @@
                                             Now</a>
                                     @else
                                         <a href="#"
-                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired</a>
+                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed
+                                            ON {{ $campaignDetails->end_date->format('Y-M-d') }}</a>
                                     @endif
                                 </div>
                             </div>
@@ -147,7 +152,7 @@
                                                 <label><strong>Payment Gateway/Mode</strong></label> <br>
                                                 @foreach ($paymentGateways as $keyPaymentGateways => $datumPaymentGateways)
                                                     <label class="radio-inline">
-                                                        <input
+                                                        <input required
                                                             onchange="paymentGateway('{{ $datumPaymentGateways->slug }}')"
                                                             type="radio" @if (!old('payment_gateway') && $datumPaymentGateways->slug == 'khalti') checked @endif
                                                             @if (old('payment_gateway') == $datumPaymentGateways->slug) checked @endif
@@ -177,7 +182,7 @@
                                         <div class="col-sm-12 @if ($errors->first('fullname')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Full Name</strong></label>
-                                                <input type="text" maxlength="100" name="fullname"
+                                                <input required type="text" maxlength="100" name="fullname" min="7"
                                                     value="{{ old('fullname') ?? Auth::guard('frontend_users')->user()?->full_name }}"
                                                     placeholder="Rama Namaya" class="form-control">
                                                 @if ($errors->first('fullname'))
@@ -191,7 +196,7 @@
                                             class="col-sm-12 bank-details   @if (old('payment_mode') == 'online') d-none @endif  @if ($errors->first('mobile_number')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Mobile Number</strong></label>
-                                                <input type="text" maxlength="15" name="mobile_number"
+                                                <input required type="text" maxlength="15" minlength="10" name="mobile_number"
                                                     value="{{ old('mobile_number') ?? Auth::guard('frontend_users')->user()?->mobile_number }}"
                                                     placeholder="9841000000" class="form-control">
                                                 @if ($errors->first('mobile_number'))
@@ -204,7 +209,7 @@
                                         <div class="col-sm-12 @if ($errors->first('country')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Country</strong></label>
-                                                <select name="country" class="form-control">
+                                                <select required name="country" class="form-control">
                                                     @foreach ($countries as $keyCountries => $datumCountries)
                                                         <option
                                                             @if (!old('country')) @if ($datumCountries->name == 'Nepal') selected @endif
@@ -224,7 +229,7 @@
                                         <div class="col-sm-12 @if ($errors->first('address')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Address</strong></label>
-                                                <input type="text" maxlength="200"
+                                                <input required type="text" maxlength="100"
                                                     value="{{ old('address') ?? Auth::guard('frontend_users')->user()?->address }}"
                                                     name="address" placeholder="Tinkune-7,Kathmandu"
                                                     class="form-control">
@@ -239,7 +244,7 @@
                                         <div class="col-sm-12 @if ($errors->first('email')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Email</strong></label>
-                                                <input type="email"
+                                                <input required type="email"
                                                     value="{{ old('email') ?? Auth::guard('frontend_users')->user()?->email }}"
                                                     name="email" placeholder="example@example.com"
                                                     class="form-control">
@@ -253,9 +258,9 @@
                                         <div class="col-sm-12 @if ($errors->first('amount')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Amount (Rs.)</strong></label>
-                                                <input id="donationAmount" type="text" min="10" max="500000"
-                                                    value="{{ old('amount') }}" placeholder="1000" name="amount"
-                                                    class="form-control">
+                                                <input required id="donationAmount" type="text" min="10"
+                                                    max="500000" value="{{ old('amount') }}" placeholder="1000"
+                                                    name="amount" class="form-control">
                                                 @if ($errors->first('amount'))
                                                     <span
                                                         class="text-danger display-block">{{ $errors->first('amount') }}</span>
@@ -266,7 +271,7 @@
                                             class="col-sm-12 bank-details @if (old('payment_mode') == 'online') d-none @endif @if ($errors->first('payment_receipt')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Payment Receipt</strong></label>
-                                                <input type="file" name="payment_receipt" placeholder=""
+                                                <input id="payment_receipt" accept=".jpg, .jpeg, .png, .pdf"  type="file" name="payment_receipt" placeholder=""
                                                     class="form-control">
                                                 @if ($errors->first('payment_receipt'))
                                                     <span
@@ -277,7 +282,8 @@
                                         <div class="col-sm-12 @if ($errors->first('description')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Description</strong></label>
-                                                <textarea rows="6" name="description" class="form-control" value="description" placeholder="Description">{{ old('description') }} </textarea>
+                                                <textarea required rows="6"  id="description" name="description" class="form-control" value="description"
+                                                    placeholder="Description">{{old('description')}}</textarea>
                                                 @if ($errors->first('description'))
                                                     <span
                                                         class="text-danger display-block">{{ $errors->first('description') }}</span>
@@ -315,7 +321,8 @@
                             <div class="section-title">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h5 class="font-weight-300 m-0">Thankful for the positivity and inspiration beautiful souls bring. Cheers to those selfless donors.</h5>
+                                        <h5 class="font-weight-300 m-0">Thankful for the positivity and inspiration
+                                            beautiful souls bring. Cheers to those selfless donors.</h5>
                                         <h2 class="mt-0 text-uppercase font-28">Our <span
                                                 class="font-30 text-theme-colored">Donors.</span></h2>
                                         <div class="icon">
@@ -354,10 +361,13 @@
                     $('.bank-details').removeClass('d-none');
                     $('#khaltiDonateBtn').addClass('d-none');
                     $('#offlineDonateBtn').removeClass('d-none');
+                    $('#payment_receipt').prop('required',true);
                 } else {
                     $('.bank-details').addClass('d-none');
                     $('#khaltiDonateBtn').removeClass('d-none');
                     $('#offlineDonateBtn').addClass('d-none');
+                    $('#payment_receipt').prop('required',false);
+
                 }
             }
         </script>
@@ -466,9 +476,28 @@
             var checkout = new KhaltiCheckout(config);
             var btn = document.getElementById('khaltiDonateBtn');
             btn.onclick = function() {
+                let showKhaltiForm = true;
+
+                /* check validation */
+                const form = document.getElementById("donateForm");
+                if (!form.checkValidity()) {
+                    // Display validation messages
+                    for (const element of form.elements) {
+                        if (element.tagName === "INPUT" && !element.validity.valid) {
+                            showKhaltiForm = false;
+                            element.reportValidity();
+                        }
+                    }
+                }
+                /* end check validation */
+
                 event.preventDefault();
                 let donationAmount = $('#donationAmount').val();
-                let showKhaltiForm = true;
+                let description = $('#description').val().trim();
+                if (description.length <15) {
+                    showKhaltiForm = false;
+                    Swal.fire('Error!', 'Description should be more than 15 characters.', 'error');
+                }
                 if (donationAmount == '') {
                     showKhaltiForm = false;
                     Swal.fire('Error!', 'Please input donation amount.', 'error');

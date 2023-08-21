@@ -95,10 +95,10 @@
                                                 Now</a>
                                         @elseif ($causesListDatum->campaign_status == 'completed')
                                             <a href="#"
-                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
+                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 mb-10 disabled">Completed</a>
                                         @else
                                             <a href="#"
-                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired</a>
+                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 mb-10 disabled">Expired</a>
                                         @endif
 
                                     </div>
