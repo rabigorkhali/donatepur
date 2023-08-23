@@ -146,9 +146,9 @@
                         <strong>{{ $errors->first($formInputName) }}</strong>
                     </span>
                 @endif
-                <a href="{{ asset('uploads/' . $campaignDetail->cover_image) }}" target="_blank">
+                <a href="{{ asset('public/uploads/' . $campaignDetail->cover_image) }}" target="_blank">
                     <img class="img-thumbnail" style="height:100px"
-                        src="{{ asset('uploads/' . giveImageName($campaignDetail->cover_image, 'medium')) }}"
+                        src="{{ asset('public/uploads/' . giveImageName($campaignDetail->cover_image, 'medium')) }}"
                         height="50">
                 </a>
             </div>

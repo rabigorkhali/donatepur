@@ -34,7 +34,7 @@
                                     <a href="#" class="post-thumb">
                                         @if ($getPostsBlogsDatum->image)
                                             <img height="55" width="85" alt=""
-                                                src="{{ asset('/uploads/') . '/' . imageName($getPostsBlogsDatum->image, '-small') }}">
+                                                src="{{ asset('/public/uploads/') . '/' . imageName($getPostsBlogsDatum->image, '-small') }}">
                                         @else
                                             <img height="55" width="85" alt=""
                                                 src="{{ imageName($getPostsBlogsDatum->image) }}">

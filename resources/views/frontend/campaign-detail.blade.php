@@ -7,7 +7,7 @@
     <div class="main-content">
         <!-- Section: inner-header -->
         <section class="inner-header divider parallax layer-overlay overlay-dark-5" data-stellar-background-ratio="0.5"
-            data-bg-img="{{ asset('uploads') . '/' . $campaignDetails->cover_image }}"
+            data-bg-img="{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}"
             style="background-image: url(&quot;images/bg/bg1.jpg&quot;); background-position: 50% 61px;">
             <div class="container pt-100 pb-50">
                 <!-- Section Content -->
@@ -33,7 +33,7 @@
                                     <div class="col-md-5">
                                         <div class="thumb">
                                             <img class="img-fullwidth img-thumbnail" alt=""
-                                                src="{{ asset('uploads') . '/' . $campaignDetails->cover_image }}">
+                                                src="{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}">
                                         </div>
                                     </div>
                                     <div class="col-md-7">
@@ -135,8 +135,8 @@
         </section>
         @if ($campaignDetails->campaign_status == 'running')
             <section id="donationForm" class="divider parallax"
-                data-bg-img="{{ asset('uploads') . '/' . $campaignDetails->cover_image }}" data-parallax-ratio="0.7"
-                style="background-image: url('{{ asset('uploads') . '/' . $campaignDetails->cover_image }}'); background-position: 50% 76px;">
+                data-bg-img="{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}" data-parallax-ratio="0.7"
+                style="background-image: url('{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}'); background-position: 50% 76px;">
                 <div class="container pt-0 pb-0">
                     <div class="row">
                         <div class="col-md-8">
@@ -175,7 +175,7 @@
                                                 <label>Account No: </label>{{ setting('bank.bank_account_number') }}</br>
                                                 <label>Bank Name: </label>{{ setting('bank.bank_name') }}</br>
                                                 <label>QR: </label><br> <img height="100"
-                                                    src="{{ asset('uploads') . '/' . setting('bank.bank_qr') }}">
+                                                    src="{{ asset('/public/uploads') . '/' . setting('bank.bank_qr') }}">
                                             </div>
                                         </div>
 

@@ -25,9 +25,9 @@ use Illuminate\Support\Str;
 class RegisteredUserController extends Controller
 {
     use ImageTrait;
-    public $dir = "/uploads/public-users";
-    public $mainDirectory = "/uploads";
-    public $dirforDb = "/public-users/";
+    public $dir = "/public/uploads/public-users";
+    public $mainDirectory = "/public/uploads";
+    public $dirforDb = "/public/public-users/";
     /**
      * Display the registration view.
      */

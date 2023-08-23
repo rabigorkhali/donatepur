@@ -1,23 +1,23 @@
-<script src="{{ asset('/frontend/js/custom.js') }}"></script>
+<script src="{{ asset('/public/frontend/js/custom.js') }}"></script>
 <script type="text/javascript"
-    src="{{ asset('/frontend/js/revolution-slider/js/extensions/revolution.extension.actions.min.js') }}"></script>
+    src="{{ asset('/public/frontend/js/revolution-slider/js/extensions/revolution.extension.actions.min.js') }}"></script>
 <script type="text/javascript"
-    src="{{ asset('/frontend/js/revolution-slider/js/extensions/revolution.extension.carousel.min.js') }}"></script>
+    src="{{ asset('/public/frontend/js/revolution-slider/js/extensions/revolution.extension.carousel.min.js') }}"></script>
 <script type="text/javascript"
-    src="{{ asset('/frontend/js/revolution-slider/js/extensions/revolution.extension.kenburn.min.js') }}"></script>
+    src="{{ asset('/public/frontend/js/revolution-slider/js/extensions/revolution.extension.kenburn.min.js') }}"></script>
 <script type="text/javascript"
-    src="{{ asset('/frontend/js/revolution-slider/js/extensions/revolution.extension.layeranimation.min.js') }}">
+    src="{{ asset('/public/frontend/js/revolution-slider/js/extensions/revolution.extension.layeranimation.min.js') }}">
 </script>
 <script type="text/javascript"
-    src="{{ asset('/frontend/js/revolution-slider/js/extensions/revolution.extension.migration.min.js') }}"></script>
+    src="{{ asset('/public/frontend/js/revolution-slider/js/extensions/revolution.extension.migration.min.js') }}"></script>
 <script type="text/javascript"
-    src="{{ asset('/frontend/js/revolution-slider/js/extensions/revolution.extension.navigation.min.js') }}"></script>
+    src="{{ asset('/public/frontend/js/revolution-slider/js/extensions/revolution.extension.navigation.min.js') }}"></script>
 <script type="text/javascript"
-    src="{{ asset('/frontend/js/revolution-slider/js/extensions/revolution.extension.parallax.min.js') }}"></script>
+    src="{{ asset('/public/frontend/js/revolution-slider/js/extensions/revolution.extension.parallax.min.js') }}"></script>
 <script type="text/javascript"
-    src="{{ asset('/frontend/js/revolution-slider/js/extensions/revolution.extension.slideanims.min.js') }}"></script>
+    src="{{ asset('/public/frontend/js/revolution-slider/js/extensions/revolution.extension.slideanims.min.js') }}"></script>
 <script type="text/javascript"
-    src="{{ asset('/frontend/js/revolution-slider/js/extensions/revolution.extension.video.min.js') }}"></script>
+    src="{{ asset('/public/frontend/js/revolution-slider/js/extensions/revolution.extension.video.min.js') }}"></script>
 <script>
     $(document).ready(function() {
 

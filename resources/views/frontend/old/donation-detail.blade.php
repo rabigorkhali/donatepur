@@ -100,7 +100,7 @@
                     <div class="col col-md-9">
                         <div class="causes-single">
                             <div class="img-holder">
-                                <img src="{{ asset('uploads') . '/' . $campaignDetails->cover_image }}" alt
+                                <img src="{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}" alt
                                     class="img img-responsive">
                             </div>
                             <div class="causes-list-box">

@@ -4,7 +4,7 @@
     <div class="main-content">
         <!-- Section: inner-header -->
         
-        <section class="inner-header divider parallax layer-overlay overlay-dark-5" data-stellar-background-ratio="0.5" data-bg-img="{{ asset('uploads') . '/' . imageName($pageDetails->image, '-cropped') }}" style="background-image: url('{{ asset('uploads') . '/' . imageName($pageDetails->image, '-cropped') }}'); background-position: 50% 61px;">
+        <section class="inner-header divider parallax layer-overlay overlay-dark-5" data-stellar-background-ratio="0.5" data-bg-img="{{ asset('/public/uploads') . '/' . imageName($pageDetails->image, '-cropped') }}" style="background-image: url('{{ asset('/public/uploads') . '/' . imageName($pageDetails->image, '-cropped') }}'); background-position: 50% 61px;">
             <div class="container pt-100 pb-50">
               <!-- Section Content -->
               <div class="section-content">

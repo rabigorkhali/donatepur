@@ -73,10 +73,10 @@
                                     <strong style="color: #555;">Receipt: </strong>
                                     @if ($thisModelDetail->payment_receipt)
                                     <br>
-                                        <a href="{{ asset('uploads/' . $thisModelDetail->payment_receipt) }}"
+                                        <a href="{{ asset('public/uploads/' . $thisModelDetail->payment_receipt) }}"
                                             target="_blank">
                                             <img class="img-thumbnail" style="height:50"
-                                                src="{{ asset('uploads/' . $thisModelDetail->payment_receipt) }}"
+                                                src="{{ asset('public/uploads/' . $thisModelDetail->payment_receipt) }}"
                                                 width="200">
                                         </a>
                                     @else

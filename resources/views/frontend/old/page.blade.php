@@ -31,7 +31,7 @@
                     <div class="col col-md-12">
                         <div class="causes-single">
                             {{-- <div class="img-holder">
-                                <img src="{{ asset('uploads') . '' . $pageDetails->image }}" alt
+                                <img src="{{ asset('/public/uploads') . '' . $pageDetails->image }}" alt
                                     class="img img-responsive">
                             </div> --}}
                             <div class="causes-list-box">

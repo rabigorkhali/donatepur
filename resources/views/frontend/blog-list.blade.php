@@ -57,7 +57,7 @@
                                     <article class="post clearfix mb-30 bg-lighter">
                                         <div class="entry-header">
                                             <div class="post-thumb thumb">
-                                                <img src="{{ asset('uploads') . '/' . imageName($postListDatum->image, '-cropped') }}"
+                                                <img src="{{ asset('/public/uploads') . '/' . imageName($postListDatum->image, '-cropped') }}"
                                                     alt="" class="img-responsive img-fullwidth">
                                             </div>
                                         </div>

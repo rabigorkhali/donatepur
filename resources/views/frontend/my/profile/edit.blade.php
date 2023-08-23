@@ -141,9 +141,9 @@
                         <strong>{{ $errors->first($formInputName) }}</strong>
                     </span>
                 @endif
-                <a href="{{ asset('uploads/' . $user->profile_picture) }}" target="_blank">
+                <a href="{{ asset('public/uploads/' . $user->profile_picture) }}" target="_blank">
                 <img class="img-thumbnail" style="height:100px"
-                    src="{{ asset('uploads/' . giveImageName($user->profile_picture, 'medium')) }}" height="50">
+                    src="{{ asset('public/uploads/' . giveImageName($user->profile_picture, 'medium')) }}" height="50">
                 </a>
             </div>
             <div class="flex items-center gap-4 mb-2">
