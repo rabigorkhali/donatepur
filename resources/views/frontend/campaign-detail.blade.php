@@ -75,10 +75,10 @@
                                                 <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
                                                     href="#donationForm" onclick="scrollToElement('donationForm')">Donate
                                                     Now</a>
-                                            @elseif ($campaignDetails->campaign_status == 'completed')
+                                            @elseif (in_array($campaignDetails->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                                 <a href="#"
                                                     class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
-                                            @else
+                                            @elseif($campaignDetails->end_date < date('Y-m-d'))
                                                 <a href="#"
                                                     class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired
                                                 </a>
@@ -113,9 +113,13 @@
                                         <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
                                             href="#donationForm" onclick="scrollToElement('donationForm')">Donate
                                             Now</a>
-                                    @else
+                                    @elseif (in_array($campaignDetails->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                         <a href="#"
                                             class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed
+                                            ON {{ $campaignDetails->end_date->format('Y-M-d') }}</a>
+                                    @elseif ($campaignDetails->end_date < date('Y-m-d'))
+                                        <a href="#"
+                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired
                                             ON {{ $campaignDetails->end_date->format('Y-M-d') }}</a>
                                     @endif
                                 </div>
@@ -135,7 +139,8 @@
         </section>
         @if ($campaignDetails->campaign_status == 'running')
             <section id="donationForm" class="divider parallax"
-                data-bg-img="{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}" data-parallax-ratio="0.7"
+                data-bg-img="{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}"
+                data-parallax-ratio="0.7"
                 style="background-image: url('{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}'); background-position: 50% 76px;">
                 <div class="container pt-0 pb-0">
                     <div class="row">
@@ -182,7 +187,8 @@
                                         <div class="col-sm-12 @if ($errors->first('fullname')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Full Name</strong></label>
-                                                <input required type="text" maxlength="100" name="fullname" min="7"
+                                                <input required type="text" maxlength="100" name="fullname"
+                                                    min="7"
                                                     value="{{ old('fullname') ?? Auth::guard('frontend_users')->user()?->full_name }}"
                                                     placeholder="Rama Namaya" class="form-control">
                                                 @if ($errors->first('fullname'))
@@ -196,7 +202,8 @@
                                             class="col-sm-12 bank-details   @if (old('payment_mode') == 'online') d-none @endif  @if ($errors->first('mobile_number')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Mobile Number</strong></label>
-                                                <input required type="text" maxlength="15" minlength="10" name="mobile_number"
+                                                <input id="mobileNumber"  type="text" maxlength="15" minlength="10"
+                                                    name="mobile_number"
                                                     value="{{ old('mobile_number') ?? Auth::guard('frontend_users')->user()?->mobile_number }}"
                                                     placeholder="9841000000" class="form-control">
                                                 @if ($errors->first('mobile_number'))
@@ -258,7 +265,7 @@
                                         <div class="col-sm-12 @if ($errors->first('amount')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Amount (Rs.)</strong></label>
-                                                <input required id="donationAmount" type="text" min="10"
+                                                <input required id="donationAmount" type="number" min="10"
                                                     max="500000" value="{{ old('amount') }}" placeholder="1000"
                                                     name="amount" class="form-control">
                                                 @if ($errors->first('amount'))
@@ -271,7 +278,8 @@
                                             class="col-sm-12 bank-details @if (old('payment_mode') == 'online') d-none @endif @if ($errors->first('payment_receipt')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Payment Receipt</strong></label>
-                                                <input id="payment_receipt" accept=".jpg, .jpeg, .png, .pdf"  type="file" name="payment_receipt" placeholder=""
+                                                <input id="payment_receipt" accept=".jpg, .jpeg, .png, .pdf"
+                                                    type="file" name="payment_receipt" placeholder=""
                                                     class="form-control">
                                                 @if ($errors->first('payment_receipt'))
                                                     <span
@@ -282,8 +290,8 @@
                                         <div class="col-sm-12 @if ($errors->first('description')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Description</strong></label>
-                                                <textarea required rows="6"  id="description" name="description" class="form-control" value="description"
-                                                    placeholder="Description">{{old('description')}}</textarea>
+                                                <textarea required rows="6" id="description" name="description" class="form-control" value="description"
+                                                    placeholder="Description">{{ old('description') }}</textarea>
                                                 @if ($errors->first('description'))
                                                     <span
                                                         class="text-danger display-block">{{ $errors->first('description') }}</span>
@@ -336,7 +344,8 @@
                                     <div class="item text-center">
                                         <img alt="" src="{{ $datumDonors['profile_pic'] }}">
                                         <div class="donor-details bg-white">
-                                            <h4 class="m-0 pt-10 text-theme-colored">{{ $datumDonors['name'] }}</h4>
+                                            <h4 class="m-0 pt-10 text-theme-colored">
+                                                {{ $datumDonors['name'] ? $datumDonors['name'] : 'Anonymous' }}</h4>
                                             <p class="font-12 pb-10">Donated :
                                                 {{ priceToNprFormat($datumDonors['amount']) }}
                                             </p>
@@ -361,12 +370,14 @@
                     $('.bank-details').removeClass('d-none');
                     $('#khaltiDonateBtn').addClass('d-none');
                     $('#offlineDonateBtn').removeClass('d-none');
-                    $('#payment_receipt').prop('required',true);
+                    $('#payment_receipt').prop('required', true);
+                    $('#mobileNumber').prop('required', true);
                 } else {
                     $('.bank-details').addClass('d-none');
                     $('#khaltiDonateBtn').removeClass('d-none');
                     $('#offlineDonateBtn').addClass('d-none');
-                    $('#payment_receipt').prop('required',false);
+                    $('#payment_receipt').prop('required', false);
+                    $('#mobileNumber').prop('required', false);
 
                 }
             }
@@ -429,7 +440,6 @@
                 ],
                 "eventHandler": {
                     onSuccess(payload) {
-                        console.log(payload, 'payloadpayload');
                         $.ajax({
                             url: app_url + '/payment/khalti/verfication',
                             type: 'GET',
@@ -442,9 +452,11 @@
                             },
                             success: function(responseSuccess) {
                                 $("#preloader").hide();
-                                Swal.fire('Success!',
-                                    'Thank you. You donation has been received. God bless you.',
-                                    'success');
+                                if (responseSuccess.type == 'error') {
+                                    Swal.fire('Error!',responseSuccess.msg, 'error');
+                                } else {
+                                    Swal.fire('success!',responseSuccess.msg, 'success');
+                                }
                                 let currentUrl = window.location.href;
                                 currentUrl = currentUrl.split("#")[0]
                                 $('html, body').animate({
@@ -453,6 +465,7 @@
                             },
                             error: function(error) {
                                 $("#preloader").hide();
+                                console.log(error);
                                 Swal.fire('Error!', 'Error. Please try again.', 'error');
                             },
                             complete: function() {
@@ -464,6 +477,7 @@
 
                     },
                     onError(error) {
+                        console.log(error, 'iamhere');
                         $("#preloader").hide();
                         Swal.fire('Error!', 'Error. Please try again.', 'error');
                     },
@@ -475,6 +489,7 @@
 
             var checkout = new KhaltiCheckout(config);
             var btn = document.getElementById('khaltiDonateBtn');
+            
             btn.onclick = function() {
                 let showKhaltiForm = true;
 
@@ -494,7 +509,7 @@
                 event.preventDefault();
                 let donationAmount = $('#donationAmount').val();
                 let description = $('#description').val().trim();
-                if (description.length <15) {
+                if (description.length < 15) {
                     showKhaltiForm = false;
                     Swal.fire('Error!', 'Description should be more than 15 characters.', 'error');
                 }
@@ -505,7 +520,7 @@
                 donationAmount = parseInt(donationAmount);
                 if (donationAmount < 10) {
                     showKhaltiForm = false;
-                    Swal.fire('Error!', 'Amount must be greater than Rs.10.', 'error');
+                    Swal.fire('Error!', 'Amount must be greater or equals to Rs.10.', 'error');
                 }
                 if (showKhaltiForm) {
                     $("#preloader").show();

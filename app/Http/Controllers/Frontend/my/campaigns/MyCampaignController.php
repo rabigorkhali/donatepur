@@ -121,7 +121,7 @@ class MyCampaignController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'goal_amount' => 'required|numeric|min:1000|max:10000000',
+            'goal_amount' => 'required|numeric|min:1000|max:1000000',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
             'campaign_category_id' => 'required|exists:campaign_categories,id',

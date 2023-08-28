@@ -93,7 +93,7 @@
                                             <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
                                                 href="{{ route('campaignDetailPage', $causesListDatum->slug) }}">Donate
                                                 Now</a>
-                                        @elseif ($causesListDatum->campaign_status == 'completed')
+                                        @elseif (in_array($causesListDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                             <a href="#"
                                                 class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 mb-10 disabled">Completed</a>
                                         @else

@@ -282,6 +282,7 @@
                                 <div class="owl-carousel-3col" data-dots="true">
                                     @foreach ($featuredCauses as $featuredCausesKey => $featuredCausesDatum)
                                         <div class="item mb-10">
+                                            {{$featuredCausesDatum->cover_image.'sdfsdfs'}}
                                             <div class="image-box-thum">
                                                 <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">
                                                     <img height="239" style=" border-radius:5px 5px 0 0;"
@@ -319,7 +320,7 @@
                                                         <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
                                                             href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">Donate
                                                             Now</a>
-                                                    @elseif ($featuredCausesDatum->campaign_status == 'completed')
+                                                    @elseif (in_array($featuredCausesDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                                         <a href="#"
                                                             class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
                                                     @else
@@ -493,7 +494,7 @@
                                             <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
                                                 href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">Donate
                                                 Now</a>
-                                        @elseif ($recentCausesDatum->campaign_status == 'completed')
+                                        @elseif (in_array($recentCausesDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                             <a href="#"
                                                 class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
                                         @else

@@ -21,4 +21,5 @@ Route::post('/donation', [HomeController::class, 'getDonation'])->name('getDonat
 Route::get('/payment/khalti/verfication', [HomeController::class, 'khaltiPaymentVerification'])->name('khaltiPaymentVerification');
 Route::post('/save-location/{campaign}', [HomeController::class, 'saveLocation'])->name('saveLocation');
 
+Route::get('/sync-expired-campaigns', [HomeController::class, 'syncExpiredCampaigns'])->name('syncExpiredCampaigns');
 

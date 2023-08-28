@@ -89,13 +89,12 @@ class PasswordResetLinkController extends Controller
 
     public function storeResetForm(Request $request)
     {
-
-        try {
             $request->validate([
                 'token' => 'required',
                 'email' => 'required|email',
                 'password' => ['required', 'confirmed', 'min:6'],
             ]);
+            try {
             $token = $request->get('token');
             $password = $request->get('password');
             $email = $request->get('email');
@@ -104,12 +103,12 @@ class PasswordResetLinkController extends Controller
             $checkPublicUserPassword = PublicUserPasswordReset::where('email', $email)->wheredate('created_at', date('Y-m-d'))->count();
             if ($checkPublicUserPassword > 6) {
                 Session::flash('error', 'You have requested more than 5 times. Please try again tomorrow.');
-                return redirect()->route('login');
+                return redirect()->route('password.reset',$token);
             }
             $checkPublicUserPassword = PublicUserPasswordReset::where('token', $token)->wheredate('created_at', date('Y-m-d'))->count();
             if (!$checkPublicUserPassword) {
                 Session::flash('error', 'Invalid token. Please try again.');
-                return redirect()->route('login');
+                return redirect()->route('password.reset',$token);
             }
             PublicUserPasswordReset::where('email', $email)->delete();
             PublicUser::where('email', $email)->update(['password' => Hash::make($password)]);
