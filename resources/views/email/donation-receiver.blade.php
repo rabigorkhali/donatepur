@@ -344,7 +344,7 @@
                                                                             style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 25.2px;">
                                                                             <span style="font-size:14px;">
                                                                                 Greetings! You've received a donation of
-                                                                                <b>{{priceToNprFormat($donationData['amount'])}}</b> for the "{{$campaignDetails->title}}" campaign. Thank you!
+                                                                                <b>{{priceToNprFormat($donationData['amount']??0)}}</b> for the "{{$campaignDetails->title}}" campaign. Thank you!
                                                                                 <br>
                                                                                 If you have any queries,
                                                                                 please reach us via

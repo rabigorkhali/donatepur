@@ -64,18 +64,18 @@ class HomeController extends FrontendBaseController
     public function index(Request $request)
     {
         try {
-            // return $this->renderView('email.donation-receiver', ['token'=>'sdfsdf']);
+            //  return $this->renderView('email.donation-receiver', ['token'=>'sdfsdf']);
             $data = array();
             $data['featuredCauses'] = CampaignView::where('status', true)
                 ->where('is_featured', false)
-                ->wherein('campaign_status', ['running'])
+                ->wherenotin('campaign_status',getCampaignStatusThatCantBeShown())
                 ->orderby('summary_total_collection', 'desc')
                 ->take(6)->get();
 
             $data['recentCauses'] = CampaignView::where('status', true)
                 ->where('is_featured', false)
-                ->wherein('campaign_status', ['running'])
-                ->orderby('summary_total_collection', 'desc')
+                ->wherenotin('campaign_status',getCampaignStatusThatCantBeShown())
+                ->orderby('created_at', 'desc')
                 ->take(6)->get();
 
             $data['sliderBanners'] = $this->sliderBanner
@@ -287,7 +287,7 @@ class HomeController extends FrontendBaseController
             $mailData['donationId'] = $resp->id;
             $mailData['campaignDetails'] = $campaignDetails;
             $mailData['donationData'] = $insertData;
-            Mail::to('donatepur@gmail.com')->send(new DonationReceivedEmail($mailData));
+            Mail::to($campaignDetails->owner->email)->send(new DonationReceivedEmail($mailData));
             /* send mail */
             Session::flash('success', 'Congratulations. Your donation has been successfully received. Please wait for the verification.');
             return redirect()->back();

@@ -176,3 +176,9 @@ function frontendActiveButton($routeNameParam = '')
     }
     return '';
 }
+
+function getCampaignStatusThatCantBeShown()
+{
+    return ['pending','rejected','accepted'];
+
+}

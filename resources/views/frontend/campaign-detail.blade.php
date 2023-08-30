@@ -202,7 +202,7 @@
                                             class="col-sm-12 bank-details   @if (old('payment_mode') == 'online') d-none @endif  @if ($errors->first('mobile_number')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Mobile Number</strong></label>
-                                                <input id="mobileNumber"  type="text" maxlength="15" minlength="10"
+                                                <input id="mobileNumber" type="text" maxlength="15" minlength="10"
                                                     name="mobile_number"
                                                     value="{{ old('mobile_number') ?? Auth::guard('frontend_users')->user()?->mobile_number }}"
                                                     placeholder="9841000000" class="form-control">
@@ -366,6 +366,7 @@
     @section('scripts')
         <script>
             function paymentGateway(value) {
+                console.log(value);
                 if (value == 'bank') {
                     $('.bank-details').removeClass('d-none');
                     $('#khaltiDonateBtn').addClass('d-none');
@@ -416,6 +417,17 @@
                 const oldPaymentGateway = "{{ old('payment_gateway') }}";
                 paymentGateway(oldPaymentGateway);
 
+                /* hover */
+                let $mousemoveKhalti = $('#khaltiDonateBtn');
+                let $mouseMoveBank = $('#offlineDonateBtn');
+                $mousemoveKhalti.hover(function(event) {
+                    paymentGateway($('input[name="payment_gateway"]:checked').val());
+                });
+                $mouseMoveBank.hover(function(event) {
+                    paymentGateway($('input[name="payment_gateway"]:checked').val());
+                });
+                /* hover */
+
             });
         </script>
 
@@ -453,9 +465,9 @@
                             success: function(responseSuccess) {
                                 $("#preloader").hide();
                                 if (responseSuccess.type == 'error') {
-                                    Swal.fire('Error!',responseSuccess.msg, 'error');
+                                    Swal.fire('Error!', responseSuccess.msg, 'error');
                                 } else {
-                                    Swal.fire('success!',responseSuccess.msg, 'success');
+                                    Swal.fire('success!', responseSuccess.msg, 'success');
                                 }
                                 let currentUrl = window.location.href;
                                 currentUrl = currentUrl.split("#")[0]
@@ -489,7 +501,7 @@
 
             var checkout = new KhaltiCheckout(config);
             var btn = document.getElementById('khaltiDonateBtn');
-            
+
             btn.onclick = function() {
                 let showKhaltiForm = true;
 
