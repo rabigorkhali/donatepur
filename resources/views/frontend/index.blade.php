@@ -282,7 +282,6 @@
                                 <div class="owl-carousel-3col" data-dots="true">
                                     @foreach ($featuredCauses as $featuredCausesKey => $featuredCausesDatum)
                                         <div class="item mb-10">
-                                            {{$featuredCausesDatum->cover_image.'sdfsdfs'}}
                                             <div class="image-box-thum">
                                                 <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">
                                                     <img height="239" style=" border-radius:5px 5px 0 0;"

@@ -96,7 +96,7 @@ class HomeController extends FrontendBaseController
                 if ($donationRawDatum?->giver?->profile_picture) {
                     $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
                 } else {
-                    $topDonors['profile_pic'] = asset('public/static-images/images/usernotfound.png');
+                    $topDonors['profile_pic'] = asset('public/uploads/static-images/images/usernotfound.png');
                 }
 
                 // $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
@@ -316,7 +316,7 @@ class HomeController extends FrontendBaseController
                 if ($donationRawDatum?->giver?->profile_picture) {
                     $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
                 } else {
-                    $topDonors['profile_pic'] = asset('public/static-images/images/usernotfound.png');
+                    $topDonors['profile_pic'] = asset('public/uploads/static-images/images/usernotfound.png');
                 }
                 $topDonors['amount'] = $donationRawDatum->amount;
                 $topDonors['is_anonymous'] = $donationRawDatum->is_anonymous;

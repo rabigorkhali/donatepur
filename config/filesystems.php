@@ -1,4 +1,5 @@
 <?php
+// dd(public_path('/'));
 return [
 
     /*
@@ -57,7 +58,8 @@ return [
 
         'voyager' => [
             'driver' => 'local',
-            'root' => public_path('/../public'),// change here something specific to your application need
+            'root' => public_path('/uploads'),// change here something specific to your application need
+            // 'root' => public_path('/../public'),// change here something specific to your application need
             'url' => env('APP_URL').'/public/uploads',
             // 'root' => env('APP_URL').'/public/uploads',
             'visibility' => 'public',
