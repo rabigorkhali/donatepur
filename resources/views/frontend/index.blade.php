@@ -1,6 +1,15 @@
 @extends('frontend.master')
 @section('title', 'Home')
 @section('content')
+{{-- <style>
+    .menuzord-brand::before {
+            content: 'TEST MODE';
+            font-size: 20px;
+            vertical-align: top;
+            margin: 10px;
+            color: green;
+         }
+    </style> --}}
     <!-- Start main-content -->
     <div class="main-content">
         <!-- Section: home -->
