@@ -64,7 +64,7 @@ class HomeController extends FrontendBaseController
     public function index(Request $request)
     {
         try {
-             return $this->renderView('email.donation-receiver', ['token'=>'sdfsdf']);
+            //  return $this->renderView('email.donation-receiver', ['token'=>'sdfsdf']);
             $data = array();
             $data['featuredCauses'] = CampaignView::where('status', true)
                 ->where('is_featured', false)
