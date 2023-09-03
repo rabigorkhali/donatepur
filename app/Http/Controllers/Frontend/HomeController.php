@@ -110,7 +110,6 @@ class HomeController extends FrontendBaseController
             $data['partners'] = Partner::get();
             return $this->renderView($this->viewFolder(), $data);
         } catch (Throwable $th) {
-            dd($th->getMessage());
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
     }
@@ -419,7 +418,7 @@ class HomeController extends FrontendBaseController
                 $mailData['donationId'] = $resp->id;
                 $mailData['campaignDetails'] = $campaignDetails;
                 $mailData['donationData'] = $insertData;
-                Mail::to('donatepur@gmail.com')->send(new DonationReceivedEmail($mailData));
+                Mail::to($campaignDetails->owner->email)->send(new DonationReceivedEmail($mailData));
                 /* send mail */
 
                 return $data;
