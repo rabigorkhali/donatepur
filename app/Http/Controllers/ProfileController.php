@@ -17,9 +17,9 @@ use Throwable;
 class ProfileController extends Controller
 {
     use ImageTrait;
-    public $dir = "/public/uploads/public-users";
-    public $mainDirectory = "/public/uploads";
-    public $dirforDb = "/public/public-users/";
+    public $dir = "/uploads/public-users";
+    public $mainDirectory = "/uploads";
+    public $dirforDb = "/public-users/";
 
     /**
      * Display the user's profile form.
