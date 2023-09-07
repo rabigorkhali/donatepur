@@ -331,7 +331,7 @@
                                     <div class="col-md-6">
                                         <h5 class="font-weight-300 m-0">Thankful for the positivity and inspiration
                                             beautiful souls bring. Cheers to those selfless donors.</h5>
-                                        <h2 class="mt-0 text-uppercase font-28">Our <span
+                                        <h2 class="mt-0 text-uppercase font-28">Top <span
                                                 class="font-30 text-theme-colored">Donors.</span></h2>
                                         <div class="icon">
                                             <i class="fa fa-hospital-o"></i>
@@ -346,8 +346,11 @@
                                         <div class="donor-details bg-white">
                                             <h4 class="m-0 pt-10 text-theme-colored">
                                                 {{ $datumDonors['name'] ? $datumDonors['name'] : 'Anonymous' }}</h4>
-                                            <p class="font-12 pb-10">Donated :
-                                                {{ priceToNprFormat($datumDonors['amount']) }}
+                                            <p class="font-12">
+                                                Donated : {{ priceToNprFormat($datumDonors['amount']) }}<br>
+                                                Date :{{ $datumDonors['donation_date'] }}
+                                            </p>
+                                            <p class="font-12 pb-10">
                                             </p>
                                         </div>
                                     </div>

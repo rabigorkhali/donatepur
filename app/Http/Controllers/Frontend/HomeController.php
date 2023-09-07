@@ -69,13 +69,13 @@ class HomeController extends FrontendBaseController
             $data = array();
             $data['featuredCauses'] = CampaignView::where('status', true)
                 ->where('is_featured', false)
-                ->wherenotin('campaign_status',getCampaignStatusThatCantBeShown())
+                ->wherenotin('campaign_status', getCampaignStatusThatCantBeShown())
                 ->orderby('summary_total_collection', 'desc')
                 ->take(6)->get();
 
             $data['recentCauses'] = CampaignView::where('status', true)
                 ->where('is_featured', false)
-                ->wherenotin('campaign_status',getCampaignStatusThatCantBeShown())
+                ->wherenotin('campaign_status', getCampaignStatusThatCantBeShown())
                 ->orderby('created_at', 'desc')
                 ->take(6)->get();
 
@@ -170,8 +170,6 @@ class HomeController extends FrontendBaseController
             $data['postCategories'] = Category::orderby('name', 'asc')->get();
             return $this->renderView($this->parentViewFolder() . '.blog-list', $data);
         } catch (Throwable $th) {
-
-            dd($th);
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
     }
@@ -295,7 +293,6 @@ class HomeController extends FrontendBaseController
             Session::flash('success', 'Congratulations. Your donation has been successfully received. Please wait for the verification.');
             return redirect()->back();
         } catch (Throwable $th) {
-            dd($th);
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->back();
@@ -324,6 +321,7 @@ class HomeController extends FrontendBaseController
                 }
                 $topDonors['amount'] = $donationRawDatum->amount;
                 $topDonors['is_anonymous'] = $donationRawDatum->is_anonymous;
+                $topDonors['donation_date']= $donationRawDatum->created_at->format('Y-M-d');
                 $topDonors['giver_public_user_id'] = $donationRawDatum->giver_public_user_id;
                 array_push($topDonorsList, $topDonors);
             }
@@ -423,8 +421,9 @@ class HomeController extends FrontendBaseController
                 $mailData['donationId'] = $resp->id;
                 $mailData['campaignDetails'] = $campaignDetails;
                 $mailData['donationData'] = $insertData;
-                Mail::to($campaignDetails->owner->email)->send(new DonationReceivedEmail($mailData));
-                /* send mail */
+                $mailData['donationReceiverEmail'] = $campaignDetails->owner->email;
+                dispatch(new SendEmailAfterDonationMade($mailData));
+                /* send email */
 
                 return $data;
                 /* donateaoro */
