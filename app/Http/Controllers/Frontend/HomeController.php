@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Frontend\FrontendBaseController;
+use App\Jobs\SendEmailAfterDonationMade;
 use App\Mail\DonationReceivedEmail;
 use App\Models\Country;
 use App\Models\Voyager\Campaign;
@@ -286,11 +287,15 @@ class HomeController extends FrontendBaseController
             $mailData['donationId'] = $resp->id;
             $mailData['campaignDetails'] = $campaignDetails;
             $mailData['donationData'] = $insertData;
-            Mail::to($campaignDetails->owner->email)->send(new DonationReceivedEmail($mailData));
+            $mailData['donationReceiverEmail'] = $campaignDetails->owner->email;
+            dispatch(new SendEmailAfterDonationMade($mailData));
+
+            // Mail::to($campaignDetails->owner->email)->send(new DonationReceivedEmail($mailData));
             /* send mail */
             Session::flash('success', 'Congratulations. Your donation has been successfully received. Please wait for the verification.');
             return redirect()->back();
         } catch (Throwable $th) {
+            dd($th);
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->back();

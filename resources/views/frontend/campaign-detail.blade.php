@@ -387,6 +387,9 @@
         <script>
             $(document).ready(function() {
 
+                $('#donationForm').submit(function() {
+                    $("#preloader").show();
+                });
                 // Set your target end date and time (year, month - 1, day, hour, minute, second)
                 const targetDate = new Date("{{ $campaignDetails->end_date }}");
                 targetDate.setHours(targetDate.getHours() + 23);

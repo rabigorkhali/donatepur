@@ -85,12 +85,12 @@
                             </tr>
                             <tr>
                                 <th style="width:20%;">Start Date</th>
-                                <td>{{ $campaignDetail->start_date }}</td>
+                                <td>{{ $campaignDetail->start_date->format('Y-m-d') }}</td>
                             </tr>
 
                             <tr>
                                 <th style="width:20%;">End Date</th>
-                                <td>{{ $campaignDetail->end_date }}</td>
+                                <td>{{ $campaignDetail->end_date->format('Y-m-d') }}</td>
                             </tr>
                             <tr>
                                 <th style="width:20%;">Address</th>
@@ -116,8 +116,8 @@
                             </tr>
 
                             <tr>
-                                <th style="width:20%;">Verification Status</th>
-                                <td>{{ ucwords(str_replace('-', ' ', $campaignDetail->campaign_status)) }}</td>
+                                <th style="width:20%;">Withdrawal Status</th>
+                                <td>{{ ucwords(str_replace('-', ' ', $withdrawalDetails->withdrawal_status)) }}</td>
                             </tr>
                             <tr>
                                 <th style="width:20%;">Status</th>

@@ -9,6 +9,7 @@ use App\Models\Voyager\CampaignCategory;
 use App\Models\Voyager\CampaignView;
 use App\Models\Voyager\Donation;
 use App\Models\Voyager\SystemErrorLog;
+use App\Services\frontend\CampaignService;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -29,6 +30,7 @@ class MyCampaignController extends Controller
     {
         $this->campaigns = new Campaign();
         $this->donation = new Donation();
+        $this->campaignService = new CampaignService();
     }
 
     public function renderView($viewFile, $data)
@@ -267,6 +269,8 @@ class MyCampaignController extends Controller
     public function campaignSummary(Request $request, $id)
     {
         try {
+
+            return $this->campaignService->campaignSummary($request,$id);
             $data = [];
             $campaignData = CampaignView::select('start_date', 'end_date', 'cover_image', 'goal_amount', 'summary_total_collection', 'net_amount_collection', 'summary_service_charge_amount', 'total_number_donation', 'campaign_status')
                 ->where('public_user_id', $request->user->id)->where('id', $id)->first();

@@ -27,7 +27,6 @@
     {{-- With buttons --}}
     <x-adminlte-datatable id="table7" :heads="$heads" head-theme="light" theme="" :config="$config" striped
         hoverable with-buttons />
-
     {{-- With buttons + customization --}}
     @php
         $config['dom'] = '<"row" <"col-sm-7" B> <"col-sm-5 d-flex justify-content-end" i> >

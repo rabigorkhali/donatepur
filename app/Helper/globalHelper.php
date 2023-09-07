@@ -13,6 +13,9 @@ function calculatePercentageMaxTo100($number, $total)
             return 100;
         }
         $res = round($percentage, 3);
+        if ($res == 0) {
+            return 0;
+        }
         if ($res <= 1) {
             return 1;
         }
@@ -179,6 +182,5 @@ function frontendActiveButton($routeNameParam = '')
 
 function getCampaignStatusThatCantBeShown()
 {
-    return ['pending','rejected','accepted'];
-
+    return ['pending', 'rejected', 'accepted'];
 }

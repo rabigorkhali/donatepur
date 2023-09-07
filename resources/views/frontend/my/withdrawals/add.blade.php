@@ -181,6 +181,7 @@
         });
 
         $(document).ready(function() {
+            $('#campaign_id').change();
             function getCompaignDetails(campaignId) {
 
                 let fetchUrl = "{{ url('/my/campaigns-summary/') }}" + '/' + campaignId;
@@ -195,9 +196,8 @@
                         $('#summary_service_charge_amount').text(data.campaign
                             .summary_service_charge_amount);
                         $('#total_number_donation').text(data.campaign.total_number_donation);
-                        $('#start_date').text(data.campaign.start_date);
-                        $('#end_date').text(data.campaign.end_date);
-                        console.log(data.campaign);
+                        $('#start_date').text(data.campaign.start_date_format);
+                        $('#end_date').text(data.campaign.end_date_format);
                         $('#campaign_details_div').removeClass('d-none');
                         $('#payment_details_div').removeClass('d-none');
 

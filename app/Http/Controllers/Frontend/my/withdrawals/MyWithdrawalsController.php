@@ -44,8 +44,11 @@ class MyWithdrawalsController extends Controller
     }
 
     public function index(Request $request)
-    {   
+    {
         try {
+            /* TEST */
+            /* DELETE ONLY IF WITHDRAWALSTATUS IS PENDING */
+            /* END TEST */
             $data = array();
             $data['page_title'] = $this->pageTitle;
             $data['heads'] = [
@@ -67,22 +70,25 @@ class MyWithdrawalsController extends Controller
             $sn = 1;
             $thisArray = [];
             foreach ($thisModelDataList as $thisModelDataListKey => $thisModelDataListDatum) {
-                
-                $btnDelete = '<a onclick="deleteBtn(' . $thisModelDataListDatum->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
+                $btnDelete='';
+                if ($thisModelDataListDatum->withdrawal_status == 'pending') {
+                    $btnDelete = '<a onclick="deleteBtn(' . $thisModelDataListDatum->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
                               <i class="fa fa-lg fa-fw fa-trash"></i>
                           </a>';
+                }
+
                 $btnDetails = '<a target="_blank" href="' . route('my.withdrawals.view', $thisModelDataListDatum->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
                                <i class="fa fa-lg fa-fw fa-eye"></i>
                            </a>';
 
-                $amountDetails =   $this->campaignService->calculateAllAmount($thisModelDataListDatum->campaign_id);
+                $amountDetails =   $this->campaignService->campaignSummary($request, $thisModelDataListDatum->campaign_id);
                 $thisArray = [
                     $sn,
                     $thisModelDataListDatum->campaign->title,
                     priceToNprFormat($thisModelDataListDatum->campaign->goal_amount),
-                    priceToNprFormat($amountDetails['total_collection'] ?? 0),
-                    priceToNprFormat($amountDetails['service_charge'] ?? 0),
-                    priceToNprFormat($amountDetails['net_collection'] ?? 0),
+                    $amountDetails['campaign']->summary_total_collection ?? 0,
+                    $amountDetails['campaign']->summary_service_charge_amount ?? 0,
+                    $amountDetails['campaign']->net_amount_collection ?? 0,
                     ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
                     ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
                     '<nobr>' . $btnDelete . $btnDetails . '</nobr>'
@@ -99,6 +105,7 @@ class MyWithdrawalsController extends Controller
 
             return $this->renderView('.index', $data);
         } catch (Throwable $th) {
+            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
@@ -137,7 +144,7 @@ class MyWithdrawalsController extends Controller
             $campaignId = $request->get('campaign_id');
             $alreadyInwithdrawal = Withdrawal::where('campaign_id', $campaignId)->first();
             if ($alreadyInwithdrawal) {
-                Session::flash('error', 'Bad request.');
+                Session::flash('error', 'Bad request. Withdrawal request already made.');
                 return redirect()->back()->withErrors($validator)->withInput();
             }
             $campaignData = CampaignView::where('campaign_status', 'completed')->where('public_user_id', $request->user->id)->find($campaignId);
@@ -154,7 +161,7 @@ class MyWithdrawalsController extends Controller
             $data['created_at'] = date('Y-m-d H:i:s');
             $data['withdrawal_status'] = 'pending';
             $data['public_user_id'] = $request->user->id;
-            
+
             $data['withdrawal_amount'] = $campaignData->net_amount_collection;
             $data['withdrawal_service_charge'] = $campaignData->summary_service_charge_amount;
             // $data['bank_name'] = $paymentGateways->bank_name;
@@ -162,7 +169,7 @@ class MyWithdrawalsController extends Controller
             // $data['bank_account_address'] = $paymentGateways->bank_account_address;
             DB::beginTransaction();
             Withdrawal::insert($data);
-            Campaign::where('id', $campaignId)->update(['campaign_status' => 'withdraw-processing']);
+            Campaign::where('id', $campaignId)->update(['campaign_status' => 'withdrawal-processing']);
             DB::commit();
             Session::flash('success', 'Success! Withdrawal request sent successfully.');
             return redirect('/my/withdrawals');
@@ -181,6 +188,7 @@ class MyWithdrawalsController extends Controller
         - Check withdrawal belongs to valid user
         */
         /* TEST CASE */
+        DB::beginTransaction();
         $thisId = $request->get('id');
         $thisDataDetails = Withdrawal::where('public_user_id', $request->user->id)
             ->where('withdrawal_status', 'pending')->where('id', $thisId)->first();
@@ -199,7 +207,9 @@ class MyWithdrawalsController extends Controller
             Session::flash('error', 'Bad request.');
             return redirect()->back();
         }
+        Campaign::where('id', $thisDataDetails->campaign->id)->update(['campaign_status' => 'completed']);
         Session::flash('success', 'Withdrawal Request cancelled successfully.');
+        DB::commit();
         return redirect()->back();
     }
 
@@ -218,7 +228,7 @@ class MyWithdrawalsController extends Controller
                 Session::flash('error', 'Bad request.');
                 return redirect()->back();
             }
-            $data['withdrawalDetails']=$withdrawalDetails;
+            $data['withdrawalDetails'] = $withdrawalDetails;
             $data['campaignDetail'] = CampaignView::where('public_user_id', $request->user->id)->where('id', $withdrawalDetails->campaign_id)->first();
             if (!$data['campaignDetail']) {
                 Session::flash('error', 'Bad request.');

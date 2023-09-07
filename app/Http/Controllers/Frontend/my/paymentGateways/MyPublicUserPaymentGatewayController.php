@@ -69,8 +69,8 @@ class MyPublicUserPaymentGatewayController extends Controller
                     $sn,
                     $paymentGatewaysDatum?->payment_gateway_name,
                     $paymentGatewaysDatum->mobile_number,
-                    $paymentGatewaysDatum->bank_name??'N/A',
-                    $paymentGatewaysDatum->bank_account_number??'N/A',
+                    $paymentGatewaysDatum->bank_name ?? 'N/A',
+                    $paymentGatewaysDatum->bank_account_number ?? 'N/A',
                     ($paymentGatewaysDatum->status) ? 'Active' : 'Inactive',
                     '<nobr>'  . $btnDelete . $btnDetails . '</nobr>'
                 ];
@@ -88,7 +88,7 @@ class MyPublicUserPaymentGatewayController extends Controller
                     ]
                 ],
                 'columns' => [
-                    null, null, null, null,null,null,
+                    null, null, null, null, null, null,
                     ['orderable' => false]
                 ],
             ];
@@ -129,22 +129,28 @@ class MyPublicUserPaymentGatewayController extends Controller
             throw new ValidationException($validator);
         }
         try {
-            $data = $request->only('mobile_number','bank_name', 'payment_gateway_name', 'status', 'detail','bank_account_number','bank_name','bank_address');
+            $data = $request->only('mobile_number', 'bank_name', 'payment_gateway_name', 'status', 'detail', 'bank_account_number', 'bank_name', 'bank_address');
+            $countPaymentGateway = UserPaymentGateway::where('public_user_id', $request->user->id)->count();
+            if ($countPaymentGateway >= 3) {
+                Session::flash('error', 'You can only add upto 3 payment gateways.');
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
             if ($request->file('qr_code')) {
                 $data['qr_code'] = $this->dirforDb . $this->uploadImage($this->dir, 'qr_code', true, 1280, null);
             }
+
             $paymentGatewayDetails = PaymentGateway::where('name', $request->get('payment_gateway_name'))->first();
             $alreadyExists = UserPaymentGateway::where('public_user_id', $request->user->id)
-            ->where('mobile_number',$data['mobile_number'])
-            ->where('payment_gateway_name', $paymentGatewayDetails->name)
-            ->where('bank_account_number', $data['bank_account_number'])
-            ->where('bank_name', $data['bank_name'])
-            ->whereNull('deleted_at')
-            ->count();
+                ->where('mobile_number', $data['mobile_number'])
+                ->where('payment_gateway_name', $paymentGatewayDetails->name)
+                ->where('bank_account_number', $data['bank_account_number'])
+                ->where('bank_name', $data['bank_name'])
+                ->whereNull('deleted_at')
+                ->count();
             if ($alreadyExists) {
                 Session::flash('error', 'Payment gateway already added.');
                 return redirect()->back()->withErrors($validator)->withInput();
-            } 
+            }
             $data['payment_gateway_name'] = $paymentGatewayDetails->name;
             $data['public_user_id'] = $request->user->id;
             UserPaymentGateway::insert($data);
@@ -161,7 +167,7 @@ class MyPublicUserPaymentGatewayController extends Controller
     {
         $thisModelId = $request->get('id');
         $thisModelData = UserPaymentGateway::where('public_user_id', $request->user->id)->where('id', $thisModelId)->first();
-        if ($thisModelData->qr_code) $this->removeImage($this->mainDirectory, $thisModelData->qr_code);
+        // if ($thisModelData->qr_code) $this->removeImage($this->mainDirectory, $thisModelData->qr_code);
 
         if (!$thisModelData) {
             Session::flash('error', 'Data not found.');
