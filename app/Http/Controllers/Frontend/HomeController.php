@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Jobs\SendEmailAfterDonationMade;
+use App\Jobs\SendEmailAfterDonationMadeToGiver;
 use App\Mail\DonationReceivedEmail;
 use App\Models\Country;
 use App\Models\Voyager\Campaign;
@@ -290,9 +291,22 @@ class HomeController extends FrontendBaseController
 
             // Mail::to($campaignDetails->owner->email)->send(new DonationReceivedEmail($mailData));
             /* send mail */
+
+
+            /* SEND EMAIL GIVER */
+            $mailData = [];
+            $mailData['donationId'] = $resp->id;
+            $mailData['campaignDetails'] = $campaignDetails;
+            $mailData['donationData'] = $insertData;
+            $mailData['donationGiverEmail'] = $insertData['email'] ?? '';
+            if ($mailData['donationGiverEmail']) {
+                dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
+            }
+            /* SEND EMAIL GIVER */
             Session::flash('success', 'Congratulations. Your donation has been successfully received. Please wait for the verification.');
             return redirect()->back();
         } catch (Throwable $th) {
+            dd($th);
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->back();
@@ -321,7 +335,7 @@ class HomeController extends FrontendBaseController
                 }
                 $topDonors['amount'] = $donationRawDatum->amount;
                 $topDonors['is_anonymous'] = $donationRawDatum->is_anonymous;
-                $topDonors['donation_date']= $donationRawDatum->created_at->format('Y-M-d');
+                $topDonors['donation_date'] = $donationRawDatum->created_at->format('Y-M-d');
                 $topDonors['giver_public_user_id'] = $donationRawDatum->giver_public_user_id;
                 array_push($topDonorsList, $topDonors);
             }
@@ -424,6 +438,17 @@ class HomeController extends FrontendBaseController
                 $mailData['donationReceiverEmail'] = $campaignDetails->owner->email;
                 dispatch(new SendEmailAfterDonationMade($mailData));
                 /* send email */
+
+                /* SEND EMAIL GIVER */
+                $mailData = [];
+                $mailData['donationId'] = $resp->id;
+                $mailData['campaignDetails'] = $campaignDetails;
+                $mailData['donationData'] = $insertData;
+                $mailData['donationGiverEmail'] = $insertData['email'] ?? '';
+                if ($mailData['donationGiverEmail']) {
+                    dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
+                }
+                /* SEND EMAIL GIVER */
 
                 return $data;
                 /* donateaoro */
