@@ -255,4 +255,20 @@ return [
            ],
        ]*/
     ],
+    'fields' => [
+        // Other fields...
+    
+        [
+            'name' => 'password',
+            'display_name' => 'Password',
+            'type' => 'password',
+            'required' => true,
+            'browse' => false, // Hide in browse view
+            'edit' => true,    // Show in edit view
+            'add' => true,     // Show in add view
+            'delete' => false, // Hide in delete confirmation modal
+        ],
+    
+        // Other fields...
+    ],
 ];
