@@ -235,9 +235,12 @@ class HomeController extends FrontendBaseController
             'address' => 'required|string|max:255',
             'amount' => 'required|numeric|min:10|max:100000',
             'description' => 'required|string|max:500|min:10',
-            'payment_receipt' => 'required_if:payment_gateway,bank|mimes:jpeg,png,pdf|max:2048',
-            'payment_gateway' => 'required',
-            'mobile_number' => 'required_if:payment_gateway,bank|string|max:15',
+            'payment_receipt' => 'required|mimes:jpeg,png,pdf|max:2048',
+            // 'payment_receipt' => 'required_if:payment_gateway,bank|mimes:jpeg,png,pdf|max:2048',
+            // 'payment_gateway' => 'required',
+            'mobile_number' => 'required|string|max:15',
+            'payment_gateway_dynamic' => 'required|string|max:15',
+            // 'mobile_number' => 'required_if:payment_gateway,bank|string|max:15',
         ]);
 
         if ($validator->fails()) {
@@ -306,7 +309,6 @@ class HomeController extends FrontendBaseController
             Session::flash('success', 'Congratulations. Your donation has been successfully received. Please wait for the verification.');
             return redirect()->back();
         } catch (Throwable $th) {
-            dd($th);
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->back();
@@ -342,6 +344,7 @@ class HomeController extends FrontendBaseController
             $data['topDonors'] = $topDonorsList;
             return $this->renderView($this->parentViewFolder() . '.campaign-detail', $data);
         } catch (Throwable $th) {
+            dd($th);
             // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
@@ -465,6 +468,16 @@ class HomeController extends FrontendBaseController
             $data['msg'] = $th->getMessage();
             return $data;
         }
+    }
+
+    public function esewaPaymentSuccess(Request $request)
+    {
+
+    }
+
+    public function esewaPaymentFailure(Request $request)
+    {
+        
     }
 
     function saveLocation(Request $request)

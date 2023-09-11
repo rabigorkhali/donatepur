@@ -146,36 +146,180 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="bg-light-transparent p-40">
-                                <h3 class="mt-0 line-bottom">Make a Donation<span class="font-weight-300"> Now!</span></h3>
-                                <form id="donateForm" action="{{ route('getDonation') }}" method="post"
-                                    enctype="multipart/form-data">
+
+                                <h3 class="mt-0 line-bottom">Make a Donation<span class="font-weight-300"> Now!</span>
+                                </h3>
+                                <div class="@if ($errors->first('payment_gateway')) has-error @endif">
+                                    <div class="form-group mb-20">
+                                        <label><strong>Payment Gateway/Mode</strong></label> <br>
+                                        @foreach ($paymentGateways as $keyPaymentGateways => $datumPaymentGateways)
+                                            <label class="radio-inline">
+                                                <input required id="payment_gateway"
+                                                    onchange="paymentGateway('{{ $datumPaymentGateways->slug }}')"
+                                                    type="radio" @if (!old('payment_gateway') && $datumPaymentGateways->slug == 'khalti') checked @endif
+                                                    @if (old('payment_gateway') == $datumPaymentGateways->slug) checked @endif
+                                                    value="{{ $datumPaymentGateways->slug }}" name="payment_gateway">
+                                                {{ $datumPaymentGateways->name }}
+                                            </label>
+                                        @endforeach
+                                        @if ($errors->first('payment_gateway'))
+                                            <span
+                                                class="text-danger display-block">{{ $errors->first('payment_gateway') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{-- ONLY FOR ESEWA --}}
+                                <form id="esewaPaymentForm" class="esewa-donation-form"
+                                    action="https://uat.esewa.com.np/epay/main" method="POST">
                                     @csrf
+                                    <input value="0" name="tAmt" id="esewaTotalAmount" type="hidden">
+                                    <input value="0" name="amt" id="esewaAmount" type="hidden">
+                                    <input value="0" name="txAmt" id="esewaTaxAmount" type="hidden">
+                                    <input value="0" name="psc" id="esewaProductServiceCharge" type="hidden">
+                                    <input value="0" name="pdc" id="esewaProductDeliveryCharge" type="hidden">
+                                    <input value="EPAYTEST" name="scd" type="hidden" id="esewaMerchantSecretCode">
+                                    <input value="785#$%#$#09nb" name="pid" type="hidden"
+                                        id="esewaUniqueProductKey">
+                                    <input value="{{ route('esewaSuccess') }}?q=su" id="esewaSuccessUrl" type="hidden"
+                                        name="su">
+                                    <input value="{{ route('esewaFailure') }}?q=fu" id="esewaFailureUrl" type="hidden"
+                                        name="fu">
+                                </form>
+                                {{-- END ONLY FOR ESEWA --}}
+
+                                {{-- KHALTI --}}
+                                <form id="khaltiDonateForm" class="khalti-donate-form"
+                                    action="{{ route('getDonation') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" value="bank" name="payment_gateway_dynamic">
                                     <div class="row">
                                         <input type="hidden" name="campaign_id" value="{{ $campaignDetails->id }}">
-                                        <div class="col-sm-12  @if ($errors->first('payment_gateway')) has-error @endif">
+
+                                        <div class="col-sm-12 @if ($errors->first('fullname')) has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Payment Gateway/Mode</strong></label> <br>
-                                                @foreach ($paymentGateways as $keyPaymentGateways => $datumPaymentGateways)
-                                                    <label class="radio-inline">
-                                                        <input required
-                                                            onchange="paymentGateway('{{ $datumPaymentGateways->slug }}')"
-                                                            type="radio" @if (!old('payment_gateway') && $datumPaymentGateways->slug == 'khalti') checked @endif
-                                                            @if (old('payment_gateway') == $datumPaymentGateways->slug) checked @endif
-                                                            value="{{ $datumPaymentGateways->slug }}"
-                                                            name="payment_gateway">
-                                                        {{ $datumPaymentGateways->name }}
-                                                    </label>
-                                                @endforeach
-                                                @if ($errors->first('payment_gateway'))
+                                                <label><strong>Full Name</strong></label>
+                                                <input id="khaltiFullname" required type="text" maxlength="100"
+                                                    name="fullname" min="7"
+                                                    value="{{ old('fullname') ?? Auth::guard('frontend_users')->user()?->full_name }}"
+                                                    placeholder="Rama Namaya" class="form-control">
+                                                @if ($errors->first('fullname'))
                                                     <span
-                                                        class="text-danger display-block">{{ $errors->first('payment_gateway') }}</span>
+                                                        class="text-danger display-block">{{ $errors->first('fullname') }}</span>
                                                 @endif
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12 d-none bank-details"
-                                            style="border: 1px solid #000; margin: 10px;">
+                                        <div class="col-sm-12  @if ($errors->first('mobile_number')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Mobile Number</strong></label>
+                                                <input required id="khaltiMobileNumber" type="text" maxlength="15"
+                                                    minlength="10" name="mobile_number"
+                                                    value="{{ old('mobile_number') ?? Auth::guard('frontend_users')->user()?->mobile_number }}"
+                                                    placeholder="9841000000" class="form-control">
+                                                @if ($errors->first('mobile_number'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('mobile_number') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 @if ($errors->first('country')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Country</strong></label>
+                                                <select id="khaltiCountry" required name="country" class="form-control">
+                                                    @foreach ($countries as $keyCountries => $datumCountries)
+                                                        <option
+                                                            @if (!old('country')) @if ($datumCountries->name == 'Nepal') selected @endif
+                                                            @endif
+                                                            @if (strtolower(old('country') ?? Auth::guard('frontend_users')->user()?->country) == strtolower($datumCountries->name)) selected @endif
+                                                            value="{{ strtolower($datumCountries->name) }}">{{ $datumCountries->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @if ($errors->first('country'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('country') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 @if ($errors->first('address')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Address</strong></label>
+                                                <input required id="khaltiAddress" type="text" maxlength="100"
+                                                    value="{{ old('address') ?? Auth::guard('frontend_users')->user()?->address }}"
+                                                    name="address" placeholder="Tinkune-7,Kathmandu"
+                                                    class="form-control">
+                                                @if ($errors->first('address'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('address') }}</span>
+                                                @endif
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-sm-12 @if ($errors->first('email')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Email</strong></label>
+                                                <input required id="khaltiEmail" required type="email"
+                                                    value="{{ old('email') ?? Auth::guard('frontend_users')->user()?->email }}"
+                                                    name="email" placeholder="example@example.com"
+                                                    class="form-control">
+                                                @if ($errors->first('email'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('email') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 @if ($errors->first('amount')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Amount (Rs.)</strong></label>
+                                                <input required id="khaltiDonationAmount" type="number" min="10"
+                                                    max="1000000" value="{{ old('amount') }}" placeholder="1000"
+                                                    name="amount" class="form-control">
+                                                @if ($errors->first('amount'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('amount') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 @if ($errors->first('description')) has-error @endif">
+                                            <div class="form-group mb-20">
+                                                <label><strong>Description</strong></label>
+                                                <textarea rows="6" id="khaltiDescription" name="description" class="form-control" value="description"
+                                                    placeholder="Description">{{ old('description') }}</textarea>
+                                                @if ($errors->first('description'))
+                                                    <span
+                                                        class="text-danger display-block">{{ $errors->first('description') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+
+                                                <a class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
+                                                    data-loading-text="Please wait..." id="khaltiDonateBtn">Donate with
+                                                    Khalti</a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                {{-- END KHALTI --}}
+
+
+                                {{-- BANK --}}
+                                <form id="offlineDonateForm" class="offline-donate-form d-none"
+                                    action="{{ route('getDonation') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" value="bank" name="payment_gateway_dynamic">
+                                    <div class="row">
+                                        <input type="hidden" name="campaign_id" value="{{ $campaignDetails->id }}">
+                                        <div class="col-md-12" style="border: 1px solid #000; margin: 10px;">
                                             <div class="form-group mb-20 ">
+                                                <h4>Please transfer your donation amount in following bank details.</h4>
                                                 <label>Account Name: </label>{{ setting('bank.bank_account_name') }}<br>
                                                 <label>Account No: </label>{{ setting('bank.bank_account_number') }}</br>
                                                 <label>Bank Name: </label>{{ setting('bank.bank_name') }}</br>
@@ -198,12 +342,11 @@
                                             </div>
                                         </div>
 
-                                        <div
-                                            class="col-sm-12 bank-details   @if (old('payment_mode') == 'online') d-none @endif  @if ($errors->first('mobile_number')) has-error @endif">
+                                        <div class="col-sm-12  @if ($errors->first('mobile_number')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Mobile Number</strong></label>
-                                                <input id="mobileNumber" type="text" maxlength="15" minlength="10"
-                                                    name="mobile_number"
+                                                <input required id="mobileNumber" type="text" maxlength="15"
+                                                    minlength="10" name="mobile_number"
                                                     value="{{ old('mobile_number') ?? Auth::guard('frontend_users')->user()?->mobile_number }}"
                                                     placeholder="9841000000" class="form-control">
                                                 @if ($errors->first('mobile_number'))
@@ -274,11 +417,11 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div
-                                            class="col-sm-12 bank-details @if (old('payment_mode') == 'online') d-none @endif @if ($errors->first('payment_receipt')) has-error @endif">
+                                        <div class="col-sm-12 @if ($errors->first('payment_receipt')) has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Payment Receipt</strong></label>
-                                                <input id="payment_receipt" accept=".jpg, .jpeg, .png, .pdf"
+                                                <label><strong>Payment Receipt (Screenshot of above
+                                                        transaction.)</strong></label>
+                                                <input required id="payment_receipt" accept=".jpg, .jpeg, .png, .pdf"
                                                     type="file" name="payment_receipt" placeholder=""
                                                     class="form-control">
                                                 @if ($errors->first('payment_receipt'))
@@ -300,20 +443,19 @@
                                         </div>
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <button id="offlineDonateBtn" type="submit"
+                                                <a id="offlineDonateBtn" type="button"
                                                     class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
-                                                    data-loading-text="Please wait...">Donate Now</button>
+                                                    data-loading-text="Please wait...">Donate Now</a>
 
-                                                <button
-                                                    class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30 d-none"
-                                                    data-loading-text="Please wait..." id="khaltiDonateBtn">Donate with
-                                                    Khalti</button>
+                                                <a class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30 d-none"
+                                                    data-loading-text="Please wait..." id="EsewaDonateBtn">Donate with
+                                                    Esewa</a>
 
                                             </div>
                                         </div>
                                     </div>
                                 </form>
-
+                                {{-- END BANK --}}
                             </div>
                         </div>
                     </div>
@@ -369,20 +511,19 @@
     @section('scripts')
         <script>
             function paymentGateway(value) {
-                console.log(value);
-                if (value == 'bank') {
-                    $('.bank-details').removeClass('d-none');
-                    $('#khaltiDonateBtn').addClass('d-none');
-                    $('#offlineDonateBtn').removeClass('d-none');
-                    $('#payment_receipt').prop('required', true);
-                    $('#mobileNumber').prop('required', true);
-                } else {
-                    $('.bank-details').addClass('d-none');
-                    $('#khaltiDonateBtn').removeClass('d-none');
-                    $('#offlineDonateBtn').addClass('d-none');
-                    $('#payment_receipt').prop('required', false);
-                    $('#mobileNumber').prop('required', false);
+                $('.khalti-donate-form').addClass('d-none');
+                $('.offline-donate-form').addClass('d-none');
 
+                if (value == 'bank') {
+                    $("input[type='radio'][name='payment_gateway'][value='bank']").prop("checked", true);
+                    $('.offline-donate-form').removeClass('d-none');
+                } else if (value == 'khalti') {
+                    $("input[type='radio'][name='payment_gateway'][value='khalti']").prop("checked", true);
+                    $('.khalti-donate-form').removeClass('d-none');
+
+                } else if (value == 'esewa') {
+                    $("input[type='radio'][name='payment_gateway'][value='esewa']").prop("checked", true);
+                    $('.esewa-donate-form').addClass('d-none');
                 }
             }
         </script>
@@ -417,11 +558,13 @@
                         clearInterval(timerInterval);
                     }
                 }
-
                 updateTimer();
                 const timerInterval = setInterval(updateTimer, 1000);
-                const oldPaymentGateway = "{{ old('payment_gateway') }}";
+                const oldPaymentGateway = "{{ old('payment_gateway_dynamic') }}";
                 paymentGateway(oldPaymentGateway);
+                if (!oldPaymentGateway) {
+                    paymentGateway($('input[name="payment_gateway"]:checked').val());
+                }
 
                 /* hover */
                 let $mousemoveKhalti = $('#khaltiDonateBtn');
@@ -437,12 +580,41 @@
             });
         </script>
 
+        {{-- BANK OFFLINE --}}
+        <script>
+            $("#offlineDonateBtn").click(function() {
+
+                /* check validation */
+                const form = document.getElementById("offlineDonateForm");
+                if (!form.checkValidity()) {
+                    // Display validation messages
+                    console.log(form.elements);
+                    for (const element of form.elements) {
+                        if (element.tagName === "INPUT" && !element.validity.valid) {
+                            showKhaltiForm = false;
+                            element.reportValidity();
+                        }
+
+                        if (element.tagName === "TEXTAREA" && !element.validity.valid) {
+                            showKhaltiForm = false;
+                            element.reportValidity();
+                        }
+                    }
+                }
+                /* end check validation */
+                if (form.checkValidity()) {
+                    $("#offlineDonateForm").submit();
+                }
+            });
+        </script>
+        {{-- BANK OFFLINE --}}
+
+        {{-- FOR KHALTI --}}
         <script>
             var price = 0;
             var public_key = "{{ env('KHALTI_PUBLIC_KEY') }}";
             var app_url = "{{ env('APP_URL') }}";
             var app_name = "{{ env('APP_NAME') }}";
-
             var config = {
                 // replace the publicKey with yours
                 "publicKey": public_key,
@@ -464,7 +636,7 @@
                             data: {
                                 amount: payload.amount,
                                 trans_token: payload.token,
-                                form_data: $("#donateForm").serializeArray(),
+                                form_data: $("#khaltiDonateForm").serializeArray(),
                                 campaign_id: "{{ $campaignDetails->id }}",
                                 donor_id: "{{ $campaignDetails->id }}",
                             },
@@ -504,15 +676,12 @@
                     }
                 }
             };
-
             var checkout = new KhaltiCheckout(config);
             var btn = document.getElementById('khaltiDonateBtn');
-
             btn.onclick = function() {
                 let showKhaltiForm = true;
-
                 /* check validation */
-                const form = document.getElementById("donateForm");
+                const form = document.getElementById("khaltiDonateForm");
                 if (!form.checkValidity()) {
                     // Display validation messages
                     for (const element of form.elements) {
@@ -520,34 +689,67 @@
                             showKhaltiForm = false;
                             element.reportValidity();
                         }
+                        if (element.tagName === "TEXTAREA" && !element.validity.valid) {
+                            showKhaltiForm = false;
+                            element.reportValidity();
+                        }
                     }
                 }
                 /* end check validation */
+                if (form.checkValidity()) {
 
-                event.preventDefault();
-                let donationAmount = $('#donationAmount').val();
-                let description = $('#description').val().trim();
-                if (description.length < 15) {
-                    showKhaltiForm = false;
-                    Swal.fire('Error!', 'Description should be more than 15 characters.', 'error');
-                }
-                if (donationAmount == '') {
-                    showKhaltiForm = false;
-                    Swal.fire('Error!', 'Please input donation amount.', 'error');
-                }
-                donationAmount = parseInt(donationAmount);
-                if (donationAmount < 10) {
-                    showKhaltiForm = false;
-                    Swal.fire('Error!', 'Amount must be greater or equals to Rs.10.', 'error');
-                }
-                if (showKhaltiForm) {
-                    $("#preloader").show();
-                    checkout.show({
-                        amount: donationAmount * 100
-                    });
+                    event.preventDefault();
+                    let khaltiFullname = $('#khaltiFullname').val().trim();
+                    let khaltiMobileNumber = $('#khaltiMobileNumber').val().trim();
+                    let khaltiCountry = $('#khaltiCountry').val().trim();
+                    let khaltiAddress = $('#khaltiAddress').val().trim();
+                    let khaltiEmail = $('#khaltiEmail').val().trim();
+                    let khaltiDonationAmount = $('#khaltiDonationAmount').val().trim();
+                    let khaltiDescription = $('#khaltiDescription').val().trim();
+                    if (khaltiFullname.length < 6 && khaltiFullname.length > 100) {
+                        showKhaltiForm = false;
+                        Swal.fire('Error!', 'Fullname should be between 6 to 100 characters.', 'error');
+                    }
+                    if (khaltiMobileNumber.length > 15 || khaltiMobileNumber.length <= 6) {
+                        showKhaltiForm = false;
+                        Swal.fire('Error!', 'Mobile number should be between 6 and  15 characters.', 'error');
+                    }
+                    if (!khaltiCountry.length) {
+                        showKhaltiForm = false;
+                        Swal.fire('Error!', 'Country field is required.', 'error');
+                    }
+                    if (khaltiAddress.length > 100 || khaltiAddress.length < 5) {
+                        showKhaltiForm = false;
+                        Swal.fire('Error!', 'Address should be more than 5 characters.', 'error');
+                    }
+
+                    if (khaltiEmail.length > 100 && khaltiEmail.length < 6) {
+                        showKhaltiForm = false;
+                        Swal.fire('Error!', 'Email should be more than 5 characters.', 'error');
+                    }
+                    if (khaltiDescription.length < 15) {
+                        showKhaltiForm = false;
+                        Swal.fire('Error!', 'Description should be more than 15 characters.', 'error');
+                    }
+                    khaltiDonationAmount = parseInt(khaltiDonationAmount);
+                    if (khaltiDonationAmount == '' || khaltiDonationAmount < 10 || khaltiDonationAmount > 1000000) {
+                        showKhaltiForm = false;
+                        Swal.fire('Error!', 'Donation amount should be between Rs. 10 and Rs. 1,000,000.', 'error');
+                    }
+                    if (khaltiDonationAmount < 10) {
+                        showKhaltiForm = false;
+                        Swal.fire('Error!', 'Amount must be greater or equals to Rs.10.', 'error');
+                    }
+                    if (showKhaltiForm) {
+                        $("#preloader").show();
+                        checkout.show({
+                            amount: khaltiDonationAmount * 100
+                        });
+                    }
                 }
             }
         </script>
+        {{-- END FOR KHALTI --}}
 
         {{-- LOCATION TRACCER --}}
         <script>
