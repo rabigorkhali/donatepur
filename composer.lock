@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f497226dd659d4a374393de97d63fa8f",
+    "content-hash": "b3719f0a5478a38a876a2be716c20c82",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -169,6 +169,68 @@
                 }
             ],
             "time": "2023-01-15T23:15:59+00:00"
+        },
+        {
+            "name": "cixware/esewa-php-sdk",
+            "version": "2.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cixware/esewa-php-sdk.git",
+                "reference": "2874e88078dc1ff74ff7fb03decf6c4891f7cca9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cixware/esewa-php-sdk/zipball/2874e88078dc1ff74ff7fb03decf6c4891f7cca9",
+                "reference": "2874e88078dc1ff74ff7fb03decf6c4891f7cca9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "*",
+                "guzzlehttp/guzzle": "^7.5",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.15",
+                "phpunit/phpunit": "^9.6",
+                "rector/rector": "^0.15"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cixware\\Esewa\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cixware",
+                    "email": "support@cixware.io",
+                    "homepage": "https://cixware.io"
+                },
+                {
+                    "name": "Madan Sapkota",
+                    "email": "contact+github@madansapkota.com",
+                    "homepage": "https://madansapkota.com"
+                }
+            ],
+            "description": "eSewa payment gateway integration in PHP.",
+            "homepage": "https://github.com/cixware/esewa-php-sdk",
+            "keywords": [
+                "api",
+                "esewa",
+                "gateway",
+                "nepal",
+                "payment",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/cixware/esewa-php-sdk/issues",
+                "source": "https://github.com/cixware/esewa-php-sdk/tree/2.5.0"
+            },
+            "time": "2023-03-24T04:19:34+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -3103,6 +3165,67 @@
                 }
             ],
             "time": "2023-02-25T19:38:58+00:00"
+        },
+        {
+            "name": "predis/predis",
+            "version": "v2.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/predis/predis.git",
+                "reference": "b1d3255ed9ad4d7254f9f9bba386c99f4bb983d1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/predis/predis/zipball/b1d3255ed9ad4d7254f9f9bba386c99f4bb983d1",
+                "reference": "b1d3255ed9ad4d7254f9f9bba386c99f4bb983d1",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.3",
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^8.0 || ~9.4.4"
+            },
+            "suggest": {
+                "ext-relay": "Faster connection with in-memory caching (>=0.6.2)"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Till Krüss",
+                    "homepage": "https://till.im",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A flexible and feature-complete Redis client for PHP.",
+            "homepage": "http://github.com/predis/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "support": {
+                "issues": "https://github.com/predis/predis/issues",
+                "source": "https://github.com/predis/predis/tree/v2.2.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/tillkruss",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-09-13T16:42:03+00:00"
         },
         {
             "name": "psr/container",

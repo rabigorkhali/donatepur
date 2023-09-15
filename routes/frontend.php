@@ -24,5 +24,8 @@ Route::get('/sync-expired-campaigns', [HomeController::class, 'syncExpiredCampai
 /* DONATION PAYMENT URLS */
 Route::get('/payment/khalti/verfication', [HomeController::class, 'khaltiPaymentVerification'])->name('khaltiPaymentVerification');
 Route::post('/donation', [HomeController::class, 'getDonation'])->name('getDonation');
+Route::get('/esewa/payment', [HomeController::class, 'esewaPayment'])->name('esewaPayment');
 Route::get('/esewa/success', [HomeController::class, 'esewaPaymentSuccess'])->name('esewaSuccess');
 Route::get('/esewa/failure', [HomeController::class, 'esewaPaymentFailure'])->name('esewaFailure');
+
+Route::post('/set-session/{sessionName}', [HomeController::class, 'setSession'])->name('setSession');

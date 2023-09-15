@@ -21,6 +21,7 @@ use App\Models\Voyager\Post;
 use App\Models\Voyager\PublicUser;
 use App\Models\Voyager\Setting;
 use App\Models\Voyager\SliderBanner;
+use App\Models\Voyager\SystemErrorLog;
 use App\Models\Voyager\Testimonial;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ use Illuminate\Support\Facades\Session;
 use Throwable;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+
 
 class HomeController extends FrontendBaseController
 {
@@ -48,6 +50,12 @@ class HomeController extends FrontendBaseController
     {
         return $this->parentViewFolder() . '.index';;
     }
+
+    public function  setSession(Request $request, $sessionName)
+    {
+        session([$sessionName => $request->all()]);
+    }
+
     public function getPage($slug)
     {
         try {
@@ -227,7 +235,7 @@ class HomeController extends FrontendBaseController
     public function getDonation(Request $request)
     {
         $data = $request->except('_token');
-        $insertData = $request->except('_token', 'campaign_slug', 'payment_mode', 'payment_gateway');
+        $insertData = $request->except('_token', 'campaign_slug', 'payment_mode', 'payment_gateway', 'payment_gateway_dynamic');
         $validator = Validator::make($request->all(), [
             'fullname' => 'required|string|max:255',
             'country' => 'required|string|max:255',
@@ -264,11 +272,7 @@ class HomeController extends FrontendBaseController
                 return redirect()->back();
             }
 
-            if ($data['payment_gateway'] == 'bank') {
-                $paymentGateWayDetails = PaymentGateway::where('slug', 'bank')->first();
-            } else {
-                $paymentGateWayDetails = PaymentGateway::where('slug', $data['payment_gateway'])->first();
-            }
+            $paymentGateWayDetails = PaymentGateway::where('slug', 'bank')->first();
             $insertData['payment_gateway_id'] = $paymentGateWayDetails->id;
             $insertData['campaign_id'] = $campaignDetails->id;
             $insertData['receiver_public_user_id'] = $campaignDetails->public_user_id;
@@ -290,7 +294,7 @@ class HomeController extends FrontendBaseController
             $mailData['campaignDetails'] = $campaignDetails;
             $mailData['donationData'] = $insertData;
             $mailData['donationReceiverEmail'] = $campaignDetails->owner->email;
-            dispatch(new SendEmailAfterDonationMade($mailData));
+            // dispatch(new SendEmailAfterDonationMade($mailData));
 
             // Mail::to($campaignDetails->owner->email)->send(new DonationReceivedEmail($mailData));
             /* send mail */
@@ -303,12 +307,13 @@ class HomeController extends FrontendBaseController
             $mailData['donationData'] = $insertData;
             $mailData['donationGiverEmail'] = $insertData['email'] ?? '';
             if ($mailData['donationGiverEmail']) {
-                dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
+                // dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
             }
             /* SEND EMAIL GIVER */
-            Session::flash('success', 'Congratulations. Your donation has been successfully received. Please wait for the verification.');
+            Session::flash('success', 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.');
             return redirect()->back();
         } catch (Throwable $th) {
+            dd($th);
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->back();
@@ -322,11 +327,22 @@ class HomeController extends FrontendBaseController
             $campaignDetails = CampaignView::where('status', true)
                 ->where('campaign_status', '!=', 'pending')
                 ->where('slug', $slug)->first();
+            /* fortest */
+            // dd(phpinfo());
+            $mailData = [];
+            $mailData['donationId'] = 234234;
+            $mailData['campaignDetails'] = $campaignDetails;
+            $mailData['donationData'] = null;
+            $mailData['donationGiverEmail'] = "rabigorkhaly@gmail.com" ?? '';
+            if ($mailData['donationGiverEmail']) {
+                dispatch(new SendEmailAfterDonationMadeToGiver($mailData))->delay(now()->addMinutes(5));
+            }
+            /* fortest */
             $data['campaignDetails'] = $campaignDetails;
             $data['countries'] = Country::orderby('name', 'asc')->get();
             $data['paymentGateways'] = PaymentGateway::orderby('position', 'asc')->where('status', 1)->where('show_in_frontend', 1)->get();
             $topDonorsList = [];
-            $donationRaw = $this->donation->with('giver')->where('campaign_id', $campaignDetails->id)->wherein('payment_status', ['completed'])->where('is_verified', 1)->orderby('amount')->get();
+            $donationRaw = $this->donation->with('giver')->where('campaign_id', $campaignDetails->id)->wherein('payment_status', ['completed'])->where('is_verified', 1)->orderby('amount', 'desc')->get();
             foreach ($donationRaw as $donationRawKey => $donationRawDatum) {
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
@@ -355,6 +371,7 @@ class HomeController extends FrontendBaseController
         //hit the khalit server
 
         try {
+            $userCurrent = Auth::guard('frontend_users')->user() ?? null;
             /* validation */
             $paymentGateWayDetails = PaymentGateway::where('slug', 'khalti')->where('status', 1)->first();
             $campaignDetails = CampaignView::where('status', 1)->first();
@@ -414,6 +431,7 @@ class HomeController extends FrontendBaseController
                 $insertData = [];
                 $insertData['amount'] = $response->amount / 100;
                 $insertData['fullname'] = trim($formDataArray['fullname']);
+                $insertData['mobile_number'] = trim($formDataArray['mobile_number']);
                 $insertData['country'] = trim($formDataArray['country']);
                 $insertData['email'] = trim($formDataArray['email']);
                 $insertData['address'] = trim($formDataArray['address']);
@@ -421,7 +439,7 @@ class HomeController extends FrontendBaseController
                 $insertData['payment_gateway_id'] = $paymentGateWayDetails->id;
                 $insertData['campaign_id'] = $request->input('campaign_id');
                 $insertData['receiver_public_user_id'] = $campaignDetails->public_user_id;
-                $insertData['giver_public_user_id'] = $request->user?->id ?? null;
+                $insertData['giver_public_user_id'] = $userCurrent->id ?? null;
                 $insertData['created_at'] = date('Y-m-d H:i:s');
                 $insertData['transaction_id'] = $response->idx ?? null;
                 $insertData['service_charge_percentage'] = 7;
@@ -431,7 +449,7 @@ class HomeController extends FrontendBaseController
                 $insertData['is_verified'] = 1; //by system admin manually
                 $resp = Donation::create($insertData);
                 $data['type'] = 'success';
-                $data['msg'] = 'Congratulations. Your donation has been successfully received. Please wait for the verification.';
+                $data['msg'] = 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.';
 
                 /* send mail */
                 $mailData = [];
@@ -439,7 +457,7 @@ class HomeController extends FrontendBaseController
                 $mailData['campaignDetails'] = $campaignDetails;
                 $mailData['donationData'] = $insertData;
                 $mailData['donationReceiverEmail'] = $campaignDetails->owner->email;
-                dispatch(new SendEmailAfterDonationMade($mailData));
+                // dispatch(new SendEmailAfterDonationMade($mailData));
                 /* send email */
 
                 /* SEND EMAIL GIVER */
@@ -449,7 +467,8 @@ class HomeController extends FrontendBaseController
                 $mailData['donationData'] = $insertData;
                 $mailData['donationGiverEmail'] = $insertData['email'] ?? '';
                 if ($mailData['donationGiverEmail']) {
-                    dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
+                    // dispatch(new MyJob())->delay(now()->addMinutes(5))->onQueue('my-queue')->onConnection('redis');
+                    // dispatch(new SendEmailAfterDonationMadeToGiver($mailData))->delay(now()->addMinutes(5));
                 }
                 /* SEND EMAIL GIVER */
 
@@ -470,14 +489,198 @@ class HomeController extends FrontendBaseController
         }
     }
 
+    // public function esewaPaymentSuccess(Request $request)
+    // {
+    //     try {
+    //         $dataResponse = $request->all();
+
+    //         /* validation */
+    //         $data = [
+    //             'amt' => $dataResponse['amt'],
+    //             'rid' => $dataResponse['refId'],
+    //             'pid' => $dataResponse['oid'],
+    //             'scd' => 'EPAYTEST'
+    //         ];
+    //         $url = "https://uat.esewa.com.np/epay/transrec";
+    //         $curl = curl_init($url);
+    //         curl_setopt($curl, CURLOPT_POST, true);
+    //         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    //         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    //         $response = curl_exec($curl);
+    //         curl_close($curl);
+    //         $data['payment_gateway']='esewa';
+    //         $data['payment_verification']='failed';
+    //         //convert xml response to array
+    //         $response = json_decode(json_encode(simplexml_load_string($response)), TRUE);
+    //         $response_code = trim(strtolower($response['response_code'])); //remove whitespaces
+    //         $verified = 0;
+    //         if (strcmp($response_code, 'success') == 0) {
+    //             $verified = 1;
+    //         }
+    //         if ($verified) {
+    //             /* SEND EMAIL GIVER */
+    //             $data['payment_gateway'] = 'esewa';
+    //             $data['payment_verification'] = 'success';
+    //             Session::flash('success', 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.');
+    //             return redirect()->back()->with(['esewaCheckSuccessData'=>$data]);;
+    //         } else {
+    //             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+    //             return redirect()->back()->with(['esewaCheckSuccessData'=>$data]);;
+    //         }
+    //     } catch (Throwable $th) {
+    //         $data['payment_gateway']='esewa';
+    //         $data['payment_verification']='failed';
+    //         SystemErrorLog::insert(['message' => $th->getMessage()]);
+    //         Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+    //         return redirect()->back()->with(['esewaCheckSuccessData'=>$data]);;
+    //     }
+    // }
+
     public function esewaPaymentSuccess(Request $request)
     {
+        try {
+            $userCurrent = Auth::guard('frontend_users')->user() ?? null;
+            $dataResponse = $request->all();
+            if (!session('esewaDonateformData')) {
+                Session::flash('error', 'Error! Bad Request.');
+                return redirect()->back();
+            }
+            $formDataArray = session('esewaDonateformData')['data'];
+            /* validation */
+            $paymentGateWayDetails = PaymentGateway::where('slug', 'esewa')->where('status', 1)->first();
+            $campaignDetails = CampaignView::where('status', 1)->where('id', $formDataArray['campaign'])->where('campaign_status', 'running')->first();
+            if (!$campaignDetails) {
+                Session::flash('error', 'Campaign not found.');
+                return redirect()->back();
+            }
 
+            $donationDuplicateEntryCheck = Donation::where('payment_gateway_id', $paymentGateWayDetails->id)->where('transaction_id', $dataResponse['refId'])->first();
+
+            if ($donationDuplicateEntryCheck) {
+                Session::flash('success', 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.');
+                return redirect()->route('campaignDetailPage', ['slug' => $campaignDetails->slug]);
+            }
+
+            if ($campaignDetails->campaign_status !== 'running') {
+                Session::flash('error', 'Error! Only active campaigns can receive donation.');
+                return redirect()->back();
+            }
+
+            if ($campaignDetails->end_date < date('Y-m-d')) {
+
+                Session::flash('error', 'Error! This campaign has expired.');
+                return redirect()->back();
+            }
+
+            if (!$paymentGateWayDetails) {
+                Session::flash('error', 'Invalid payment gateway.');
+                return redirect()->back();
+            }
+            /* validation */
+            $dataSuccessResponseFromEsewa = [
+                'amt' => $dataResponse['amt'],
+                'rid' => $dataResponse['refId'],
+                'pid' => $dataResponse['oid'],
+                'scd' => 'EPAYTEST'
+            ];
+            $url = "https://uat.esewa.com.np/epay/transrec";
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $dataSuccessResponseFromEsewa);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($curl);
+            curl_close($curl);
+
+            //convert xml response to array
+            $response = json_decode(json_encode(simplexml_load_string($response)), TRUE);
+            $response_code = trim(strtolower($response['response_code'])); //remove whitespaces
+            $verified = 0;
+            $status = 'pending';
+            if (strcmp($response_code, 'success') == 0) {
+                $status = 'completed';
+                $verified = 1;
+            } else {
+                $status = 'pending';
+                $verified = 1;
+            }
+
+            if ($verified) {
+                /* donateaoro */
+                $insertData = [];
+                $insertData['amount'] = $dataResponse['amt'];
+                $insertData['fullname'] = trim($formDataArray['fullname']);
+                $insertData['mobile_number'] = trim($formDataArray['mobile_number']);
+                $insertData['country'] = trim($formDataArray['country']);
+                $insertData['email'] = trim($formDataArray['email']);
+                $insertData['address'] = trim($formDataArray['address']);
+                $insertData['description'] = trim($formDataArray['description']);
+                $insertData['payment_gateway_id'] = $paymentGateWayDetails->id;
+                $insertData['campaign_id'] = $formDataArray['campaign'];
+                $insertData['receiver_public_user_id'] = $campaignDetails->public_user_id;
+                $insertData['giver_public_user_id'] = $userCurrent->id ?? null;
+                $insertData['created_at'] = date('Y-m-d H:i:s');
+                $insertData['transaction_id'] = $dataResponse['refId'] ?? null;
+                $insertData['service_charge_percentage'] = 7;
+                $insertData['payment_status'] = 'completed';
+                $insertData['is_anonymous'] = 0;
+                $insertData['payment_gateway_all_response'] = json_encode($response);
+                $insertData['is_verified'] = 1; //by system admin manually
+                $resp = Donation::create($insertData);
+                /* send mail */
+                // $mailData = [];
+                // $mailData['donationId'] = $resp->id;
+                // $mailData['campaignDetails'] = $campaignDetails;
+                // $mailData['donationData'] = $insertData;
+                // $mailData['donationReceiverEmail'] = $campaignDetails->owner->email;
+                // dispatch(new SendEmailAfterDonationMade($mailData));
+                /* send email */
+
+                /* SEND EMAIL GIVER */
+                // $mailData = [];
+                // $mailData['donationId'] = $resp->id;
+                // $mailData['campaignDetails'] = $campaignDetails;
+                // $mailData['donationData'] = $insertData;
+                // $mailData['donationGiverEmail'] = $insertData['email'] ?? '';
+                // if ($mailData['donationGiverEmail']) {
+                //     dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
+                // }
+                /* SEND EMAIL GIVER */
+                session()->forget('esewaDonateformData');
+                Session::flash('success', 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.');
+                return redirect()->route('campaignDetailPage', ['slug' => $campaignDetails->slug]);
+            }
+            Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+            return redirect()->route('campaignDetailPage', ['slug' => $campaignDetails->slug]);
+        } catch (Throwable $th) {
+            dd($th);
+            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            Session::flash('error', 'Sorry. Your recent transaction had an issue. Please try again later or contact our support team.');
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
+            // return redirect()->route('campaignDetailPage', ['slug' => $campaignDetails->slug]);
+        }
     }
 
     public function esewaPaymentFailure(Request $request)
     {
-        
+        try {
+            $dataResponse = $request->all();
+            if ($dataResponse['campaign'] ?? null) {
+                $campaignDetails = CampaignView::where('status', 1)->where('id', $dataResponse['campaign'])->first();
+                if (!$campaignDetails) {
+                    return $this->renderView($this->parentViewFolder() . '.errorpage', []);
+                }
+                SystemErrorLog::insert(['message' => 'Esewa Failure on Donations for campaign id' . $campaignDetails->id . 'by' . $request?->user?->id]);
+                Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+                if ($dataResponse['campaign'] ?? null) {
+                    return redirect()->route('campaignDetailPage', ['slug' => $campaignDetails->slug]);
+                }
+            }
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
+        } catch (Throwable $th) {
+            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
+        }
     }
 
     function saveLocation(Request $request)
