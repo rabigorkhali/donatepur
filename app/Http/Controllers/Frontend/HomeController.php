@@ -294,7 +294,7 @@ class HomeController extends FrontendBaseController
             $mailData['campaignDetails'] = $campaignDetails;
             $mailData['donationData'] = $insertData;
             $mailData['donationReceiverEmail'] = $campaignDetails->owner->email;
-            // dispatch(new SendEmailAfterDonationMade($mailData));
+            dispatch(new SendEmailAfterDonationMade($mailData));
 
             // Mail::to($campaignDetails->owner->email)->send(new DonationReceivedEmail($mailData));
             /* send mail */
@@ -307,7 +307,7 @@ class HomeController extends FrontendBaseController
             $mailData['donationData'] = $insertData;
             $mailData['donationGiverEmail'] = $insertData['email'] ?? '';
             if ($mailData['donationGiverEmail']) {
-                // dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
+                dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
             }
             /* SEND EMAIL GIVER */
             Session::flash('success', 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.');
@@ -327,17 +327,6 @@ class HomeController extends FrontendBaseController
             $campaignDetails = CampaignView::where('status', true)
                 ->where('campaign_status', '!=', 'pending')
                 ->where('slug', $slug)->first();
-            /* fortest */
-            // dd(phpinfo());
-            $mailData = [];
-            $mailData['donationId'] = 234234;
-            $mailData['campaignDetails'] = $campaignDetails;
-            $mailData['donationData'] = null;
-            $mailData['donationGiverEmail'] = "rabigorkhaly@gmail.com" ?? '';
-            if ($mailData['donationGiverEmail']) {
-                dispatch(new SendEmailAfterDonationMadeToGiver($mailData))->delay(now()->addMinutes(5));
-            }
-            /* fortest */
             $data['campaignDetails'] = $campaignDetails;
             $data['countries'] = Country::orderby('name', 'asc')->get();
             $data['paymentGateways'] = PaymentGateway::orderby('position', 'asc')->where('status', 1)->where('show_in_frontend', 1)->get();
@@ -457,7 +446,7 @@ class HomeController extends FrontendBaseController
                 $mailData['campaignDetails'] = $campaignDetails;
                 $mailData['donationData'] = $insertData;
                 $mailData['donationReceiverEmail'] = $campaignDetails->owner->email;
-                // dispatch(new SendEmailAfterDonationMade($mailData));
+                dispatch(new SendEmailAfterDonationMade($mailData));
                 /* send email */
 
                 /* SEND EMAIL GIVER */
@@ -467,8 +456,7 @@ class HomeController extends FrontendBaseController
                 $mailData['donationData'] = $insertData;
                 $mailData['donationGiverEmail'] = $insertData['email'] ?? '';
                 if ($mailData['donationGiverEmail']) {
-                    // dispatch(new MyJob())->delay(now()->addMinutes(5))->onQueue('my-queue')->onConnection('redis');
-                    // dispatch(new SendEmailAfterDonationMadeToGiver($mailData))->delay(now()->addMinutes(5));
+                    dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
                 }
                 /* SEND EMAIL GIVER */
 
@@ -627,23 +615,23 @@ class HomeController extends FrontendBaseController
                 $insertData['is_verified'] = 1; //by system admin manually
                 $resp = Donation::create($insertData);
                 /* send mail */
-                // $mailData = [];
-                // $mailData['donationId'] = $resp->id;
-                // $mailData['campaignDetails'] = $campaignDetails;
-                // $mailData['donationData'] = $insertData;
-                // $mailData['donationReceiverEmail'] = $campaignDetails->owner->email;
-                // dispatch(new SendEmailAfterDonationMade($mailData));
+                $mailData = [];
+                $mailData['donationId'] = $resp->id;
+                $mailData['campaignDetails'] = $campaignDetails;
+                $mailData['donationData'] = $insertData;
+                $mailData['donationReceiverEmail'] = $campaignDetails->owner->email;
+                dispatch(new SendEmailAfterDonationMade($mailData));
                 /* send email */
 
                 /* SEND EMAIL GIVER */
-                // $mailData = [];
-                // $mailData['donationId'] = $resp->id;
-                // $mailData['campaignDetails'] = $campaignDetails;
-                // $mailData['donationData'] = $insertData;
-                // $mailData['donationGiverEmail'] = $insertData['email'] ?? '';
-                // if ($mailData['donationGiverEmail']) {
-                //     dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
-                // }
+                $mailData = [];
+                $mailData['donationId'] = $resp->id;
+                $mailData['campaignDetails'] = $campaignDetails;
+                $mailData['donationData'] = $insertData;
+                $mailData['donationGiverEmail'] = $insertData['email'] ?? '';
+                if ($mailData['donationGiverEmail']) {
+                    dispatch(new SendEmailAfterDonationMadeToGiver($mailData));
+                }
                 /* SEND EMAIL GIVER */
                 session()->forget('esewaDonateformData');
                 Session::flash('success', 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.');
@@ -652,7 +640,6 @@ class HomeController extends FrontendBaseController
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->route('campaignDetailPage', ['slug' => $campaignDetails->slug]);
         } catch (Throwable $th) {
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             Session::flash('error', 'Sorry. Your recent transaction had an issue. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
