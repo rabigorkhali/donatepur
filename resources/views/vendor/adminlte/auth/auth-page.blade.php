@@ -1,6 +1,6 @@
 @extends('adminlte::master')
-@include('frontend.partials.header')
-@include('frontend.partials.navbar')
+{{-- @include('frontend.partials.header')
+@include('frontend.partials.navbar') --}}
 @php( $dashboard_url = View::getSection('dashboard_url') ?? config('adminlte.dashboard_url', 'home') )
 
 @if (config('adminlte.use_route_url', false))
