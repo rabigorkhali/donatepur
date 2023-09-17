@@ -1,12 +1,13 @@
 @extends('adminlte::master')
-{{-- @include('frontend.partials.header')
+{{--  @include('frontend.partials.header')
+@include('frontend.partials.navbar') 
 @include('frontend.partials.navbar') --}}
-@php( $dashboard_url = View::getSection('dashboard_url') ?? config('adminlte.dashboard_url', 'home') )
+@php($dashboard_url = View::getSection('dashboard_url') ?? config('adminlte.dashboard_url', 'home'))
 
 @if (config('adminlte.use_route_url', false))
-    @php( $dashboard_url = $dashboard_url ? route($dashboard_url) : '' )
+    @php($dashboard_url = $dashboard_url ? route($dashboard_url) : '')
 @else
-    @php( $dashboard_url = $dashboard_url ? url($dashboard_url) : '' )
+    @php($dashboard_url = $dashboard_url ? url($dashboard_url) : '')
 @endif
 
 @section('adminlte_css')
@@ -17,10 +18,10 @@
 @section('classes_body'){{ ($auth_type ?? 'login') . '-page' }}@stop
 
 @section('body')
-    <div class="@if($auth_type=='register') mt-150 @endif {{ $auth_type ?? 'login' }}-box">
+    <div class="@if ($auth_type == 'register') mt-150 @endif {{ $auth_type ?? 'login' }}-box">
 
         {{-- Logo --}}
-{{--         <div class="{{ $auth_type ?? 'login' }}-logo">
+        {{--         <div class="{{ $auth_type ?? 'login' }}-logo">
             <a href="{{ $dashboard_url }}">
 
                 @if (config('adminlte.auth_logo.enabled', false))
@@ -46,9 +47,21 @@
         </div> --}}
 
         {{-- Card Box --}}
+        <div class="row">
+            <div class="col-sm-3">
+            </div> <!-- This adds a gap of col-sm-3 -->
+
+            <div class="col-sm-6">
+                <a href="{{ url('/') }}" class="btn btn-block btn-flat btn-success mb-2 mt-4">
+                    <span class="fas fa-globe"></span>
+                    Visit Homepage
+                </a>
+            </div>
+        </div>
         <div class="card {{ config('adminlte.classes_auth_card', 'card-outline card-primary') }}">
 
             {{-- Card Header --}}
+
             @hasSection('auth_header')
                 <div class="card-header {{ config('adminlte.classes_auth_header', '') }}">
                     @include('adminlte::message-group')
