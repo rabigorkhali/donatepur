@@ -2,6 +2,26 @@
 {{--  @include('frontend.partials.header')
 @include('frontend.partials.navbar') 
 @include('frontend.partials.navbar') --}}
+<style>
+    body::before {
+        content: "";
+        background-image: url('https://media.istockphoto.com/id/507276910/photo/group-of-happy-gypsy-indian-children-desert-village-india.jpg?b=1&s=612x612&w=0&k=20&c=YQExmcfn4ZL-OEdx81Epowoxlokcv5v89Rfb621YcFM=');
+        /* Replace 'your-image-url.jpg' with the actual URL or path to your background image */
+        background-size: cover;
+        background-position: center;
+        opacity: 0.2;
+        /* Set the opacity to 20% (0.2) */
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        /* Ensure the background is behind the content */
+        pointer-events: none;
+        /* Allow clicks to pass through the background */
+    }
+</style>
 @php($dashboard_url = View::getSection('dashboard_url') ?? config('adminlte.dashboard_url', 'home'))
 
 @if (config('adminlte.use_route_url', false))
