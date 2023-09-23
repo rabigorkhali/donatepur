@@ -76,7 +76,7 @@ class PasswordResetLinkController extends Controller
         }
         PublicUserPasswordReset::create(['token' => $token, 'email' => $request->get('email')]);
         Mail::to($request->only('email'))->send(new PublicUserPasswordResetMail($token));
-        Session::flash('success', 'Password reset link sent successfully.');
+        Session::flash('success', 'Password reset link sent successfully. Please Check your email.');
         return redirect()->route('login');
     }
 

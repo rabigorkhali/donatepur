@@ -52,7 +52,7 @@
             </div> <!-- This adds a gap of col-sm-3 -->
 
             <div class="col-sm-6">
-                <a href="{{ url('/') }}" class="btn btn-block btn-flat btn-success mb-2 mt-4">
+                <a href="{{ url('/') }}" class="btn btn-block btn-flat btn-secondary mb-2 mt-4">
                     <span class="fas fa-globe"></span>
                     Visit Homepage
                 </a>

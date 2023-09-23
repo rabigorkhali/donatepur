@@ -5,7 +5,8 @@
             <div class="container">
                 <nav id="menuzord-right" class="menuzord default no-bg">
                     <a class="menuzord-brand pull-left flip" href="{{ url('/') }}"><img
-                            src="{{ asset('/public/uploads') . '/' . imageName(setting('site.logo')) }}" alt=""></a>
+                            src="{{ asset('/public/uploads') . '/' . imageName(setting('site.logo')) }}"
+                            alt=""></a>
                     <ul class="menuzord-menu">
                         <li class="{{ frontendActiveButton('fontendDefaultPage') }}"><a
                                 href="{{ route('fontendDefaultPage') }}">Home</a></li>
@@ -15,6 +16,9 @@
                         </li>
                         <li><a href="#">Learn More</a>
                             <ul class="dropdown">
+                                <li class="{{ frontendActiveButton('frontendContactus') }}"><a
+                                        href="{{ route('frontendContactus') }}">Contact Us</a>
+                                </li>
                                 <li class="{{ frontendActiveButton('postList') }}"><a
                                         href="{{ route('postList') }}">Blogs</a>
                                 </li>

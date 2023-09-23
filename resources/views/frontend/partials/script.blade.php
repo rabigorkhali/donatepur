@@ -17,4 +17,5 @@
                 $('#myModal').modal('show');
             });
         });
+        
     </script>

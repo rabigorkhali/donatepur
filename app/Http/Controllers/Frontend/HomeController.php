@@ -212,24 +212,31 @@ class HomeController extends FrontendBaseController
     public function contactUsCreate(Request $request)
     {
         try {
-            $data = $request->except('_token');
+            $data = $request->except('_token','honeypot');
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'phone' => 'required|string|max:15',
                 'email' => 'required|email|max:255',
-                'description' => 'required|string|max:255',
+                'message' => 'required|string|max:255',
                 'honeypot' => 'nullable|max:0', // Honeypot field should be empty
             ]);
 
             if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
                 // Handle validation failure (e.g., return error response)
             }
             $data['created_at'] = date('Y-m-d H:i:s');
             $resp = ContactUs::insert($data);
-            if ($resp) return true;
-            return false;
-            return $this->renderView($this->parentViewFolder() . '.contact-us', $data);
+            if ($resp) {
+                Session::flash('success', 'Your message has been received. We will contact you soon.Thank You.');
+                return redirect()->back();
+            }
+            Session::flash('error', 'Error! Something went wrong. Pleas try again or contact our support team.');
+            return redirect()->back();
+            // return false;
+            // return $this->renderView($this->parentViewFolder() . '.contact-us', $data);
         } catch (Throwable $th) {
+            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             return false;

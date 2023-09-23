@@ -22,7 +22,7 @@
         {{-- Name field --}}
         <div class="input-group mb-3">
             <label class="input-group mb-1">Full Name</label>
-            <input type="text" name="full_name" class="form-control @error('full_name') is-invalid @enderror"
+            <input required type="text" name="full_name" class="form-control @error('full_name') is-invalid @enderror"
                    value="{{ old('full_name') }}" placeholder="{{ __('adminlte::adminlte.full_name') }}" autofocus>
 
             <div class="input-group-append">
@@ -41,7 +41,7 @@
         {{-- Email field --}}
         <div class="input-group mb-3">
             <label class="input-group mb-1">Email</label>
-            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+            <input required type="email" name="email" class="form-control @error('email') is-invalid @enderror"
                    value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}">
 
             <div class="input-group-append">
@@ -59,7 +59,7 @@
 
         <div class="input-group mb-3">
             <label class="input-group mb-1">Profile Picture</label>
-            <input type="file" name="profile_picture" class="form-control @error('profile_picture') is-invalid @enderror"
+            <input required type="file" name="profile_picture" class="form-control @error('profile_picture') is-invalid @enderror"
                    value="{{ old('profile_picture') }}" placeholder="" autofocus>
 
             <div class="input-group-append">
@@ -78,7 +78,7 @@
         {{-- Password field --}}
         <div class="input-group mb-3">
             <label class="input-group mb-1">Password</label>
-            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+            <input required type="password" name="password" class="form-control @error('password') is-invalid @enderror"
                    placeholder="{{ __('adminlte::adminlte.password') }}">
 
             <div class="input-group-append">
@@ -97,7 +97,7 @@
         {{-- Confirm password field --}}
         <div class="input-group mb-3">
             <label class="input-group mb-1">Confirm Password</label>
-            <input type="password" name="password_confirmation"
+            <input required type="password" name="password_confirmation"
                    class="form-control @error('password_confirmation') is-invalid @enderror"
                    placeholder="{{ __('adminlte::adminlte.retype_password') }}">
 
