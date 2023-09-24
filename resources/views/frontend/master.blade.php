@@ -16,7 +16,8 @@
                         <div class="latest-campaigns">
                             @foreach (getLatestCampaigns(3) as $keyCampaignsFooter => $getLatestCampaignsDatum)
                                 <article class="post media-post clearfix pb-0 mb-10">
-                                    <a href="{{ route('campaignDetailPage', $getLatestCampaignsDatum->slug) }}" class="post-thumb">
+                                    <a href="{{ route('campaignDetailPage', $getLatestCampaignsDatum->slug) }}"
+                                        class="post-thumb">
                                         @if ($getLatestCampaignsDatum->cover_image)
                                             <img height="55" width="85" alt=""
                                                 src="{{ asset('/public/uploads/') . '/' . imageName($getLatestCampaignsDatum->cover_image, '-small') }}">
@@ -27,10 +28,12 @@
                                         {{-- <img alt="" src="80x55.png"> --}}
                                     </a>
                                     <div class="post-right">
-                                        <h5 class="post-title mt-0 mb-5"><a
-                                                href="#">{{ $getLatestCampaignsDatum->title }}</a></h5>
-                                        <p class="post-date mb-0 font-12">
-                                            {{ $getLatestCampaignsDatum?->created_at?->format("M j, Y") }}</p>
+                                        <a href="{{ route('campaignDetailPage', $getLatestCampaignsDatum->slug) }}">
+                                            <h5 class="post-title mt-0 mb-5"><a
+                                                    href="#">{{ substr($getLatestCampaignsDatum->title,0,30) }}</a></h5>
+                                            <p class="post-date mb-0 font-12">
+                                                {{ $getLatestCampaignsDatum?->created_at?->format('M j, Y') }}</p>
+                                        </a>
                                     </div>
                                 </article>
                             @endforeach
@@ -55,9 +58,9 @@
                                     </a>
                                     <div class="post-right">
                                         <h5 class="post-title mt-0 mb-5"><a
-                                                href="#">{{ $getPostsBlogsDatum->title }}</a></h5>
+                                                href="#">{{ substr($getPostsBlogsDatum->title,0,30) }}</a></h5>
                                         <p class="post-date mb-0 font-12">
-                                            {{ $getPostsBlogsDatum->created_at->format("M j, Y") }}</p>
+                                            {{ $getPostsBlogsDatum->created_at->format('M j, Y') }}</p>
                                     </div>
                                 </article>
                             @endforeach
