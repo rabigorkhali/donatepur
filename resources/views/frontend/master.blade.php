@@ -30,7 +30,8 @@
                                     <div class="post-right">
                                         <a href="{{ route('campaignDetailPage', $getLatestCampaignsDatum->slug) }}">
                                             <h5 class="post-title mt-0 mb-5"><a
-                                                    href="#">{{ substr($getLatestCampaignsDatum->title,0,30) }}</a></h5>
+                                                    href="#">{{ substr($getLatestCampaignsDatum->title, 0, 30) }}</a>
+                                            </h5>
                                             <p class="post-date mb-0 font-12">
                                                 {{ $getLatestCampaignsDatum?->created_at?->format('M j, Y') }}</p>
                                         </a>
@@ -46,7 +47,7 @@
                         <div class="latest-posts">
                             @foreach (getPostsBlogs(3) as $keyBlogFooter => $getPostsBlogsDatum)
                                 <article class="post media-post clearfix pb-0 mb-10">
-                                    <a href="#" class="post-thumb">
+                                    <a href="{{ route('postDetailPage', $getPostsBlogsDatum->slug) }}" class="post-thumb">
                                         @if ($getPostsBlogsDatum->image)
                                             <img height="55" width="85" alt=""
                                                 src="{{ asset('/public/uploads/') . '/' . imageName($getPostsBlogsDatum->image, '-small') }}">
@@ -57,10 +58,13 @@
                                         {{-- <img alt="" src="80x55.png"> --}}
                                     </a>
                                     <div class="post-right">
-                                        <h5 class="post-title mt-0 mb-5"><a
-                                                href="#">{{ substr($getPostsBlogsDatum->title,0,30) }}</a></h5>
-                                        <p class="post-date mb-0 font-12">
-                                            {{ $getPostsBlogsDatum->created_at->format('M j, Y') }}</p>
+                                        <a href="{{ route('postDetailPage', $getPostsBlogsDatum->slug) }}">
+                                            <h5 class="post-title mt-0 mb-5"><a
+                                                    href="{{ route('postDetailPage', $getPostsBlogsDatum->slug) }}">{{ substr($getPostsBlogsDatum->title, 0, 30) }}</a>
+                                            </h5>
+                                            <p class="post-date mb-0 font-12">
+                                                {{ $getPostsBlogsDatum->created_at->format('M j, Y') }}</p>
+                                        </a>
                                     </div>
                                 </article>
                             @endforeach
