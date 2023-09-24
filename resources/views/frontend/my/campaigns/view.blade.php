@@ -38,7 +38,10 @@
                                 <th style="width:20%">Category:</th>
                                 <td>{{ $campaignDetail?->category?->title??'N/A' }}</td>
                             </tr>
-
+                            <tr>
+                                <th style="width:20%;">Created Date</th>
+                                <td>{{ ($campaignDetail->created_at)?$campaignDetail->created_at->format('Y-m-d'):'N/A' }}</td>
+                            </tr>
                             <tr>
                                 <th style="width:20%;">Start Date</th>
                                 <td>{{ $campaignDetail->start_date }}</td>

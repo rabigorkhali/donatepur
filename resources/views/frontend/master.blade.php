@@ -12,17 +12,29 @@
             <div class="row border-bottom-black">
                 <div class="col-sm-6 col-md-3">
                     <div class="widget dark">
-                        <img class="mt-10 mb-20" alt=""
-                            src="html/2016/charitypress-html/demo/images/logo-wide-white.png">
-                        <p>{{ setting('site.site_address') }}</p>
-                        <ul class="list-inline mt-5">
-                            <li class="m-0 pl-10 pr-10"> <i class="fa fa-phone text-theme-colored mr-5"></i> <a
-                                    class="text-gray" href="#">{{ setting('site.mobile_number') }}</a> </li>
-                            <li class="m-0 pl-10 pr-10"> <i class="fa fa-envelope-o text-theme-colored mr-5"></i> <a
-                                    class="text-gray" href="#">{{ setting('site.site_email') }}</a> </li>
-                            <li class="m-0 pl-10 pr-10"> <i class="fa fa-globe text-theme-colored mr-5"></i> <a
-                                    class="text-gray" href="#">www.donatepur.com</a> </li>
-                        </ul>
+                        <h5 class="widget-title line-bottom">Latest Campaigns</h5>
+                        <div class="latest-campaigns">
+                            @foreach (getLatestCampaigns(3) as $keyCampaignsFooter => $getLatestCampaignsDatum)
+                                <article class="post media-post clearfix pb-0 mb-10">
+                                    <a href="{{ route('campaignDetailPage', $getLatestCampaignsDatum->slug) }}" class="post-thumb">
+                                        @if ($getLatestCampaignsDatum->cover_image)
+                                            <img height="55" width="85" alt=""
+                                                src="{{ asset('/public/uploads/') . '/' . imageName($getLatestCampaignsDatum->cover_image, '-small') }}">
+                                        @else
+                                            <img height="55" width="85" alt=""
+                                                src="{{ imageName($getLatestCampaignsDatum->cover_image) }}">
+                                        @endif
+                                        {{-- <img alt="" src="80x55.png"> --}}
+                                    </a>
+                                    <div class="post-right">
+                                        <h5 class="post-title mt-0 mb-5"><a
+                                                href="#">{{ $getLatestCampaignsDatum->title }}</a></h5>
+                                        <p class="post-date mb-0 font-12">
+                                            {{ $getLatestCampaignsDatum?->created_at?->format("M j, Y") }}</p>
+                                    </div>
+                                </article>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-3">

@@ -53,6 +53,7 @@ class MyCampaignController extends Controller
                 'Title',
                 'Verification Status',
                 'Start Date',
+                'Created Date',
                 'End Date',
                 'Goal Amount',
                 'Total Collection',
@@ -90,6 +91,7 @@ class MyCampaignController extends Controller
                     substr($datumCampaign->title,0,50),
                     ucfirst($datumCampaign->campaign_status),
                     $datumCampaign->start_date,
+                    ($datumCampaign->created_at)?$datumCampaign->created_at->format('Y-m-d'):'',
                     $datumCampaign->end_date,
                     priceToNprFormat($datumCampaign->goal_amount),
                     priceToNprFormat($datumCampaign->total_collection),
@@ -101,9 +103,9 @@ class MyCampaignController extends Controller
             }
             $data['config'] = [
                 'data' => $campaignList,
-                'order' => [[1, 'asc']],
+                // 'order' => [[1, 'asc']],
                 'beautify' => true,
-                'columns' => [null, null, null, null, null, null, null, null, ['orderable' => false]],
+                'columns' => [null,null, null, null, null, null, null, null, null, ['orderable' => false]],
             ];
 
             return $this->renderView('.index', $data);

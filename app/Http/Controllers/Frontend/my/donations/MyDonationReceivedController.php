@@ -49,7 +49,7 @@ class MyDonationReceivedController extends Controller
             $data['heads'] = [
                 'SN',
                 'Donors Name',
-                'Is Anonymous',
+                // 'Is Anonymous',
                 'Receiver Details',
                 'Campaign',
                 'Payment Gateway',
@@ -73,7 +73,7 @@ class MyDonationReceivedController extends Controller
                 $thisArray = [
                     $sn,
                     $thisAllDataDatum?->fullname,
-                    ($thisAllDataDatum?->is_anonymous)?'Yes':'No',
+                    // ($thisAllDataDatum?->is_anonymous)?'Yes':'No',
                     'Name: '.$thisAllDataDatum?->receiver?->username.
                     '<br> Mobile: '.$thisAllDataDatum->mobile_number
                     ,
@@ -81,7 +81,7 @@ class MyDonationReceivedController extends Controller
                     $thisAllDataDatum?->paymentGateway?->name,
                     $thisAllDataDatum->mobile_number,
                     priceToNprFormat($thisAllDataDatum?->amount),
-                    priceToNprFormat($thisAllDataDatum?->service_charge_percentage),
+                    $thisAllDataDatum?->service_charge_percentage,
                     ucfirst($thisAllDataDatum?->payment_status),
                     $thisAllDataDatum?->transaction_id,
                     $thisAllDataDatum?->created_at->format('Y-m-d H:i:s'),
@@ -92,11 +92,11 @@ class MyDonationReceivedController extends Controller
             }
             $data['config'] = [
                 'data' => $thisAllDataArray,
-                'order' => [[1, 'asc']],
+                // 'order' => [[1, 'asc']],
                 'beautify' => true,
                 'scrollX'=> true,
                 'columns' => [
-                    null, null, null,null, null, null,null, null, null,null, null,null,
+                    null, null,null, null, null,null, null, null,null, null,null,
                     ['orderable' => false]
                 ],
             ];

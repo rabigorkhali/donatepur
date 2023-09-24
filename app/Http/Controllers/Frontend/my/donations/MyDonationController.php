@@ -56,7 +56,7 @@ class MyDonationController extends Controller
                 'Payment Gateway',
                 'Mobile Number',
                 'Amount(Rs.)',
-                'Service Fee(%)',
+                // 'Service Fee(%)',
                 'Payment Status',
                 'Transaction Id',
                 'Donated At',
@@ -79,10 +79,10 @@ class MyDonationController extends Controller
                     '<br> Mobile: '.$thisAllDataDatum->mobile_number
                     ,
                     $thisAllDataDatum?->campaign?->title,
-                    $thisAllDataDatum->mobile_number,
                     $thisAllDataDatum?->paymentGateway?->name,
+                    $thisAllDataDatum->mobile_number,
                     priceToNprFormat($thisAllDataDatum?->amount),
-                    priceToNprFormat($thisAllDataDatum?->service_charge_percentage),
+                    // priceToNprFormat($thisAllDataDatum?->service_charge_percentage),
                     ucfirst($thisAllDataDatum?->payment_status),
                     $thisAllDataDatum?->transaction_id,
                     $thisAllDataDatum?->created_at->format('Y-m-d H:i:s'),
@@ -93,11 +93,11 @@ class MyDonationController extends Controller
             }
             $data['config'] = [
                 'data' => $thisAllDataArray,
-                'order' => [[1, 'asc']],
+                // 'order' => [[1, 'asc']],
                 'beautify' => true,
                 'scrollX'=> true,
                 'columns' => [
-                    null, null, null,null, null, null,null, null, null,null, null,null,
+                    null, null,null, null, null,null, null, null,null, null,null,
                     ['orderable' => false]
                 ],
             ];

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Voyager\CampaignView;
 use App\Models\Voyager\Post;
 use App\Models\Voyager\Setting;
 use App\Models\Voyager\UsefullLink;
@@ -158,10 +159,16 @@ function getSiteDetails($siteType = 'Site')
     return $siteArray;
 }
 
-function getPostsBlogs($limit = '5')
+function getPostsBlogs($limit = '3')
 {
     $posts = Post::where('status', 'published')->orderby('created_at', 'desc')->limit($limit)->get();
     return $posts;
+}
+
+function getLatestCampaigns($limit = '3')
+{
+    $campaigns = CampaignView::where('status', 1)->orderby('created_at', 'desc')->limit($limit)->get();
+    return $campaigns;
 }
 
 

@@ -32,7 +32,7 @@
         $config['dom'] = '<"row" <"col-sm-7" B> <"col-sm-5 d-flex justify-content-end" i> >
                   <"row" <"col-12" tr> >
                   <"row" <"col-sm-12 d-flex justify-content-start" f> >';
-        $config['paging'] = false;
+        $config['paging'] = true;
         $config['lengthMenu'] = [10, 50, 100, 500];
     @endphp
 

@@ -59,6 +59,7 @@ class MyWithdrawalsController extends Controller
                 'Service Charge (Rs.)',
                 'Net Withdrawal Amt (Rs.)',
                 'Withdrawal Status',
+                'Payment Gateway',
                 'Withdrawal Request Date',
                 ['label' => 'Actions', 'no-export' => true, 'width' => 5],
             ];
@@ -70,7 +71,7 @@ class MyWithdrawalsController extends Controller
             $sn = 1;
             $thisArray = [];
             foreach ($thisModelDataList as $thisModelDataListKey => $thisModelDataListDatum) {
-                $btnDelete='';
+                $btnDelete = '';
                 if ($thisModelDataListDatum->withdrawal_status == 'pending') {
                     $btnDelete = '<a onclick="deleteBtn(' . $thisModelDataListDatum->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
                               <i class="fa fa-lg fa-fw fa-trash"></i>
@@ -82,6 +83,14 @@ class MyWithdrawalsController extends Controller
                            </a>';
 
                 $amountDetails =   $this->campaignService->campaignSummary($request, $thisModelDataListDatum->campaign_id);
+                $paymentGatewayDetails = $thisModelDataListDatum->userPaymentGateway->payment_gateway_name;
+                if ($thisModelDataListDatum->userPaymentGateway->payment_gateway_name !== 'Bank') {
+                    $paymentGatewayDetails .= '<br>' . $thisModelDataListDatum->userPaymentGateway->mobile_number;
+                } else {
+                    $paymentGatewayDetails .= '<br>' . $thisModelDataListDatum->userPaymentGateway->bank_name;
+                    $paymentGatewayDetails .= '<br>' . $thisModelDataListDatum->userPaymentGateway->bank_account_number;
+                }
+
                 $thisArray = [
                     $sn,
                     $thisModelDataListDatum->campaign->title,
@@ -90,6 +99,8 @@ class MyWithdrawalsController extends Controller
                     $amountDetails['campaign']->summary_service_charge_amount ?? 0,
                     $amountDetails['campaign']->net_amount_collection ?? 0,
                     ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
+
+                    $paymentGatewayDetails,
                     ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
                     '<nobr>' . $btnDelete . $btnDetails . '</nobr>'
                 ];
@@ -98,14 +109,13 @@ class MyWithdrawalsController extends Controller
             }
             $data['config'] = [
                 'data' => $thisModelDataListArray,
-                'order' => [[1, 'asc']],
+                // 'order' => [[1, 'asc']],
                 'beautify' => true,
-                'columns' => [null, null, null, null, null, null, null, null, ['orderable' => false]],
+                'columns' => [null, null, null, null, null, null, null, null, null, ['orderable' => false]],
             ];
 
             return $this->renderView('.index', $data);
         } catch (Throwable $th) {
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
@@ -148,6 +158,10 @@ class MyWithdrawalsController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
             $campaignData = CampaignView::where('campaign_status', 'completed')->where('public_user_id', $request->user->id)->find($campaignId);
+            if (!$campaignData->summary_total_collection || $campaignData->summary_total_collection < 11) {
+                Session::flash('error', 'The minimum fund that can be withdrawn must be greater  than Rs. 9.');
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
             if (!$campaignData) {
                 Session::flash('error', 'Bad request.');
                 return redirect()->back()->withErrors($validator)->withInput();

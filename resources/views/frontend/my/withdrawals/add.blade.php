@@ -28,7 +28,7 @@
             <div class="col-md-6">
                 @php $formInputName='campaign_id'; @endphp
                 <x-adminlte-select2 id="{{ $formInputName }}" required name="{{ $formInputName }}"
-                    value="{{ old($formInputName) }}" label="Campaigns" label-class=""
+                    value="{{ old($formInputName) }}" label="Campaigns (Note: Only completed campaigns will be listed.)" label-class=""
                     data-placeholder="Select Campaign...">
                     <option value="none" selected>Select Campaign</option>
                     @foreach ($campaigns as $campaignsDatum)
