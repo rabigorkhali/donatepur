@@ -54,6 +54,10 @@ function getDaysDiffByToday($givenDate)
     $today = new DateTime();
     $date = new DateTime($givenDate);
 
+    if($givenDate<$today)
+    {
+        return 0;
+    }
     // Calculate the difference between the two dates
     $interval = $today->diff($date);
 
@@ -117,9 +121,9 @@ function priceToNprFormat($string)
             }
         }
         if (!$newCharacter) {
-            return 'Rs. 0';
+            return 'Nrs. 0';
         }
-        return 'Rs.' . strrev($newCharacter);
+        return 'Nrs.' . strrev($newCharacter);
     } catch (Throwable $th) {
         return 0;
     }

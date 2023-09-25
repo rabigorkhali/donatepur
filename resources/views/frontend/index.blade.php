@@ -1,7 +1,7 @@
 @extends('frontend.master')
 @section('title', 'Home')
 @section('content')
-{{-- <style>
+    {{-- <style>
     .menuzord-brand::before {
             content: 'TEST MODE';
             font-size: 20px;
@@ -330,7 +330,7 @@
                                                             Now</a>
                                                     @elseif (in_array($featuredCausesDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                                         <a href="#"
-                                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
+                                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10 mb-10">Completed</a>
                                                     @else
                                                         <a href="#"
                                                             class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired</a>
@@ -344,8 +344,14 @@
                                                         <strong>{{ priceToNprFormat($featuredCausesDatum->goal_amount) }}</strong>target
                                                     </li>
                                                     <li class="remaining-days">
-                                                        <strong>{{ getDaysDiffByToday($featuredCausesDatum->end_date) }}</strong>days
-                                                        to go
+                                                        @if (!in_array($featuredCausesDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
+                                                            <strong>{{ getDaysDiffByToday($featuredCausesDatum->end_date) }}</strong>days
+                                                            to go
+                                                        @else
+                                                            Settled on
+                                                            {{ $featuredCausesDatum?->end_date?->format('Y-M-d') }}
+                                                        @endif
+
                                                     </li>
                                                 </ul>
                                             </div>
@@ -439,7 +445,7 @@
                                 <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom"
                                     data-value="{{ $total_collection }}" data-animation-duration="1500">Rs.</h2>
                                 <div class="clearfix"></div>
-                                <h4 class="font-14">Total Collection</h4>
+                                <h4 class="font-14">Total Collection({{ priceToNprFormat($total_collection) }}) </h4>
                             </div>
                         </div>
                     </div>
@@ -504,10 +510,10 @@
                                                 Now</a>
                                         @elseif (in_array($recentCausesDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                             <a href="#"
-                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
+                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10">Completed</a>
                                         @else
                                             <a href="#"
-                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired</a>
+                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10">Expired</a>
                                         @endif
                                     </div>
                                     <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
@@ -518,8 +524,13 @@
                                             <strong>{{ priceToNprFormat($recentCausesDatum->goal_amount) }}</strong>target
                                         </li>
                                         <li class="remaining-days">
-                                            <strong>{{ getDaysDiffByToday($recentCausesDatum->end_date) }}</strong>days
-                                            to go
+                                            @if (!in_array($recentCausesDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
+                                                <strong>{{ getDaysDiffByToday($recentCausesDatum->end_date) }}</strong>days
+                                                to go
+                                            @else
+                                                Settled on {{ $recentCausesDatum?->end_date?->format('Y-M-d') }}
+                                            @endif
+
                                         </li>
                                     </ul>
                                 </div>
@@ -573,9 +584,12 @@
                         <div class="col-md-12">
                             <div class="owl-carousel-6col clients-logo text-center">
                                 @foreach ($partners as $partnersKey => $partnersDatum)
-                                    <div class="item"> <a href="#"><img class="img-responsive"
-                                                src="{{ asset('/public/uploads') . '/' . imageName($partnersDatum->logo, '-cropped') }}"
-                                                alt=""></a>
+                                    <div class="item">
+                                        <a href="{{ $partnersDatum->website }}" target="_blank">
+                                            <img class="img-responsive"
+                                                src="{{ asset('/public/uploads') . '/' . imageName($partnersDatum->logo, '-small') }}"
+                                                alt="">
+                                        </a>
                                     </div>
                                 @endforeach
 

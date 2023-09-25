@@ -104,14 +104,19 @@
                                     </div>
                                     <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
                                         <li class="current-fund">
-                                            <strong>{{ calculatePercentageMaxTo100($causesListDatum->summary_total_collection, $causesListDatum->goal_amount) }}%</strong>funded
+                                            <strong>{{ priceToNprFormat($causesListDatum->summary_total_collection)}}</strong>funded
                                         </li>
                                         <li class="target-fund">
                                             <strong>{{ priceToNprFormat($causesListDatum->goal_amount) }}</strong>target
                                         </li>
                                         <li class="remaining-days">
+                                            @if(!in_array($causesListDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                             <strong>{{ getDaysDiffByToday($causesListDatum->end_date) }}</strong>days
                                             to go
+                                            @else
+                                            Settled on {{$causesListDatum?->end_date?->format('Y-M-d')}}
+                                            @endif
+                                            
                                         </li>
                                     </ul>
                                 </div>
