@@ -44,7 +44,7 @@ class NewUserRegistrationEmail extends Mailable
     public function build()
     {
         return $this->view('email.new-user-creation')
-            ->subject('Account Created Successfully.')
+            ->subject('Account created successfully.')
             ->with($this->data);
     }
     /**

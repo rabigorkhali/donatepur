@@ -41,8 +41,9 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
+
         $request->validate([
             'profile_picture' => ['required', 'image', 'max:25000'],
             'full_name' => ['required', 'string', 'max:100'],
@@ -56,6 +57,8 @@ class RegisteredUserController extends Controller
             $data['email'] = $request->email;
             $token = Str::uuid();
             $data['email_verify_token']=$token;
+            $data['status']=1;
+            $data['is_email_verified']=0;
             $data['password'] = Hash::make($request->password);
             if ($request->file('profile_picture')) {
                 $data['profile_picture'] = $this->dirforDb . $this->uploadImage($this->dir, 'profile_picture', true, 300, null);
