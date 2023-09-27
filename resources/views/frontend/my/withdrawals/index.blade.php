@@ -25,6 +25,8 @@
             <i class="fas fa-save mr-1"></i>Request Withdrawal</a>
     </div>
     {{-- With buttons --}}
+        {{-- datatbles files donatepur/resources/views/vendor/adminlte/components/tool/datatable.blade.php --}}
+
     <x-adminlte-datatable id="table7" :heads="$heads" head-theme="light" theme="" :config="$config" striped
         hoverable with-buttons />
     {{-- With buttons + customization --}}
