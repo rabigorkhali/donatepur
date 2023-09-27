@@ -55,6 +55,7 @@ class RegisteredUserController extends Controller
             $data = [];
             $data['full_name'] = $request->full_name;
             $data['email'] = $request->email;
+            $data['username'] = $request->email;
             $token = Str::uuid();
             $data['email_verify_token']=$token;
             $data['status']=1;
@@ -72,7 +73,6 @@ class RegisteredUserController extends Controller
             return redirect(RouteServiceProvider::HOME); */
         } catch (Throwable $th) {
             DB::rollback();
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             Session::flash('error', 'Error! Something went wrong with your previous request.');
             return redirect()->back();
