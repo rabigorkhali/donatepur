@@ -189,7 +189,7 @@
                                                                 style="width:100%;padding-right:0px;padding-left:0px;">
                                                                 <div align="center" class="alignment"
                                                                     style="line-height:10px"><img alt="Company Logo"
-                                                                        src="{{ asset('/public/uploads/static-images/donatepur_logo.png') }}"
+                                                                        src="{{ asset('/public/uploads') . '/' . imageName(setting('site.logo')) }}"
                                                                         style="display: block; height: auto; border: 0; width: 147px; max-width: 100%;"
                                                                         title="Company Logo" width="147" /></div>
                                                             </td>
@@ -342,7 +342,7 @@
                                                                         style="font-size: 12px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; mso-line-height-alt: 21.6px; color: #848484; line-height: 1.8;">
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 25.2px;">
-                                                                            <span style="font-size:14px;">Welcome! {{$full_name}}
+                                                                            <span style="font-size:14px;">Welcome! "{{$full_name}}",
                                                                                 We're thrilled to have you join our
                                                                                 mission of making a meaningful impact on
                                                                                 the lives of others. Thank you!. <br>
