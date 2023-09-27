@@ -14,7 +14,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{{ url('/my/dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item active"><a>{{$page_title}}</a></li>
+            <li class="breadcrumb-item active"><a>{{ $page_title }}</a></li>
         </ol>
     </nav>
 @stop
@@ -24,6 +24,23 @@
 
     </div>
     {{-- With buttons --}}
+
+    <form class="form-inline">
+        <div class="form-group mb-2">
+            <span class="text-italic"> Search Filter: </span>
+        </div>
+        <div class="form-group md-sm-3 mb-2 ml-2">
+            <input type="text" class="form-control" id="search" placeholder="Search">
+        </div>
+        <div class="form-group md-sm-4 mb-2 ml-2">
+            <select id="paymentGateway" class="form-control">
+                <option selected value="">Payment Gateway</option>
+                @foreach ($paymentGateways as $paymentGatewaysKey => $paymentGatewaysDatum)
+                    <option value="{{ $paymentGatewaysDatum->name }}">{{ $paymentGatewaysDatum->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </form>
     {{-- datatbles files donatepur/resources/views/vendor/adminlte/components/tool/datatable.blade.php --}}
     <x-adminlte-datatable id="table7" :heads="$heads" head-theme="light" theme="" :config="$config" striped
         hoverable with-buttons />
@@ -68,5 +85,35 @@
         }
     </script>
 
-    <script></script>
+    <script>
+        $(document).ready(function() {
+            $('#search').on('keyup', function() {
+                applyFilters();
+            });
+
+            $('#paymentGateway').on('change', function() {
+                applyFilters();
+            });
+
+            function applyFilters() {
+                let searchValue = $('#search').val();
+                let paymentGatewayValue = $('#paymentGateway').val();
+
+                let searchCondition = '';
+
+                if (searchValue) {
+                    searchCondition += '(?=.*' + $.fn.dataTable.util.escapeRegex(searchValue) + ')';
+                }
+
+                if (paymentGatewayValue) {
+                    if (searchCondition) {
+                        searchCondition += '.*';
+                    }
+                    searchCondition += '(?=.*' + $.fn.dataTable.util.escapeRegex(paymentGatewayValue) + ')';
+                }
+
+                currentTable.search(searchCondition, true, false).draw();
+            }
+        });
+    </script>
 @stop

@@ -101,6 +101,8 @@ class MyDonationController extends Controller
                     ['orderable' => false]
                 ],
             ];
+
+            $data['paymentGateways']= PaymentGateway::where('status',1)->orderby('name','asc')->get();
             return $this->renderView('index', $data);
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);

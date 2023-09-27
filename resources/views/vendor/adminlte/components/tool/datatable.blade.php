@@ -41,7 +41,9 @@
 <script>
 
     $(() => {
-        $('#{{ $id }}').DataTable( @json($config) );
+    var table=    $('#{{ $id }}').DataTable( @json($config) );
+    window.currentTable=table;  
+
     })
 
 </script>
