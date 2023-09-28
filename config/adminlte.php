@@ -84,7 +84,7 @@ return [
     */
 
     'auth_logo' => [
-        'enabled' => true,
+        'enabled' => false,
         'img' => [
             'path' => env('APP_URL').'/static-images/donatepur_logo.png',
             'alt' => 'Donatepur Logo',
