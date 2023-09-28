@@ -4,6 +4,11 @@
 
 
 @section('content_header')
+<style>
+    .dataTables_filter {
+    display: none;
+}
+</style>
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">
@@ -25,7 +30,7 @@
     </div>
     {{-- With buttons --}}
 
-    <form class="form-inline">
+    <form class="form-inline float-right">
         <div class="form-group mb-2">
             <span class="text-italic"> Search Filter: </span>
         </div>
@@ -39,6 +44,12 @@
                     <option value="{{ $paymentGatewaysDatum->name }}">{{ $paymentGatewaysDatum->name }}</option>
                 @endforeach
             </select>
+        </div>
+        <div class="form-group md-sm-4 mb-2 ml-2">
+            <input type="date" id="startDate">
+        </div>
+        <div class="form-group md-sm-4 mb-2 ml-2">
+            <input type="date" id="endDate">
         </div>
     </form>
     {{-- datatbles files donatepur/resources/views/vendor/adminlte/components/tool/datatable.blade.php --}}
