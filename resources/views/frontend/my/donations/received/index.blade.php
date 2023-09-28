@@ -4,6 +4,11 @@
 
 
 @section('content_header')
+<style>
+    .dataTables_filter {
+        display: none;
+    }
+</style>
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">
@@ -25,7 +30,39 @@
     </div>
     {{-- With buttons --}}
         {{-- datatbles files donatepur/resources/views/vendor/adminlte/components/tool/datatable.blade.php --}}
-
+        <form class="form-inline float-right">
+            <div class="form-group mb-2">
+                <span class="text-italic"> Search Filter: </span>
+            </div>
+            <div class="form-group md-sm-3 mb-2 ml-2">
+                <input type="text" class="form-control" id="search" placeholder="Search">
+            </div>
+            <div class="form-group md-sm-4 mb-2 ml-2">
+                <select id="paymentGateway" class="form-control">
+                    <option selected value="">Payment Gateway</option>
+                    @foreach ($paymentGateways as $paymentGatewaysKey => $paymentGatewaysDatum)
+                        <option value="{{ $paymentGatewaysDatum->name }}">{{ $paymentGatewaysDatum->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group md-sm-4 mb-2 ml-2">
+                <select id="campaigns" class="form-control">
+                    <option selected value="">Select Campaign</option>
+                    @foreach ($campaigns as $campaignsKey => $campaignsDatum)
+                        <option value="{{ $campaignsDatum->title }}">{{ $campaignsDatum->title }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group md-sm-4 mb-2 ml-2">
+                <input type="date" id="startDate" class="form-control">
+            </div>
+            <div class="form-group md-sm-4 mb-2 ml-2">
+                <input type="date" id="endDate" class="form-control">
+            </div>
+            <div class="form-group md-sm-4 mb-2 ml-2">
+                <button class="btn btn-sm btn-info" onclick="clearFilters()">Clear Filters</button>
+            </div>
+        </form>
     <x-adminlte-datatable id="table7" :heads="$heads" head-theme="light" theme="" :config="$config" striped
         hoverable with-buttons />
 
@@ -68,6 +105,90 @@
             });
         }
     </script>
+    <script>
+        $(document).ready(function() {
 
+
+            $('#search').on('keyup', function() {
+                applyFilters();
+            });
+
+            $('#paymentGateway').on('change', function() {
+                applyFilters();
+            });
+
+            $('#startDate').on('change', function() {
+                applyFilters();
+            });
+
+            $('#endDate').on('change', function() {
+                applyFilters();
+            });
+            $('#campaigns').on('change', function() {
+                applyFilters();
+            });
+
+            function applyFilters() {
+                let searchValue = $('#search').val();
+                let paymentGatewayValue = $('#paymentGateway').val();
+                let startDateValue = $('#startDate').val();
+                let endDateValue = $('#endDate').val();
+                let campaignValue = $('#campaigns').val();
+
+                let searchCondition = '';
+
+                if (searchValue) {
+                    searchCondition += '(?=.*' + $.fn.dataTable.util.escapeRegex(searchValue) + ')';
+                }
+
+                if (paymentGatewayValue) {
+                    if (searchCondition) {
+                        searchCondition += '.*';
+                    }
+                    searchCondition += '(?=.*' + $.fn.dataTable.util.escapeRegex(paymentGatewayValue) + ')';
+                }
+
+
+                if (campaignValue) {
+                    if (searchCondition) {
+                        searchCondition += '.*';
+                    }
+                    searchCondition += '(?=.*' + $.fn.dataTable.util.escapeRegex(campaignValue) + ')';
+                }
+
+                if (startDateValue) {
+                    let columnIndex = 10;
+                    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                        var columnData = data[columnIndex]; // Assuming date is in column index 10
+                        if (!columnData || columnData === '') {
+                            return false; // Skip empty cells
+                        }
+                        var columnValue = new Date(columnData);
+                        let startDateValue = $('#startDate').val();
+                        let startDate = new Date(startDateValue);
+                        return columnValue >= startDate;
+                    });
+                    currentTable.draw();
+                }
+
+                if (endDateValue) {
+                    let columnIndex = 10;
+                    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                        var columnData = data[columnIndex]; // Assuming date is in column index 10
+                        if (!columnData || columnData === '') {
+                            return false; // Skip empty cells
+                        }
+                        var columnValue = new Date(columnData);
+                        let endDateValue = $('#endDate').val();
+                        let endDateTime = new Date(endDateValue);
+                        return columnValue <= endDateTime;
+                    });
+                    currentTable.draw();
+                }
+
+                currentTable.search(searchCondition, true, false).draw();
+            }
+        });
+    </script>
     <script></script>
 @stop

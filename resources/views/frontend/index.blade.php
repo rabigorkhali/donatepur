@@ -473,7 +473,7 @@
                         @foreach ($recentCauses as $recentCausesKey => $recentCausesDatum)
                             <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
                                 <div class="image-box-thum">
-                                    <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">
+                                    <a href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">
                                         <img height="239" class="img-fullwidth" style=" border-radius:5px 5px 0 0;"
                                             alt=""
                                             src="{{ asset('/public/uploads') . '/' . imageName($recentCausesDatum->cover_image) }}">
@@ -481,22 +481,22 @@
                                 </div>
                                 <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
                                     <h3 class="title mt-0 mb-5"><a
-                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ substr($recentCausesDatum->title, 0, 100) }}</a>
+                                            href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">{{ substr($recentCausesDatum->title, 0, 100) }}</a>
                                     </h3>
                                     <div class="project-meta mb-10 font-12">
                                         <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
                                                 href="#">{{ $recentCausesDatum->category->title }}</a></span>
                                         <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                                 class="fa fa-money mr-5 text-theme-colored"></i>
-                                            {{ $featuredCausesDatum->total_number_donation }}
+                                            {{ $recentCausesDatum->total_number_donation }}
                                             Donations</span>
                                         <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                                 class="fa fa-eye mr-5 text-theme-colored"></i>
-                                            {{ $featuredCausesDatum->total_visits }} Views</span>
+                                            {{ $recentCausesDatum->total_visits }} Views</span>
                                     </div>
                                     <p class="desc mb-10">
                                         {{ substr($recentCausesDatum->description, 0, 100) }}... <br> <a
-                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}"
+                                            href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}"
                                             class="text-info"> Read More...</a>
                                     </p>
                                     <div class="progress-item mt-0">

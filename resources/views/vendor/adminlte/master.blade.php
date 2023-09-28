@@ -124,6 +124,14 @@
             }, 4000);
         }
     });
+
+    function clearFilters() {
+        var inputs = document.querySelectorAll('input[type="text"]');
+            
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].value = '';
+            }
+        }
 </script>
 @yield('scripts')
 @if (strpos(url()->current(), '/my/') !== false)

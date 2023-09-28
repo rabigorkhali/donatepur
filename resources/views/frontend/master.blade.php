@@ -30,7 +30,7 @@
                                     <div class="post-right">
                                         <a href="{{ route('campaignDetailPage', $getLatestCampaignsDatum->slug) }}">
                                             <h5 class="post-title mt-0 mb-5"><a
-                                                    href="#">{{ substr($getLatestCampaignsDatum->title, 0, 30) }}</a>
+                                                    href="{{ route('campaignDetailPage', $getLatestCampaignsDatum->slug) }}">{{ substr($getLatestCampaignsDatum->title, 0, 30) }}</a>
                                             </h5>
                                             <p class="post-date mb-0 font-12">
                                                 {{ $getLatestCampaignsDatum?->created_at?->format('M j, Y') }}</p>

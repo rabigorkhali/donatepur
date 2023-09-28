@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Models\Voyager\Campaign;
 use App\Models\Voyager\CampaignCategory;
+use App\Models\Voyager\CampaignView;
 use App\Models\Voyager\Donation;
 use App\Models\Voyager\PaymentGateway;
 use App\Models\Voyager\SystemErrorLog;
 use App\Models\Voyager\UserPaymentGateway;
 use App\Traits\ImageTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -100,6 +102,8 @@ class MyDonationReceivedController extends Controller
                     ['orderable' => false]
                 ],
             ];
+            $data['paymentGateways']= PaymentGateway::where('status',1)->orderby('name','asc')->get();
+            $data['campaigns']= CampaignView::where('status',1)->where('public_user_id',Auth::guard('frontend_users')->user()->id)->orderby('title','asc')->get();
             return $this->renderView('index', $data);
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);

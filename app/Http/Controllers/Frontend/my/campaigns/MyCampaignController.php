@@ -81,22 +81,24 @@ class MyCampaignController extends Controller
                           </a>';
                 }
 
-                $btnDetails = '<a target="_blank" href="' . route('my.campaigns.view', $datumCampaign->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
+                $btnDetails = '<a target="_blank" href="' . route('my.campaigns.view', $datumCampaign->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="View Details">
                                <i class="fa fa-lg fa-fw fa-eye"></i>
                            </a>';
 
-
+                $btnViewInSite = '<a target="_blank" href="' . route('campaignDetailPage', $datumCampaign->slug) . '" class="btn btn-xs btn-info text-white mx-1 shadow" title="Navigate to website.">
+                           <i class="fa fa-lg fa-fw fa-info-circle"></i> View in site.
+                       </a>';
                 $thisArray = [
                     $sn,
-                    substr($datumCampaign->title,0,50),
+                    substr($datumCampaign->title, 0, 50),
                     ucfirst($datumCampaign->campaign_status),
                     $datumCampaign->start_date,
-                    ($datumCampaign->created_at)?$datumCampaign->created_at->format('Y-m-d'):'',
+                    ($datumCampaign->created_at) ? $datumCampaign->created_at->format('Y-m-d') : '',
                     $datumCampaign->end_date,
                     priceToNprFormat($datumCampaign->goal_amount),
                     priceToNprFormat($datumCampaign->total_collection),
                     ($datumCampaign->status) ? 'Active' : 'Inactive',
-                    '<nobr>' . $btnEdit . $btnDelete . $btnDetails . '</nobr>'
+                    '<nobr>' . $btnEdit . $btnDelete . $btnDetails . $btnViewInSite.'</nobr>'
                 ];
                 $sn = $sn + 1;
                 array_push($campaignList, $thisArray);
@@ -105,7 +107,7 @@ class MyCampaignController extends Controller
                 'data' => $campaignList,
                 // 'order' => [[1, 'asc']],
                 'beautify' => true,
-                'columns' => [null,null, null, null, null, null, null, null, null, ['orderable' => false]],
+                'columns' => [null, null, null, null, null, null, null, null, null, ['orderable' => false]],
             ];
 
             return $this->renderView('.index', $data);
@@ -272,7 +274,7 @@ class MyCampaignController extends Controller
     {
         try {
 
-            return $this->campaignService->campaignSummary($request,$id);
+            return $this->campaignService->campaignSummary($request, $id);
             $data = [];
             $campaignData = CampaignView::select('start_date', 'end_date', 'cover_image', 'goal_amount', 'summary_total_collection', 'net_amount_collection', 'summary_service_charge_amount', 'total_number_donation', 'campaign_status')
                 ->where('public_user_id', $request->user->id)->where('id', $id)->first();

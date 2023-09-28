@@ -4,11 +4,11 @@
 
 
 @section('content_header')
-<style>
-    .dataTables_filter {
-    display: none;
-}
-</style>
+    <style>
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">
@@ -46,10 +46,13 @@
             </select>
         </div>
         <div class="form-group md-sm-4 mb-2 ml-2">
-            <input type="date" id="startDate">
+            <input type="date" id="startDate" class="form-control">
         </div>
         <div class="form-group md-sm-4 mb-2 ml-2">
-            <input type="date" id="endDate">
+            <input type="date" id="endDate" class="form-control">
+        </div>
+        <div class="form-group md-sm-4 mb-2 ml-2">
+            <button class="btn btn-sm btn-info" onclick="clearFilters()">Clear Filters</button>
         </div>
     </form>
     {{-- datatbles files donatepur/resources/views/vendor/adminlte/components/tool/datatable.blade.php --}}
@@ -98,6 +101,8 @@
 
     <script>
         $(document).ready(function() {
+
+
             $('#search').on('keyup', function() {
                 applyFilters();
             });
@@ -106,9 +111,19 @@
                 applyFilters();
             });
 
+            $('#startDate').on('change', function() {
+                applyFilters();
+            });
+
+            $('#endDate').on('change', function() {
+                applyFilters();
+            });
+
             function applyFilters() {
                 let searchValue = $('#search').val();
                 let paymentGatewayValue = $('#paymentGateway').val();
+                let startDateValue = $('#startDate').val();
+                let endDateValue = $('#endDate').val();
 
                 let searchCondition = '';
 
@@ -123,8 +138,39 @@
                     searchCondition += '(?=.*' + $.fn.dataTable.util.escapeRegex(paymentGatewayValue) + ')';
                 }
 
+                if (startDateValue) {
+                    let columnIndex = 10;
+                    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                        var columnData = data[columnIndex]; // Assuming date is in column index 10
+                        if (!columnData || columnData === '') {
+                            return false; // Skip empty cells
+                        }
+                        var columnValue = new Date(columnData);
+                        let startDateValue = $('#startDate').val();
+                        let startDate = new Date(startDateValue);
+                        return columnValue >= startDate;
+                    });
+                    currentTable.draw();
+                }
+
+                if (endDateValue) {
+                    let columnIndex = 10;
+                    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                        var columnData = data[columnIndex]; // Assuming date is in column index 10
+                        if (!columnData || columnData === '') {
+                            return false; // Skip empty cells
+                        }
+                        var columnValue = new Date(columnData);
+                        let endDateValue = $('#endDate').val();
+                        let endDateTime = new Date(endDateValue);
+                        return columnValue <= endDateTime;
+                    });
+                    currentTable.draw();
+                }
+
                 currentTable.search(searchCondition, true, false).draw();
             }
         });
     </script>
+
 @stop
