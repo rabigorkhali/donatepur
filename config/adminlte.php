@@ -86,7 +86,8 @@ return [
     'auth_logo' => [
         'enabled' => true,
         'img' => [
-            'path' => env('APP_URL').'/static-images/donatepur_logo.png',
+                        // 'path' => env('APP_URL').'/static-images/donatepur_logo.png',
+            'path' => setting('site.logo'),
             'alt' => 'Donatepur Logo',
             'class' => '',
             'width' => '200',
@@ -109,7 +110,8 @@ return [
     'preloader' => [
         'enabled' => true,
         'img' => [
-            'path' => env('APP_URL').'/static-images/donatepur_logo.png',
+            // 'path' => env('APP_URL').'/static-images/donatepur_logo.png',
+            'path' => setting('site.logo'),
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
