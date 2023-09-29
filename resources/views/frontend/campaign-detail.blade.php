@@ -180,9 +180,9 @@
                                     <input value="0" name="txAmt" id="esewaTaxAmount" type="hidden">
                                     <input value="0" name="psc" id="esewaProductServiceCharge" type="hidden">
                                     <input value="0" name="pdc" id="esewaProductDeliveryCharge" type="hidden">
-                                    <input value="EPAYTEST" name="scd" type="hidden" id="esewaMerchantSecretCode">
+                                    <input value="{{getPaymentConfigs('esewa')['public_key']?? 'EPAYTEST'}}" name="scd" type="hidden" id="esewaMerchantSecretCode">
                                     <input
-                                        value="campaignid_{{ $campaignDetails->id . '_' . microtime(true) . 'donatepur' }}"
+                                        value="campaignid_{{ $campaignDetails->id . '_' . microtime(true) . 'donatepur'.mt_rand(0, 99999999) }}"
                                         name="pid" type="hidden" id="esewaUniqueProductKey">
                                     <input value="{{ route('esewaSuccess') }}?q=su" id="esewaSuccessUrl" type="hidden"
                                         name="su">
