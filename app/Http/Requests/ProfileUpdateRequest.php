@@ -24,8 +24,8 @@ class ProfileUpdateRequest extends FormRequest
             'country' => ['required', 'string', 'max:50', 'in:nepal,india'],
             'address' => ['required', 'string', 'max:100'],
             'mobile_number' => ['required', 'string', 'max:15', 'min:6'],
-            'mobile_number_secondary' => ['string', 'max:15', 'min:6'],
-            'landline_number' => ['string', 'max:15', 'min:6'],
+            'mobile_number_secondary' => ['nullable','string', 'max:15', 'min:6'],
+            'landline_number' => ['nullable', 'max:15', 'min:6'],
             'date_of_birth' => ['required', 'date', 'before:' . \Carbon\Carbon::now()->subYears(16)->format('Y-m-d')],
             'profile_picture' => ['nullable','image', 'max:40960']
         ];
