@@ -20,7 +20,7 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'full_name' => ['required', 'string', 'max:50'],
             'email' => ['required', 'email', 'max:100', Rule::unique('public_users')->ignore($this->user()->id)],
-            'username' => ['required', 'string', 'max:20', Rule::unique('public_users')->ignore($this->user()->id)],
+            'username' => ['required', 'string', 'max:50', Rule::unique('public_users')->ignore($this->user()->id)],
             'country' => ['required', 'string', 'max:50', 'in:nepal,india'],
             'address' => ['required', 'string', 'max:100'],
             'mobile_number' => ['required', 'string', 'max:15', 'min:6'],
