@@ -171,7 +171,8 @@
                                 {{-- ONLY FOR ESEWA --}}
 
                                 <form id="esewaDonateForm" class="esewa-donate-form d-none"
-                                    action="https://uat.esewa.com.np/epay/main" method="POST">
+                                    action="{{getPaymentConfigs('esewa')['initiation_url']??''}}" method="POST">
+                                    {{-- action="https://uat.esewa.com.np/epay/main" method="POST"> --}}
                                     @csrf
                                     {{-- ESEWA DWFAULT --}}
                                     <input value="0" name="tAmt" id="esewaTotalAmount" type="hidden">
@@ -456,11 +457,11 @@
                                         <div class="col-md-12" style="border: 1px solid #000; margin: 10px;">
                                             <div class="form-group mb-20 ">
                                                 <h4>Please transfer your donation amount in following bank details.</h4>
-                                                <label>Account Name: </label>{{ setting('bank.bank_account_name') }}<br>
-                                                <label>Account No: </label>{{ setting('bank.bank_account_number') }}</br>
-                                                <label>Bank Name: </label>{{ setting('bank.bank_name') }}</br>
+                                                <label>Account Name: </label>{{ getPaymentConfigs('bank')['account_name']??'N/A' }}<br>
+                                                <label>Account No: </label>{{ getPaymentConfigs('bank')['account_number']??'N?A' }}</br>
+                                                <label>Bank Name: </label>{{ !empty(($paymentConfigs = getPaymentConfigs('bank'))['fullname']) ? $paymentConfigs['fullname'] : setting('bank.bank_name') }}</br>
                                                 <label>QR: </label><br> <img height="100"
-                                                    src="{{ asset('/public/uploads') . '/' . setting('bank.bank_qr') }}">
+                                                    src="{{ asset('/public/uploads') . '/' . getPaymentConfigs('bank')['qr_image']??setting('bank.bank_qr') }}">
                                             </div>
                                         </div>
 
@@ -870,7 +871,6 @@
                 }
                 /* end check validation */
                 if (esewaDonateForm.checkValidity() && esewaDonateFormWithCustomFields.checkValidity()) {
-                    console.log(12);
                     $("#preloader").show();
                     $('#esewaDonateForm').submit();
                 }
@@ -881,15 +881,16 @@
         {{-- FOR KHALTI --}}
         <script>
             var price = 0;
-            var public_key = "{{ env('KHALTI_PUBLIC_KEY') }}";
+            // var public_key = "{{ env('KHALTI_PUBLIC_KEY') }}";
+            var public_key = "{{ getPaymentConfigs('khalti')['public_key']??'' }}";
             var app_url = "{{ env('APP_URL') }}";
             var app_name = "{{ env('APP_NAME') }}";
             var config = {
                 // replace the publicKey with yours
                 "publicKey": public_key,
-                "productIdentity": "{{ $campaignDetails->id }}",
-                "productName": '{{ $campaignDetails->slug }}',
-                "productUrl": "{{ route('campaignDetailPage', $campaignDetails->slug) }}",
+                "productIdentity": "{{ $campaignDetails?->id }}",
+                "productName": '{{ $campaignDetails?->slug }}',
+                "productUrl": "{{ route('campaignDetailPage', $campaignDetails?->slug) }}",
                 "paymentPreference": [
                     "KHALTI",
                     "EBANKING",
@@ -900,7 +901,8 @@
                 "eventHandler": {
                     onSuccess(payload) {
                         $.ajax({
-                            url: app_url + '/payment/khalti/verfication',
+                            // url: app_url + '/payment/khalti/verfication',
+                            url: "{{getPaymentConfigs('khalti')['callback_url']??''}}",
                             type: 'GET',
                             data: {
                                 amount: payload.amount,
@@ -987,7 +989,7 @@
                         showKhaltiForm = false;
                         Swal.fire('Error!', 'Fullname should be between 6 to 100 characters.', 'error');
                     }
-                    if (khaltiMobileNumber.length > 15 || khaltiMobileNumber.length <= 6) {
+                    if (khaltiMobileNumber.length > 15 ?? khaltiMobileNumber.length <= 6) {
                         showKhaltiForm = false;
                         Swal.fire('Error!', 'Mobile number should be between 6 and  15 characters.', 'error');
                     }
@@ -995,7 +997,7 @@
                         showKhaltiForm = false;
                         Swal.fire('Error!', 'Country field is required.', 'error');
                     }
-                    if (khaltiAddress.length > 100 || khaltiAddress.length < 5) {
+                    if (khaltiAddress.length > 100 ?? khaltiAddress.length < 5) {
                         showKhaltiForm = false;
                         Swal.fire('Error!', 'Address should be more than 5 characters.', 'error');
                     }
@@ -1009,7 +1011,7 @@
                         Swal.fire('Error!', 'Description should be more than 15 characters.', 'error');
                     }
                     khaltiDonationAmount = parseInt(khaltiDonationAmount);
-                    if (khaltiDonationAmount == '' || khaltiDonationAmount < 10 || khaltiDonationAmount > 1000000) {
+                    if (khaltiDonationAmount == '' ?? khaltiDonationAmount < 10 ?? khaltiDonationAmount > 1000000) {
                         showKhaltiForm = false;
                         Swal.fire('Error!', 'Donation amount should be between Rs. 10 and Rs. 1,000,000.', 'error');
                     }

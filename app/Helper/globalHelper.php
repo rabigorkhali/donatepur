@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Voyager\CampaignView;
+use App\Models\Voyager\PaymentGateway;
 use App\Models\Voyager\Post;
 use App\Models\Voyager\Setting;
 use App\Models\Voyager\UsefullLink;
@@ -54,8 +55,7 @@ function getDaysDiffByToday($givenDate)
     $today = new DateTime();
     $date = new DateTime($givenDate);
 
-    if($givenDate<$today)
-    {
+    if ($givenDate < $today) {
         return 0;
     }
     // Calculate the difference between the two dates
@@ -194,4 +194,36 @@ function frontendActiveButton($routeNameParam = '')
 function getCampaignStatusThatCantBeShown()
 {
     return ['pending', 'rejected', 'accepted'];
+}
+
+function getPaymentConfigs($gatewaySlug)
+{
+    try {
+
+        $paymentDetails = PaymentGateway::where('slug', $gatewaySlug)->first();
+        $gatewayConfigs = [];
+        if (setting('site.is_dev_or_live') == 'live') {
+            $gatewayConfigs['initiation_url'] = $paymentDetails->initiation_url;
+            $gatewayConfigs['callback_url'] = $paymentDetails->callback_url;
+            $gatewayConfigs['name'] = $paymentDetails->name;
+            $gatewayConfigs['account_name'] = $paymentDetails->account_name;
+            $gatewayConfigs['account_number'] = $paymentDetails->account_number;
+            $gatewayConfigs['qr_image'] = $paymentDetails->qr_image;
+            $gatewayConfigs['private_key'] = $paymentDetails->private_key;
+            $gatewayConfigs['public_key'] = $paymentDetails->public_key;
+            return $gatewayConfigs;
+        } else {
+            $gatewayConfigs['initiation_url'] = $paymentDetails->initiation_url_dev;
+            $gatewayConfigs['callback_url'] = $paymentDetails->callback_url_dev;
+            $gatewayConfigs['name'] = $paymentDetails->name;
+            $gatewayConfigs['account_name'] = $paymentDetails->account_name;
+            $gatewayConfigs['account_number'] = $paymentDetails->account_number;
+            $gatewayConfigs['qr_image'] = $paymentDetails->qr_image;
+            $gatewayConfigs['private_key'] = $paymentDetails->private_key_dev;
+            $gatewayConfigs['public_key'] = $paymentDetails->public_key_dev;
+            return $gatewayConfigs;
+        }
+    } catch (Throwable $th) {
+        return null;
+    }
 }

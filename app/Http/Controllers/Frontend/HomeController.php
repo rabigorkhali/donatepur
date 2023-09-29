@@ -236,7 +236,6 @@ class HomeController extends FrontendBaseController
             // return false;
             // return $this->renderView($this->parentViewFolder() . '.contact-us', $data);
         } catch (Throwable $th) {
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             return false;
@@ -403,7 +402,7 @@ class HomeController extends FrontendBaseController
                 'token' => $request->input('trans_token'),
                 'amount' => $request->input('amount')
             ));
-            $url = 'https://khalti.com/api/v2/payment/verify/';
+            $url = getPaymentConfigs('khalti')['initiation_url']??'';
             # Make the call using API.
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -582,7 +581,9 @@ class HomeController extends FrontendBaseController
                 'pid' => $dataResponse['oid'],
                 'scd' => 'EPAYTEST'
             ];
-            $url = "https://uat.esewa.com.np/epay/transrec";
+
+            $url = getPaymentConfigs('esewa')['callback_url']??'';
+            // $url = "https://uat.esewa.com.np/epay/transrec";
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $dataSuccessResponseFromEsewa);
