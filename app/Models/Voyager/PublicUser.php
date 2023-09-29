@@ -12,11 +12,13 @@ use TCG\Voyager\Tests\Database\Factories\UserFactory;
 use TCG\Voyager\Traits\VoyagerUser;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 // class PublicUser extends Authenticatable implements UserContract
 class PublicUser  extends Authenticatable
 {
     use Notifiable;
+    use SoftDeletes;
 
     protected $guard = 'admin';
 

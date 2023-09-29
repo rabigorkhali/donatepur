@@ -25,9 +25,9 @@ use Illuminate\Support\Str;
 class RegisteredUserController extends Controller
 {
     use ImageTrait;
-    public $dir = "/public/uploads/public-users";
-    public $mainDirectory = "/public/uploads";
-    public $dirforDb = "/public/public-users/";
+    public $dir = "/uploads/public-users";
+    public $mainDirectory = "/uploads";
+    public $dirforDb = "/public-users/";
     /**
      * Display the registration view.
      */
@@ -55,7 +55,7 @@ class RegisteredUserController extends Controller
             $data = [];
             $data['full_name'] = $request->full_name;
             $data['email'] = $request->email;
-            $data['username'] = $request->email;
+            // $data['username'] = $request->email;
             $token = Str::uuid();
             $data['email_verify_token']=$token;
             $data['status']=1;
