@@ -7,7 +7,7 @@
     <div class="main-content">
         <!-- Section: inner-header -->
         <section class="inner-header divider parallax layer-overlay overlay-dark-5" data-stellar-background-ratio="0.5"
-            data-bg-img="{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}"
+            data-bg-img="{{ asset('/public/uploads') . '/' . imageName($campaignDetails->cover_image,'-banner') }}"
             style="background-image: url(&quot;images/bg/bg1.jpg&quot;); background-position: 50% 61px;">
             <div class="container pt-100 pb-50">
                 <!-- Section Content -->

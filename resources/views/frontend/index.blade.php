@@ -295,7 +295,7 @@
                                                 <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">
                                                     <img height="239" style=" border-radius:5px 5px 0 0;"
                                                         class="img-fullwidth" alt=""
-                                                        src="{{ asset('/public/uploads') . '/' . imageName($featuredCausesDatum->cover_image) }}">
+                                                        src="{{ asset('/public/uploads') . '/' . imageName($featuredCausesDatum->cover_image,'-cropped') }}">
                                                 </a>
                                             </div>
                                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
@@ -476,7 +476,7 @@
                                     <a href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">
                                         <img height="239" class="img-fullwidth" style=" border-radius:5px 5px 0 0;"
                                             alt=""
-                                            src="{{ asset('/public/uploads') . '/' . imageName($recentCausesDatum->cover_image) }}">
+                                            src="{{ asset('/public/uploads') . '/' . imageName($recentCausesDatum->cover_image,'-cropped') }}">
                                     </a>
                                 </div>
                                 <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">

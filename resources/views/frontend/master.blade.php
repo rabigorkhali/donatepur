@@ -20,7 +20,7 @@
                                         class="post-thumb">
                                         @if ($getLatestCampaignsDatum->cover_image)
                                             <img height="55" width="85" alt=""
-                                                src="{{ asset('/public/uploads/') . '/' . imageName($getLatestCampaignsDatum->cover_image, '-small') }}">
+                                                src="{{ asset('/public/uploads/') . '/' . imageName($getLatestCampaignsDatum->cover_image, '-cropped') }}">
                                         @else
                                             <img height="55" width="85" alt=""
                                                 src="{{ imageName($getLatestCampaignsDatum->cover_image) }}">
@@ -50,7 +50,7 @@
                                     <a href="{{ route('postDetailPage', $getPostsBlogsDatum->slug) }}" class="post-thumb">
                                         @if ($getPostsBlogsDatum->image)
                                             <img height="55" width="85" alt=""
-                                                src="{{ asset('/public/uploads/') . '/' . imageName($getPostsBlogsDatum->image, '-small') }}">
+                                                src="{{ asset('/public/uploads/') . '/' . imageName($getPostsBlogsDatum->image, '-cropped') }}">
                                         @else
                                             <img height="55" width="85" alt=""
                                                 src="{{ imageName($getPostsBlogsDatum->image) }}">
