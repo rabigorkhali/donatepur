@@ -32,6 +32,8 @@ use Throwable;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Dipesh79\LaravelEsewa\LaravelEsewa;
+use Cixware\Esewa\Client;
+use Cixware\Esewa\Config;
 
 
 class HomeController extends FrontendBaseController
@@ -410,7 +412,8 @@ class HomeController extends FrontendBaseController
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $headers = ['Authorization: Key ' . env('KHALTI_SECRET_KEY')];
+            $headers = ['Authorization: Key ' . getPaymentConfigs('khalti')['private_key']];
+            // $headers = ['Authorization: Key ' . env('KHALTI_SECRET_KEY')];
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             // Response
             $response = curl_exec($ch);
@@ -537,24 +540,21 @@ class HomeController extends FrontendBaseController
 
     public function esewaPaymentInitiateV2(Request $request)
     {
-            $amount=trim($request->get('amount'));
-            $pid=trim($request->get('pid'));
-            // dump($amount);
-            // dd($request->all());
-        //Store payment details in DB with pending status
+        $amount = trim($request->get('amount'));
+        $pid = trim($request->get('pid'));
+        $campaign = trim($request->get('campaign_id'));
         session(['esewaDonateformData' => $request->all()]);
-        // dd(session('esewaDonateformData'));
-        $payment = new LaravelEsewa();
-        $amount = $amount;
-        $order_id = $pid; //Your Unique Order Id
-        $tax_amount = 0; //Tax Amount. If there is not tax amount then keep it 0
-        $service_charge = 0; // Serivce Charge. If there is no service charge then keep it 0
-        $delivery_charge = 0; // Delivery Charge. If there is no delivery charge then keep it 0.
-        $su = route('esewaSuccess');
-        $fu = route('esewaFailure');
-        // dd($fu);
-        return redirect($payment->esewaCheckout($amount, $tax_amount, $service_charge, $delivery_charge, $order_id, $su, $fu));       
- }
+        $successUrl = route('esewaSuccess');
+        $failureUrl = route('esewaFailure') . '?campaign=' . $campaign;
+        if (setting('site.is_dev_or_live') == 'dev') {
+            $config = new Config($successUrl, $failureUrl);
+        } else {
+            $config = new Config($successUrl, $failureUrl, getPaymentConfigs('esewa')['public_key']);
+        }
+        $esewa = new Client($config);
+        // $esewa->process('P101W20dfdf1', 100, 15, 80, 50);
+        $esewa->process($pid, $amount, 0, 0, 0);
+    }
 
     public function esewaPaymentSuccess(Request $request)
     {
@@ -604,8 +604,8 @@ class HomeController extends FrontendBaseController
                 'scd' => 'EPAYTEST'
             ];
 
-            // $url = getPaymentConfigs('esewa')['callback_url'] ?? '';
-             $url = "https://uat.esewa.com.np/epay/transrec";
+            $url = getPaymentConfigs('esewa')['callback_url'] ?? '';
+            // $url = "https://uat.esewa.com.np/epay/transrec";
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $dataSuccessResponseFromEsewa);

@@ -200,7 +200,7 @@
                                         <div class="col-sm-12 @if ($errors->first('fullname') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Full Name</strong><span class="text-danger">*</span></label>
-                                                <input onkeyup="esewaDataMapping()" onchange="esewaDataMapping()"
+                                                <input 
                                                     id="esewaFullname" required type="text" maxlength="100"
                                                     name="fullname" min="7"
                                                     value="{{ old('fullname') ?? Auth::guard('frontend_users')->user()?->full_name }}"
@@ -215,7 +215,7 @@
                                         <div class="col-sm-12  @if ($errors->first('mobile_number') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Mobile Number</strong><span class="text-danger">*</span></label>
-                                                <input onkeyup="esewaDataMapping()" onchange="esewaDataMapping()" required
+                                                <input  required
                                                     id="esewaMobileNumber" type="text" maxlength="15" minlength="10"
                                                     name="mobile_number"
                                                     value="{{ old('mobile_number') ?? Auth::guard('frontend_users')->user()?->mobile_number }}"
@@ -230,7 +230,7 @@
                                         <div class="col-sm-12 @if ($errors->first('country')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Country</strong><span class="text-danger">*</span></label>
-                                                <select onkeyup="esewaDataMapping()" onchange="esewaDataMapping()"
+                                                <select 
                                                     id="esewaCountry" required name="country" class="form-control">
                                                     @foreach ($countries as $keyCountries => $datumCountries)
                                                         <option
@@ -251,7 +251,7 @@
                                         <div class="col-sm-12 @if ($errors->first('address') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Address</strong><span class="text-danger">*</span></label>
-                                                <input onkeyup="esewaDataMapping()" onchange="esewaDataMapping()" required
+                                                <input  required
                                                     id="esewaAddress" type="text" maxlength="100"
                                                     value="{{ old('address') ?? Auth::guard('frontend_users')->user()?->address }}"
                                                     name="address" placeholder="Tinkune-7,Kathmandu"
@@ -267,7 +267,7 @@
                                         <div class="col-sm-12 @if ($errors->first('email') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Email</strong><span class="text-danger">*</span></label>
-                                                <input onkeyup="esewaDataMapping()" onchange="esewaDataMapping()" required
+                                                <input  required
                                                     id="esewaEmail" required type="email"
                                                     value="{{ old('email') ?? Auth::guard('frontend_users')->user()?->email }}"
                                                     name="email" placeholder="example@example.com"
@@ -282,7 +282,7 @@
                                         <div class="col-sm-12 @if ($errors->first('amount') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Amount (Rs.)</strong><span class="text-danger">*</span></label>
-                                                <input onkeyup="esewaDataMapping()" required onchange="esewaDataMapping()"
+                                                <input onkeyup="" required onchange=""
                                                     id="esewaDonationAmount" type="number" min="10"
                                                     max="100000" value="{{ old('amount') }}" placeholder="1000"
                                                     name="amount" class="form-control">
@@ -296,7 +296,7 @@
                                         <div class="col-sm-12 @if ($errors->first('description') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Description</strong><span class="text-danger">*</span></label>
-                                                <textarea required minlength="15" maxlength="100" onkeyup="esewaDataMapping()" onchange="esewaDataMapping()"
+                                                <textarea required minlength="15" maxlength="100" 
                                                     rows="6" id="esewaDescription" name="description" class="form-control" value="description"
                                                     placeholder="Description">{{ old('description') }}</textarea>
                                                 @if ($errors->first('description') && old('payment_gateway_dynamic') == 'esewa')
