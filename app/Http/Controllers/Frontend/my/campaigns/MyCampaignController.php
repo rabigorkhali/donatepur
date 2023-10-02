@@ -98,7 +98,7 @@ class MyCampaignController extends Controller
                     priceToNprFormat($datumCampaign->goal_amount),
                     priceToNprFormat($datumCampaign->total_collection),
                     ($datumCampaign->status) ? 'Active' : 'Inactive',
-                    '<nobr>' . $btnEdit . $btnDelete . $btnDetails . $btnViewInSite.'</nobr>'
+                    '<nobr>' . $btnEdit . $btnDelete . $btnDetails . $btnViewInSite . '</nobr>'
                 ];
                 $sn = $sn + 1;
                 array_push($campaignList, $thisArray);
@@ -146,7 +146,7 @@ class MyCampaignController extends Controller
         try {
             $data = $request->only('title', 'goal_amount', 'start_date', 'end_date', 'campaign_category_id', 'address', 'country', 'video_url', 'status', 'description');
             if ($request->file('cover_image')) {
-                $data['cover_image'] = $this->dirforDb . $this->uploadImage($this->dir, 'cover_image', true, 1280, null);
+                $data['cover_image'] = $this->dirforDb . $this->uploadImageForCampaign($this->dir, 'cover_image', true, 1280, null);
             }
             $slug = replaceSpacesWithDash(strtolower($request->get('title')));
             $data['public_user_id'] = $request->user->id;
@@ -166,6 +166,7 @@ class MyCampaignController extends Controller
             return redirect('/my/campaigns');
         } catch (Throwable $th) {
             DB::rollback();
+            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
@@ -180,8 +181,6 @@ class MyCampaignController extends Controller
         /* TEST CASES */
         $campaignId = $request->get('id');
         $campaign = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
-        if ($campaign->cover_image) $this->removeImage($this->mainDirectory, $campaign->cover_image);
-
         if (!$campaign) {
             Session::flash('error', 'Campaign not found.');
             return redirect()->back();
@@ -190,7 +189,7 @@ class MyCampaignController extends Controller
             Session::flash('error', 'Only campaigns with a pending status can be deleted.');
             return redirect()->back();
         }
-        if ($campaign->cover_image) $this->removeImage($this->mainDirectory, $campaign->cover_image);
+        if ($campaign->cover_image) $this->removeImageCampaign($this->mainDirectory, $campaign->cover_image);
         Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->delete();
         Session::flash('success', 'Campaign deleted successfully.');
         return redirect()->back();
@@ -202,11 +201,11 @@ class MyCampaignController extends Controller
         $data['campaignDetail'] = $campaignDetails;
         if (!$campaignDetails) {
             Session::flash('error', 'Bad request.');
-            return redirect()->back();
+            return redirect()->route('my.campaigns.list');
         }
         if (strtolower($campaignDetails->campaign_status) !== 'pending') {
-            Session::flash('error', 'Only pending campaign can be edited.');
-            return redirect()->back();
+            Session::flash('error', 'Only pending campaigns can be edited.');
+            return redirect()->route('my.campaigns.list');
         }
         $data['campaignCategories'] = CampaignCategory::where('status', 1)->orderby('title', 'asc')->get();
         return view('frontend.my.campaigns.edit', $data);
@@ -223,7 +222,7 @@ class MyCampaignController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|min:10',
             'goal_amount' => 'required|numeric|min:1000|max:10000000',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
@@ -232,7 +231,7 @@ class MyCampaignController extends Controller
             'country' => 'required|string|max:255',
             'video_url' => 'nullable|url|max:500',
             'status' => 'required|in:1,0',
-            'cover_image' => 'image|min:100|max:20480', // Max file size set to 2MB (2048 kilobytes)
+            'cover_image' => 'image|min:50|max:20480', // Max file size set to 2MB (2048 kilobytes)
             'description' => 'required|string|min:100|max:20000',
         ]);
         if ($validator->fails()) {
@@ -243,16 +242,16 @@ class MyCampaignController extends Controller
             $campaign = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
             if (!$campaign) {
                 Session::flash('error', 'Campaign not found.');
-                return redirect()->back();
+                return redirect()->route('my.campaigns.list');
             }
             if (strtolower($campaign->campaign_status) !== 'pending') {
                 Session::flash('error', 'Only pending campaign can be updated.');
-                return redirect()->back();
+                return redirect()->route('my.campaigns.list');
             }
             $data = $request->only('title', 'goal_amount', 'start_date', 'end_date', 'campaign_category_id', 'address', 'country', 'video_url', 'status', 'description');
             if ($request->file('cover_image')) {
-                if ($campaign->cover_image) $this->removeImage($this->mainDirectory, $request->cover_image);
-                $data['cover_image'] = $this->dirforDb . $this->uploadImage($this->dir, 'cover_image', true, 1280, null);
+                if ($campaign->cover_image) $this->removeImageCampaign($this->mainDirectory, $campaign->cover_image);
+                $data['cover_image'] = $this->dirforDb . $this->uploadImageForCampaign($this->dir, 'cover_image', false, 1280, null);
             }
             $slug = replaceSpacesWithDash(strtolower($request->get('title')));
             $slugExists = Campaign::where('slug', $slug)->count();
@@ -263,7 +262,7 @@ class MyCampaignController extends Controller
             }
             Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->update($data);
             Session::flash('success', 'Success! Data saved successfully.');
-            return redirect()->back()->withInput();
+            return redirect()->route('my.campaigns.list')->withInput();
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
