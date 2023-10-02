@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Session;
 use Throwable;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Dipesh79\LaravelEsewa\LaravelEsewa;
 
 
 class HomeController extends FrontendBaseController
@@ -96,7 +97,7 @@ class HomeController extends FrontendBaseController
             $data['total_campaign'] = $this->campaigns->where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->count();
             $data['total_collection'] = CampaignView::where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->sum('summary_total_collection');
             $totalDonars = $this->donation->wherein('payment_status', ['completed'])->distinct('giver_public_user_id')->count();
-            $data['total_donars'] = $totalDonars + $this->donation->wherein('payment_status', ['completed','successful'])->where('is_verified', 1)->where('giver_public_user_id', null)->count();
+            $data['total_donars'] = $totalDonars + $this->donation->wherein('payment_status', ['completed', 'successful'])->where('is_verified', 1)->where('giver_public_user_id', null)->count();
             $data['total_public_users'] = PublicUser::where('status', 1)->count();
             $donationRaw = $this->donation->with('giver')->wherein('payment_status', ['completed'])->where('is_verified', 1)->orderby('amount')->get();
             $topDonorsList = [];
@@ -212,7 +213,7 @@ class HomeController extends FrontendBaseController
     public function contactUsCreate(Request $request)
     {
         try {
-            $data = $request->except('_token','honeypot');
+            $data = $request->except('_token', 'honeypot');
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'phone' => 'required|string|max:15',
@@ -402,7 +403,7 @@ class HomeController extends FrontendBaseController
                 'token' => $request->input('trans_token'),
                 'amount' => $request->input('amount')
             ));
-            $url = getPaymentConfigs('khalti')['initiation_url']??'';
+            $url = getPaymentConfigs('khalti')['initiation_url'] ?? '';
             # Make the call using API.
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -534,6 +535,27 @@ class HomeController extends FrontendBaseController
     //     }
     // }
 
+    public function esewaPaymentInitiateV2(Request $request)
+    {
+            $amount=trim($request->get('amount'));
+            $pid=trim($request->get('pid'));
+            // dump($amount);
+            // dd($request->all());
+        //Store payment details in DB with pending status
+        session(['esewaDonateformData' => $request->all()]);
+        // dd(session('esewaDonateformData'));
+        $payment = new LaravelEsewa();
+        $amount = $amount;
+        $order_id = $pid; //Your Unique Order Id
+        $tax_amount = 0; //Tax Amount. If there is not tax amount then keep it 0
+        $service_charge = 0; // Serivce Charge. If there is no service charge then keep it 0
+        $delivery_charge = 0; // Delivery Charge. If there is no delivery charge then keep it 0.
+        $su = route('esewaSuccess');
+        $fu = route('esewaFailure');
+        // dd($fu);
+        return redirect($payment->esewaCheckout($amount, $tax_amount, $service_charge, $delivery_charge, $order_id, $su, $fu));       
+ }
+
     public function esewaPaymentSuccess(Request $request)
     {
         try {
@@ -543,12 +565,12 @@ class HomeController extends FrontendBaseController
                 Session::flash('error', 'Error! Bad Request.');
                 return redirect()->back();
             }
-            $formDataArray = session('esewaDonateformData')['data'];
+            $formDataArray = session('esewaDonateformData');
             /* validation */
             $paymentGateWayDetails = PaymentGateway::where('slug', 'esewa')->where('status', 1)->first();
-            $campaignDetails = CampaignView::where('status', 1)->where('id', $formDataArray['campaign'])->where('campaign_status', 'running')->first();
+            $campaignDetails = CampaignView::where('status', 1)->where('id', $formDataArray['campaign_id'])->where('campaign_status', 'running')->first();
             if (!$campaignDetails) {
-                Session::flash('error', 'Campaign not found.');
+                Session::flash('error', 'This campaign cannot accept donation.');
                 return redirect()->back();
             }
 
@@ -582,8 +604,8 @@ class HomeController extends FrontendBaseController
                 'scd' => 'EPAYTEST'
             ];
 
-            $url = getPaymentConfigs('esewa')['callback_url']??'';
-            // $url = "https://uat.esewa.com.np/epay/transrec";
+            // $url = getPaymentConfigs('esewa')['callback_url'] ?? '';
+             $url = "https://uat.esewa.com.np/epay/transrec";
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $dataSuccessResponseFromEsewa);

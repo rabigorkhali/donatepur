@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Console\\Commands\\syncExpiredCampaigns' => $baseDir . '/app/Console/Commands/syncExpiredCampaigns.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => $baseDir . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
@@ -289,6 +290,8 @@ return array(
     'Dflydev\\DotAccessData\\Exception\\InvalidPathException' => $vendorDir . '/dflydev/dot-access-data/src/Exception/InvalidPathException.php',
     'Dflydev\\DotAccessData\\Exception\\MissingPathException' => $vendorDir . '/dflydev/dot-access-data/src/Exception/MissingPathException.php',
     'Dflydev\\DotAccessData\\Util' => $vendorDir . '/dflydev/dot-access-data/src/Util.php',
+    'Dipesh79\\LaravelEsewa\\EsewaServiceProvider' => $vendorDir . '/dipesh79/laravel-esewa/src/EsewaServiceProvider.php',
+    'Dipesh79\\LaravelEsewa\\LaravelEsewa' => $vendorDir . '/dipesh79/laravel-esewa/src/LaravelEsewa.php',
     'Doctrine\\Common\\Cache\\Cache' => $vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache/Cache.php',
     'Doctrine\\Common\\Cache\\CacheProvider' => $vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache/CacheProvider.php',
     'Doctrine\\Common\\Cache\\ClearableCache' => $vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache/ClearableCache.php',

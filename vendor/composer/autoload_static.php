@@ -171,6 +171,7 @@ class ComposerStaticInit52a4671ef6d975bc7f4bf439c915bf7c
             'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\' => 16,
+            'Dipesh79\\LaravelEsewa\\' => 22,
             'Dflydev\\DotAccessData\\' => 22,
             'DeepCopy\\' => 9,
             'Database\\Seeders\\' => 17,
@@ -544,6 +545,10 @@ class ComposerStaticInit52a4671ef6d975bc7f4bf439c915bf7c
         array (
             0 => __DIR__ . '/..' . '/doctrine/event-manager/src',
         ),
+        'Dipesh79\\LaravelEsewa\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dipesh79/laravel-esewa/src',
+        ),
         'Dflydev\\DotAccessData\\' => 
         array (
             0 => __DIR__ . '/..' . '/dflydev/dot-access-data/src',
@@ -596,6 +601,7 @@ class ComposerStaticInit52a4671ef6d975bc7f4bf439c915bf7c
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\syncExpiredCampaigns' => __DIR__ . '/../..' . '/app/Console/Commands/syncExpiredCampaigns.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
@@ -879,6 +885,8 @@ class ComposerStaticInit52a4671ef6d975bc7f4bf439c915bf7c
         'Dflydev\\DotAccessData\\Exception\\InvalidPathException' => __DIR__ . '/..' . '/dflydev/dot-access-data/src/Exception/InvalidPathException.php',
         'Dflydev\\DotAccessData\\Exception\\MissingPathException' => __DIR__ . '/..' . '/dflydev/dot-access-data/src/Exception/MissingPathException.php',
         'Dflydev\\DotAccessData\\Util' => __DIR__ . '/..' . '/dflydev/dot-access-data/src/Util.php',
+        'Dipesh79\\LaravelEsewa\\EsewaServiceProvider' => __DIR__ . '/..' . '/dipesh79/laravel-esewa/src/EsewaServiceProvider.php',
+        'Dipesh79\\LaravelEsewa\\LaravelEsewa' => __DIR__ . '/..' . '/dipesh79/laravel-esewa/src/LaravelEsewa.php',
         'Doctrine\\Common\\Cache\\Cache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Cache.php',
         'Doctrine\\Common\\Cache\\CacheProvider' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/CacheProvider.php',
         'Doctrine\\Common\\Cache\\ClearableCache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/ClearableCache.php',

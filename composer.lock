@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "24e6182d0fbf7dacc9e92bbc2be56b80",
+    "content-hash": "c9d759c7fe573c00fc0d3a9e0c0909ea",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -244,6 +244,52 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.2"
             },
             "time": "2022-10-27T11:44:00+00:00"
+        },
+        {
+            "name": "dipesh79/laravel-esewa",
+            "version": "v1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Dipesh79/LaravelEsewa.git",
+                "reference": "c424044f607278bddbb1f4745b8b1b30ef6a3f3f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Dipesh79/LaravelEsewa/zipball/c424044f607278bddbb1f4745b8b1b30ef6a3f3f",
+                "reference": "c424044f607278bddbb1f4745b8b1b30ef6a3f3f",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Dipesh79\\LaravelEsewa\\EsewaServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Dipesh79\\LaravelEsewa\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dipesh79",
+                    "email": "dipeshkhanal79@gmail.com",
+                    "homepage": "https://www.khanaldipesh.com.np",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel Esewa - A simple laravel package to integrate esewa payment.",
+            "support": {
+                "issues": "https://github.com/Dipesh79/LaravelEsewa/issues",
+                "source": "https://github.com/Dipesh79/LaravelEsewa/tree/v1"
+            },
+            "time": "2022-12-11T06:08:52+00:00"
         },
         {
             "name": "doctrine/cache",

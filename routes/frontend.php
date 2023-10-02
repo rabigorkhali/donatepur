@@ -27,5 +27,6 @@ Route::post('/donation', [HomeController::class, 'getDonation'])->name('getDonat
 Route::get('/esewa/payment', [HomeController::class, 'esewaPayment'])->name('esewaPayment');
 Route::get('/esewa/success', [HomeController::class, 'esewaPaymentSuccess'])->name('esewaSuccess');
 Route::get('/esewa/failure', [HomeController::class, 'esewaPaymentFailure'])->name('esewaFailure');
+Route::post('/esewa/payment/v2', [HomeController::class, 'esewaPaymentInitiateV2'])->name('esewaPaymentInitiateV2');
 
 Route::post('/set-session/{sessionName}', [HomeController::class, 'setSession'])->name('setSession');

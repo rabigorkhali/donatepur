@@ -170,10 +170,10 @@
                                 </div>
                                 {{-- ONLY FOR ESEWA --}}
 
-                                <form id="esewaDonateForm" class="esewa-donate-form d-none"
-                                    action="{{getPaymentConfigs('esewa')['initiation_url']??''}}" method="POST">
-                                    {{-- action="https://uat.esewa.com.np/epay/main" method="POST"> --}}
-                                    @csrf
+        
+
+                                <form id="esewaDonateFormWithCustomFields" class="esewa-donate-form d-none"
+                                    method="POST" action="{{route('esewaPaymentInitiateV2')}}">
                                     {{-- ESEWA DWFAULT --}}
                                     <input value="0" name="tAmt" id="esewaTotalAmount" type="hidden">
                                     <input value="0" name="amt" id="esewaAmount" type="hidden">
@@ -190,10 +190,6 @@
                                         id="esewaFailureUrl" type="hidden" name="fu">
                                     {{-- END ESEWA DEFAULT --}}
 
-                                </form>
-
-                                <form id="esewaDonateFormWithCustomFields" class="esewa-donate-form d-none"
-                                    method="POST" action="#">
                                     <input type="hidden" value="esewa" name="payment_gateway_dynamic">
                                     @csrf
                                     <input value="{{ $campaignDetails->id }}" name="campaign_id" type="hidden">
@@ -313,10 +309,8 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
 
-                                                <a class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
-                                                    data-loading-text="Please wait..." id="esewaDonateBtn">Donate
-                                                    with
-                                                    Esewa</a>
+                                                <button type="submit" class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
+                                                    data-loading-text="Please wait..." id="esewaDonateBtn">Donate with Esewa</button>
 
                                             </div>
                                         </div>
@@ -747,136 +741,6 @@
             });
         </script>
         {{-- BANK OFFLINE --}}
-
-        {{-- ESEWA --}}
-        <script>
-            function setSession() {
-                let url = "{{ url('/set-session/') . '/esewaDonateformData' }}";
-                var postData = {
-                    data: esewaDataMappingWithourSessionSet(),
-                    _token: "{{ csrf_token() }}"
-                };
-                $.ajax({
-                    url: url,
-                    method: "POST",
-                    data: JSON.stringify(postData),
-                    contentType: "application/json",
-                    success: function(data) {
-                        console.log(data);
-                    },
-                    error: function(xhr, status, error) {
-                        console.log("An error occurred: " + error);
-                    }
-                });
-            }
-
-            function esewaDataMapping() {
-
-                let esewaFormData = {
-                    campaign: "{{ $campaignDetails->id }}",
-                    fullname: $('#esewaFullname').val().trim(),
-                    mobile_number: $('#esewaMobileNumber').val().trim(),
-                    country: $('#esewaCountry').val().trim(),
-                    address: $('#esewaAddress').val().trim(),
-                    email: $('#esewaEmail').val().trim(),
-                    amount: $('#esewaDonationAmount').val().trim(),
-                    description: $('#esewaDescription').val().trim(),
-
-                    /* esewa basic */
-                    tAmt: $('#esewaTotalAmount').val().trim(),
-                    amt: $('#esewaAmount').val().trim(),
-                    txAmt: $('#esewaTaxAmount').val().trim(),
-                    psc: $('#esewaProductServiceCharge').val().trim(),
-                    pdc: $('#esewaProductDeliveryCharge').val().trim(),
-                    scd: $('#esewaMerchantSecretCode').val().trim(),
-                    pid: $('#esewaUniqueProductKey').val().trim(),
-
-                    /* end esewa basic */
-                };
-                let amount = $('#esewaDonationAmount').val();
-                $('#esewaTotalAmount').val(amount);
-                $('#esewaAmount').val(amount);
-
-                setSession();
-                return esewaFormData;
-                // let esewaQueryString = $.param(esewaFormData);
-                // let esewaPaymentUrl = "https://uat.esewa.com.np/epay/transrec?q=su";
-                // esewaPaymentUrl = esewaPaymentUrl + "&" + esewaQueryString;
-                // let esewaSuccessUrl = "{{ route('esewaSuccess') }}" + "?q=su&" + esewaQueryString;
-                // // $('#esewaDonateForm').attr('action', esewaPaymentUrl);
-                // $('#esewaSuccessUrl').attr('value', esewaSuccessUrl);
-            }
-
-            function esewaDataMappingWithourSessionSet() {
-
-                let esewaFormData = {
-                    campaign: "{{ $campaignDetails->id }}",
-                    fullname: $('#esewaFullname').val().trim(),
-                    mobile_number: $('#esewaMobileNumber').val().trim(),
-                    country: $('#esewaCountry').val().trim(),
-                    address: $('#esewaAddress').val().trim(),
-                    email: $('#esewaEmail').val().trim(),
-                    amount: $('#esewaDonationAmount').val().trim(),
-                    description: $('#esewaDescription').val().trim(),
-
-                    /* esewa basic */
-                    tAmt: $('#esewaTotalAmount').val().trim(),
-                    amt: $('#esewaAmount').val().trim(),
-                    txAmt: $('#esewaTaxAmount').val().trim(),
-                    psc: $('#esewaProductServiceCharge').val().trim(),
-                    pdc: $('#esewaProductDeliveryCharge').val().trim(),
-                    scd: $('#esewaMerchantSecretCode').val().trim(),
-                    pid: $('#esewaUniqueProductKey').val().trim(),
-
-                    /* end esewa basic */
-                };
-                let amount = $('#esewaDonationAmount').val();
-                $('#esewaTotalAmount').val(amount);
-                $('#esewaAmount').val(amount);
-
-                return esewaFormData;
-            }
-
-
-
-            /* check validation */
-            $("#esewaDonateBtn").click(function() {
-                const esewaDonateForm = document.getElementById("esewaDonateForm");
-                const esewaDonateFormWithCustomFields = document.getElementById("esewaDonateFormWithCustomFields");
-                let showEsewaForm = true;
-                if (!esewaDonateForm.checkValidity()) {
-                    // Display validation messages
-                    for (const element of esewaDonateForm.elements) {
-                        if (element.tagName === "INPUT" && !element.validity.valid) {
-                            showEsewaForm = false;
-                            element.reportValidity();
-                        }
-                        if (element.tagName === "TEXTAREA" && !element.validity.valid) {
-                            showEsewaForm = false;
-                            element.reportValidity();
-                        }
-                    }
-                }
-
-                if (!esewaDonateFormWithCustomFields.checkValidity()) {
-                    // Display validation messages
-                    for (const element of esewaDonateFormWithCustomFields.elements) {
-                        if (element.tagName === "INPUT" && !element.validity.valid) {
-                            element.reportValidity();
-                        }
-                        if (element.tagName === "TEXTAREA" && !element.validity.valid) {
-                            element.reportValidity();
-                        }
-                    }
-                }
-                /* end check validation */
-                if (esewaDonateForm.checkValidity() && esewaDonateFormWithCustomFields.checkValidity()) {
-                    $("#preloader").show();
-                    $('#esewaDonateForm').submit();
-                }
-            });
-        </script>
-        {{-- END ESEWA --}}
 
         {{-- FOR KHALTI --}}
         <script>
