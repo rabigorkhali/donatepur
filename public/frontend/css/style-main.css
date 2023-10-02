@@ -1793,7 +1793,7 @@ section > .container-fluid {
   padding: 0;
 }
 .header-nav.navbar-transparent.animated-active {
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(255, 255, 255, 0.6);
 }
 /*
  * nav.less
@@ -1937,7 +1937,7 @@ section > .container-fluid {
   border-bottom: 1px solid #eee;
 }
 .header-nav.navbar-transparent.animated-active {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.6);
 }
 .header-nav.navbar-transparent.animated-active .header-nav-wrapper {
   border-bottom: none !important;
