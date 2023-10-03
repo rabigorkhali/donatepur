@@ -132,7 +132,7 @@
                 @endif
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6 mb-2">
                 @php $formInputName='profile_picture'; @endphp
                 <x-adminlte-input name="{{ $formInputName }}" type='file' accept="image/*" class="  " value=""
                     fgroup-class="" />
@@ -146,7 +146,7 @@
                     src="{{ asset('public/uploads/' . giveImageName($user->profile_picture, 'medium')) }}" height="50">
                 </a>
             </div>
-            <div class="flex items-center gap-4 mb-2">
+            <div class="flex items-center gap-4 mb-2 mt-2">
                 <x-adminlte-button label="Primary" type="submit" theme="primary" label="Save" icon="fas fa-save" />
             </div>
         </div>

@@ -68,10 +68,13 @@
 
         {{-- Card Box --}}
         <div class="row">
-            <div class="col-sm-3">
-            </div> <!-- This adds a gap of col-sm-3 -->
 
-            <div class="col-sm-6">
+            <div class="col-sm-12 col-md-12 btn btn-block btn-flat ">
+                <a href="{{ url('/') }}"><img src="{{ asset('/public/uploads') . '/' . imageName(setting('site.logo')) }}"
+                        height="100">
+                </a>
+            </div>
+            <div class="col-sm-12 col-md-12 ">
                 <a href="{{ url('/') }}" class="btn btn-block btn-flat btn-secondary mb-2 mt-4">
                     <span class="fas fa-globe"></span>
                     Visit Homepage
