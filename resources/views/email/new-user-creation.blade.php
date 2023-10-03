@@ -342,12 +342,12 @@
                                                                         style="font-size: 12px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; mso-line-height-alt: 21.6px; color: #848484; line-height: 1.8;">
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 25.2px;">
-                                                                            <span style="font-size:14px;">Welcome! "{{$full_name}}",
+                                                                            <span style="font-size:14px;">Welcome!
+                                                                                "{{ $full_name ?? 'N/A' }}",
                                                                                 We're thrilled to have you join our
                                                                                 mission of making a meaningful impact on
-                                                                                the lives of others. Thank you!. <br>
-                                                                                Regards,<br>
-                                                                                Donatepur - The Place of Hopes.
+                                                                                the lives of others.<br> Thank you!.
+                                                                                <br>
                                                                             </span>
                                                                         </p>
                                                                     </div>
@@ -365,7 +365,7 @@
                                                             <td class="pad">
                                                                 <div align="center" class="alignment">
                                                                     <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="www.example.com" style="height:44px;width:160px;v-text-anchor:middle;" arcsize="10%" strokeweight="0.75pt" strokecolor="#101" fillcolor="#101"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:16px"><![endif]--><a
-                                                                        href="{{ route('public.user.verify.email', [$email_verify_token, $email]) }}"
+                                                                        href="{{ route('public.user.verify.email', [$email_verify_token ?? '', $email ?? '']) }}"
                                                                         style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#101;border-radius:4px;width:auto;border-top:1px solid #101;font-weight:undefined;border-right:1px solid #101;border-bottom:1px solid #101;border-left:1px solid #101;padding-top:5px;padding-bottom:5px;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;"
                                                                         target="_blank"><span
                                                                             style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span
@@ -374,11 +374,29 @@
                                                                             </span></span></a>
                                                                     <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
                                                                 </div>
+                                                                <div style="font-family: sans-serif">
+                                                                    <div class=""
+                                                                        style="font-size: 12px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; mso-line-height-alt: 21.6px; color: #848484; line-height: 1.8;">
+                                                                        <p
+                                                                            style="margin: 10; font-size: 14px; text-align: center; mso-line-height-alt: 25.2px;">
+                                                                            <span style="font-size:14px;">
+                                                                                {{ setting('site.site_email') }},{{ setting('site.mobile_number') }}<br>
+                                                                                {{ setting('site.site_address') }}<br>
+                                                                                {{ setting('site.copy_right_footer_text') }}
+                                                                            </span>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
                                                             </td>
                                                         </tr>
+
                                                     </table>
+
                                                     <div class="spacer_block block-4"
-                                                        style="height:20px;line-height:20px;font-size:1px;"> </div>
+                                                        style="height:20px;line-height:20px;font-size:1px;">
+
+
+                                                    </div>
                                                 </td>
                                                 <td class="column column-3"
                                                     style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;"
@@ -414,14 +432,18 @@
                                                         <tr>
                                                             <td class="pad"
                                                                 style="width:100%;padding-right:0px;padding-left:0px;">
+
                                                                 <div align="center" class="alignment"
                                                                     style="line-height:10px"><img
                                                                         alt="Bottom round corners" class="big"
                                                                         src="{{ asset('/public/uploads/static-images/images/round_corner_bottom.png') }}"
                                                                         style="display: block; height: auto; border: 0; width: 680px; max-width: 100%;"
                                                                         title="Bottom round corners" width="680" />
+
                                                                 </div>
+
                                                             </td>
+
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -603,6 +625,8 @@
             </tr>
         </tbody>
     </table><!-- End -->
+
+
 </body>
 
 </html>

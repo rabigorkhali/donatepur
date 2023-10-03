@@ -379,6 +379,19 @@
                                                     </table>
                                                     <div class="spacer_block block-4"
                                                         style="height:20px;line-height:20px;font-size:1px;"> </div>
+                                                        <div style="font-family: sans-serif">
+                                                            <div class=""
+                                                                style="font-size: 12px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; mso-line-height-alt: 21.6px; color: #848484; line-height: 1.8;">
+                                                                <p
+                                                                    style="margin: 10; font-size: 14px; text-align: center; mso-line-height-alt: 25.2px;">
+                                                                    <span style="font-size:14px;">
+                                                                        {{ setting('site.site_email') }},{{ setting('site.mobile_number') }}<br>
+                                                                        {{ setting('site.site_address') }}<br>
+                                                                        {{ setting('site.copy_right_footer_text') }}
+                                                                    </span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                 </td>
                                                 <td class="column column-3"
                                                     style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;"

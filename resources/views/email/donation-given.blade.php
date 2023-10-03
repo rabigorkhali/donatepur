@@ -350,14 +350,12 @@
                                                                                 campaign has been delivered.
                                                                                 Thank you for your generous donation!
                                                                                 Your kindness and support make a
-                                                                                positive impact on our mission. May god bless you.
-                                                                                
+                                                                                positive impact on our mission. <br> May
+                                                                                god bless you.
+
                                                                                 <br>
-                                                                                If you have any queries,
-                                                                                please reach us via
-                                                                                Email:{{ setting('site.site_email') }}
-                                                                                <br>
-                                                                                Contact:{{ setting('site.mobile_number') }}</span>
+                                                                            </span>
+                                                                        
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -385,6 +383,19 @@
                                                             </td>
                                                         </tr>
                                                     </table>
+                                                    <div style="font-family: sans-serif">
+                                                        <div class=""
+                                                            style="font-size: 12px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; mso-line-height-alt: 21.6px; color: #848484; line-height: 1.8;">
+                                                            <p
+                                                                style="margin: 10; font-size: 14px; text-align: center; mso-line-height-alt: 25.2px;">
+                                                                <span style="font-size:14px;">
+                                                                    {{ setting('site.site_email') }},{{ setting('site.mobile_number') }}<br>
+                                                                    {{ setting('site.site_address') }}<br>
+                                                                    {{ setting('site.copy_right_footer_text') }}
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                     <div class="spacer_block block-4"
                                                         style="height:20px;line-height:20px;font-size:1px;"> </div>
                                                 </td>
