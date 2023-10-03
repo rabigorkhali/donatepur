@@ -69,7 +69,7 @@
 
             <div class="col-md-6 bank" class="bank">
                 @php $formInputName='bank_name'; @endphp
-                <x-adminlte-input pattern=".{0,100}" title="Please enter a value below 100 characters"
+                <x-adminlte-input required pattern=".{0,100}" title="Please enter a value below 100 characters"
                     name="{{ $formInputName }}" value="{{ old($formInputName) }}" placeholder="Bank Name" fgroup-class=" "
                     class="bank" />
                 @if ($errors->has($formInputName))
@@ -81,7 +81,7 @@
 
             <div class="col-md-6 bank">
                 @php $formInputName='bank_address'; @endphp
-                <x-adminlte-input pattern=".{0,100}" class="bank" title="Please enter a value below 100 characters"
+                <x-adminlte-input required pattern=".{0,100}" class="bank" title="Please enter a value below 100 characters"
                     name="{{ $formInputName }}" value="{{ old($formInputName) }}" placeholder="Bank Address"
                     fgroup-class=" " />
                 @if ($errors->has($formInputName))
@@ -93,7 +93,7 @@
 
             <div class="col-md-6 bank">
                 @php $formInputName='bank_account_number'; @endphp
-                <x-adminlte-input pattern=".{0,100}" title="Please enter a value below 100 characters"
+                <x-adminlte-input required pattern=".{0,100}" title="Please enter a value below 100 characters"
                     name="{{ $formInputName }}" value="{{ old($formInputName) }}" placeholder="Bank Acount Number"
                     fgroup-class=" " />
                 @if ($errors->has($formInputName))
@@ -119,7 +119,7 @@
             </div>
             <div class="col-md-12 mt-2">
                 @php $formInputName='detail'; @endphp
-                <x-adminlte-textarea label="Descriptions" maxlength="200" rows="10" label-class="" cols="10"
+                <x-adminlte-textarea required label="Descriptions" maxlength="200" rows="10" label-class="" cols="10"
                     name="{{ $formInputName }}" value="">
                     {{ old($formInputName) }}
                 </x-adminlte-textarea>
@@ -151,8 +151,10 @@
         //     focus: true
         // });
         if ($('#payment_gateway_name').val() == 'Bank') {
+            $('.bank input').attr('required','required');
             $('.bank').show();
         } else {
+            $('.bank input').removeAttr('required');
             $('.bank').hide();
 
         }
@@ -160,8 +162,10 @@
         $('#payment_gateway_name').change(function() {
             let paymentGateWayName = $(this).val();
             if (paymentGateWayName == 'Bank') {
+                $('.bank input').attr('required','required');
                 $('.bank').show();
             } else {
+                $('.bank input').removeAttr('required');
                 $('.bank').hide();
             }
         });
