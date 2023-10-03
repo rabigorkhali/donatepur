@@ -106,10 +106,13 @@ class HomeController extends FrontendBaseController
             foreach ($donationRaw as $donationRawKey => $donationRawDatum) {
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
-
-                if ($donationRawDatum?->giver?->profile_picture) {
+                if ($donationRawDatum->donor_display_image) {
+                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image);
+                }
+                else if ($donationRawDatum?->giver?->profile_picture) {
                     $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
-                } else {
+                }
+                else {
                     $topDonors['profile_pic'] = asset('public/uploads/static-images/images/usernotfound.png');
                 }
 
@@ -348,11 +351,17 @@ class HomeController extends FrontendBaseController
             foreach ($donationRaw as $donationRawKey => $donationRawDatum) {
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
-                if ($donationRawDatum?->giver?->profile_picture) {
+                if ($donationRawDatum->donor_display_image) {
+                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image);
+                }
+                else if ($donationRawDatum?->giver?->profile_picture) {
                     $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
-                } else {
+                }
+                else {
                     $topDonors['profile_pic'] = asset('public/uploads/static-images/images/usernotfound.png');
                 }
+                
+            
                 $topDonors['amount'] = $donationRawDatum->amount;
                 $topDonors['is_anonymous'] = $donationRawDatum->is_anonymous;
                 $topDonors['donation_date'] = $donationRawDatum->created_at->format('Y-M-d');
