@@ -44,6 +44,12 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
 
+        $publicUser = PublicUser::where('email', trim($request->email))->withTrashed()->first();
+        if ($publicUser && $publicUser->deleted_at) {
+            Session::flash('error', 'Your account has been deleted. Please contact our support team for inquiry.');
+            return redirect()->route('login');
+        }
+
         $request->validate([
             'profile_picture' => ['required', 'image', 'max:25000'],
             'full_name' => ['required', 'string', 'max:100'],

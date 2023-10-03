@@ -42,6 +42,10 @@ class PasswordResetLinkController extends Controller
     {
         try {
             $tokenExists = PublicUser::where('email', $email)->first();
+            if ($tokenExists && $tokenExists->deleted_at) {
+                Session::flash('error', 'Your account has been deleted. Please contact our support team for inquiry.');
+                return redirect()->route('login');
+            }
             if ($tokenExists->is_email_verified == 1) {
                 Session::flash('error', 'This email has been already verified.');
                 return redirect()->route('login');
@@ -69,6 +73,11 @@ class PasswordResetLinkController extends Controller
         ]);
         $token = Str::uuid();
         $email = $request->get('email');
+        $publicUser = PublicUser::where('email', trim($request->email))->withTrashed()->first();
+        if ($publicUser && $publicUser->deleted_at) {
+            Session::flash('error', 'Your account has been deleted. Please contact our support team for inquiry.');
+            return redirect()->route('login');
+        }
         $checkPublicUserPassword = PublicUserPasswordReset::where('email', $email)->wheredate('created_at', date('Y-m-d'))->count();
         if ($checkPublicUserPassword > 6) {
             Session::flash('error', 'You have requested more than 5 times. Please try again tomorrow.');
@@ -100,6 +109,12 @@ class PasswordResetLinkController extends Controller
             $email = $request->get('email');
 
             DB::begintransaction();
+            $publicUser = PublicUser::where('email', trim($request->email))->withTrashed()->first();
+            if ($publicUser && $publicUser->deleted_at) {
+                Session::flash('error', 'Your account has been deleted. Please contact our support team for inquiry.');
+                return redirect()->route('login');
+            }
+            
             $checkPublicUserPassword = PublicUserPasswordReset::where('email', $email)->wheredate('created_at', date('Y-m-d'))->count();
             if ($checkPublicUserPassword > 6) {
                 Session::flash('error', 'You have requested more than 5 times. Please try again tomorrow.');
