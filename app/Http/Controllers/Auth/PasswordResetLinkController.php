@@ -114,7 +114,12 @@ class PasswordResetLinkController extends Controller
                 Session::flash('error', 'Your account has been deleted. Please contact our support team for inquiry.');
                 return redirect()->route('login');
             }
-            
+
+            if (!$publicUser) {
+                Session::flash('error', 'Bad request.');
+                return redirect()->route('login');
+            }
+
             $checkPublicUserPassword = PublicUserPasswordReset::where('email', $email)->wheredate('created_at', date('Y-m-d'))->count();
             if ($checkPublicUserPassword > 6) {
                 Session::flash('error', 'You have requested more than 5 times. Please try again tomorrow.');
