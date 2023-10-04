@@ -610,7 +610,7 @@
                             <div class="owl-carousel-6col" data-nav="true">
                                 @foreach ($topDonors as $datumDonors)
                                     <div class="item text-center">
-                                        <img alt="" src="{{ $datumDonors['profile_pic'] }}">
+                                        <img alt="" height="177" src="{{ $datumDonors['profile_pic'] }}">
                                         <div class="donor-details bg-white">
                                             <h4 class="m-0 pt-10 text-theme-colored">
                                                 {{ $datumDonors['name'] ? $datumDonors['name'] : 'Anonymous' }}</h4>
