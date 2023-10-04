@@ -383,8 +383,9 @@ class HomeController extends FrontendBaseController
         try {
             $userCurrent = Auth::guard('frontend_users')->user() ?? null;
             /* validation */
+            $dataRequest=$request->all();
             $paymentGateWayDetails = PaymentGateway::where('slug', 'khalti')->where('status', 1)->first();
-            $campaignDetails = CampaignView::where('status', 1)->first();
+            $campaignDetails = CampaignView::where('status', 1)->where('id', $dataRequest['campaign_id'])->first();
 
             if (!$campaignDetails) {
                 $data['type'] = 'error';
