@@ -98,7 +98,8 @@ class HomeController extends FrontendBaseController
                 ->take(3)->get();
             $data['total_campaign'] = $this->campaigns->where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->count();
             $data['total_collection'] = CampaignView::where('status', true)->wherenotin('campaign_status', ['pending', 'rejected', 'cancelled'])->sum('summary_total_collection');
-            $totalDonars = $this->donation->wherein('payment_status', ['completed'])->distinct('giver_public_user_id')->count();
+            // $totalDonars = $this->donation->wherein('payment_status', ['completed'])->distinct('giver_public_user_id')->count();
+            $totalDonars = $this->donation->wherein('payment_status', ['completed'])->count();
             $data['total_donars'] = $totalDonars + $this->donation->wherein('payment_status', ['completed', 'successful'])->where('is_verified', 1)->where('giver_public_user_id', null)->count();
             $data['total_public_users'] = PublicUser::where('status', 1)->count();
             $donationRaw = $this->donation->with('giver')->wherein('payment_status', ['completed'])->where('is_verified', 1)->orderby('amount')->get();
