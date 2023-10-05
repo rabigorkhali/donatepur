@@ -32,7 +32,7 @@ trait ImageTrait
         $fileName = $fileName . '.' . Request::file($input)->getClientOriginalExtension();
         $image = Image::make(Request::file($input));
         $image->orientate();
-        if ($resize) {
+        if ($resize && $image->width()>$width) {
             $image = $image->resize($width, $height, function ($constraint) {
                 $constraint->aspectRatio();
             });
@@ -75,7 +75,7 @@ trait ImageTrait
         $image = Image::make(Request::file($input));
         $image->orientate();
 
-        if ($resize) {
+        if ($resize && $image->width()>$width) {
             $image = $image->resize($width, $height, function ($constraint) {
                 $constraint->aspectRatio();
             });

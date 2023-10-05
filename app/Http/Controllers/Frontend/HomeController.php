@@ -258,12 +258,12 @@ class HomeController extends FrontendBaseController
             'country' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'address' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:10|max:100000',
+            'amount' => 'required|numeric|min:10|max:1000000',
             'description' => 'required|string|max:500|min:10',
-            'payment_receipt' => 'required|mimes:jpeg,png,pdf|max:2048',
+            'payment_receipt' => 'required|mimes:jpeg,png,pdf|max:4048',
             // 'payment_receipt' => 'required_if:payment_gateway,bank|mimes:jpeg,png,pdf|max:2048',
             // 'payment_gateway' => 'required',
-            'mobile_number' => 'required|string|max:15',
+            'mobile_number' => 'required|string|min:5|max:15',
             'payment_gateway_dynamic' => 'required|string|max:15',
             // 'mobile_number' => 'required_if:payment_gateway,bank|string|max:15',
         ]);
@@ -301,7 +301,7 @@ class HomeController extends FrontendBaseController
             $insertData['is_anonymous'] = 0;
             $insertData['is_verified'] = 0; //by system admin manually
             if ($request->file('payment_receipt')) {
-                $insertData['payment_receipt'] = 'donations/' . $this->uploadImage($this->dir, 'payment_receipt', true, 1280, null);
+                $insertData['payment_receipt'] = 'donations/' . $this->uploadImage($this->dir, 'payment_receipt', true, 700, null);
             }
             $resp = Donation::create($insertData);
 
@@ -330,7 +330,6 @@ class HomeController extends FrontendBaseController
             Session::flash('success', 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.');
             return redirect()->back();
         } catch (Throwable $th) {
-            dd($th);
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->back();
