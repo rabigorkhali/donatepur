@@ -108,7 +108,7 @@ class HomeController extends FrontendBaseController
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
                 if ($donationRawDatum->donor_display_image) {
-                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image,'-cropped');
+                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image,'-medium');
                 }
                 else if ($donationRawDatum?->giver?->profile_picture) {
                     $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
@@ -352,7 +352,7 @@ class HomeController extends FrontendBaseController
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
                 if ($donationRawDatum->donor_display_image) {
-                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image,'-cropped');
+                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image,'-medium');
                 }
                 else if ($donationRawDatum?->giver?->profile_picture) {
                     $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
