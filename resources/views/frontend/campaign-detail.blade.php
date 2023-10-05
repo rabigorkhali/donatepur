@@ -7,7 +7,7 @@
     <div class="main-content">
         <!-- Section: inner-header -->
         <section class="inner-header divider parallax layer-overlay overlay-dark-5" data-stellar-background-ratio="0.5"
-            data-bg-img="{{ asset('/public/uploads') . '/' . imageName($campaignDetails->cover_image,'-banner') }}"
+            data-bg-img="{{ asset('/public/uploads') . '/'  }}"
             style="background-image: url(&quot;images/bg/bg1.jpg&quot;); background-position: 50% 61px;">
             <div class="container pt-100 pb-50">
                 <!-- Section Content -->
@@ -610,7 +610,7 @@
                             <div class="owl-carousel-6col" data-nav="true">
                                 @foreach ($topDonors as $datumDonors)
                                     <div class="item text-center">
-                                        <img alt="" height="177" src="{{ $datumDonors['profile_pic'] }}">
+                                        <img alt="" src="{{ $datumDonors['profile_pic'] }}">
                                         <div class="donor-details bg-white">
                                             <h4 class="m-0 pt-10 text-theme-colored">
                                                 {{ $datumDonors['name'] ? $datumDonors['name'] : 'Anonymous' }}</h4>

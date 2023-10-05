@@ -384,7 +384,7 @@
                         <div class="owl-carousel-6col" data-nav="true">
                             @foreach ($topDonors as $topDonorsKey => $topDonorsDatum)
                                 <div class="item text-center">
-                                    <img alt="{{$topDonorsDatum['name']}}" height="177" src="{{ $topDonorsDatum['profile_pic'] ?? '' }}">
+                                    <img alt="{{$topDonorsDatum['name']}}"  src="{{ $topDonorsDatum['profile_pic'] ?? '' }}">
                                     <div class="donor-details bg-white">
                                         <h4 class="m-0 pt-10 text-theme-colored">{{ $topDonorsDatum['name'] ?? '' }}</h4>
                                         <p class="font-12 pb-10">Donated :

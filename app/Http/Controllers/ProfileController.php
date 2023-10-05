@@ -40,7 +40,7 @@ class ProfileController extends Controller
         $data = $request->except('_token', 'password', 'user', '_method');
         if ($request->file('profile_picture')) {
             if ($userDetails->profile_picture) $this->removeImage($this->mainDirectory, $userDetails->profile_picture);
-            $data['profile_picture'] = $this->dirforDb . $this->uploadImage($this->dir, 'profile_picture', true, 1280, null);
+            $data['profile_picture'] = $this->dirforDb . $this->uploadImage($this->dir, 'profile_picture', true, 640, null);
         }
         PublicUser::where('id', $userDetails->id)->update($data);
         $userDetails->save($data);

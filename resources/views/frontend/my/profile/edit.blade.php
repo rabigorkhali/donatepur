@@ -122,7 +122,7 @@
 
             <div class="col-md-6">
                 @php $formInputName='date_of_birth'; @endphp
-                <x-adminlte-input name="{{ $formInputName }}" type='date' class="  "
+                <x-adminlte-input required name="{{ $formInputName }}" type='date' class="  "
                     value="{{ old($formInputName, $user->$formInputName) }}"
                     fgroup-class="" />
                 @if ($errors->has($formInputName))
