@@ -62,7 +62,7 @@ trait ImageTrait
         return $fileName;
     }
 
-    public function uploadImageForCampaign($dir, $input, $resize = false, $width = '', $height = '')
+    public function uploadImageForCampaign($dir, $input, $resize = false, $width = null, $height = null)
     {
         $directory = public_path() . $dir;
         if (is_dir($directory) != true) \File::makeDirectory($directory, $mode = 0775, true);
@@ -74,9 +74,7 @@ trait ImageTrait
         $fileName = $fileName . '.' . Request::file($input)->getClientOriginalExtension();
         $image = Image::make(Request::file($input));
         $image->orientate();
-        $image = $image->resize(1000, null, function ($constraintThumbnail) {
-            $constraintThumbnail->aspectRatio();
-        });
+
         if ($resize) {
             $image = $image->resize($width, $height, function ($constraint) {
                 $constraint->aspectRatio();

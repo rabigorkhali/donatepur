@@ -231,8 +231,8 @@ class MyCampaignController extends Controller
             'country' => 'required|string|max:255',
             'video_url' => 'nullable|url|max:500',
             'status' => 'required|in:1,0',
-            'cover_image' => 'image|min:50|max:20480', // Max file size set to 2MB (2048 kilobytes)
-            'description' => 'required|string|min:100|max:20000',
+            'cover_image' => 'image|min:50|max:10480', // Max file size set to 2MB (2048 kilobytes)
+            'description' => 'required|string|min:100|max:2000',
         ]);
         if ($validator->fails()) {
             throw new ValidationException($validator);
