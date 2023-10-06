@@ -346,10 +346,6 @@
                                                                                 Greetings! You've received a donation of
                                                                                 <b>{{priceToNprFormat($donationData['amount']??0)}}</b> for the "{{$campaignDetails?->title??''}}" campaign. Thank you!
                                                                                 <br>
-                                                                                If you have any queries,
-                                                                                please reach us via
-                                                                                Email:{{ setting('site.site_email') }} <br>
-                                                                                Contact:{{ setting('site.mobile_number') }}</span>
                                                                         </p>
                                                                     </div>
                                                                 </div>

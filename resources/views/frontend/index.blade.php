@@ -86,7 +86,7 @@
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:1px;"><a
                                                 class="btn btn-colored btn-lg btn-theme-colored pl-20 pr-20"
-                                                href="{{$sliderBannersDatum->got_to_link}}">{{ $sliderBannersDatum->btn_text ?? 'Donate Now' }}</a>
+                                                href="{{ $sliderBannersDatum->got_to_link }}">{{ $sliderBannersDatum->btn_text ?? 'Donate Now' }}</a>
                                         </div>
                                     </li>
                                 @else
@@ -159,7 +159,7 @@
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:1px;"><a
                                                 class="btn btn-colored btn-lg btn-flat btn-theme-colored pl-20 pr-20"
-                                                href="{{$sliderBannersDatum->got_to_link}}">{{ $sliderBannersDatum->btn_text ?? 'Donate Now' }}</a>
+                                                href="{{ $sliderBannersDatum->got_to_link }}">{{ $sliderBannersDatum->btn_text ?? 'Donate Now' }}</a>
                                         </div>
                                     </li>
                                 @endif
@@ -295,7 +295,7 @@
                                                 <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">
                                                     <img height="239" style=" border-radius:5px 5px 0 0;"
                                                         class="img-fullwidth" alt=""
-                                                        src="{{ asset('/public/uploads') . '/' . imageName($featuredCausesDatum->cover_image,'-cropped') }}">
+                                                        src="{{ asset('/public/uploads') . '/' . imageName($featuredCausesDatum->cover_image, '-cropped') }}">
                                                 </a>
                                             </div>
                                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
@@ -384,7 +384,8 @@
                         <div class="owl-carousel-6col" data-nav="true">
                             @foreach ($topDonors as $topDonorsKey => $topDonorsDatum)
                                 <div class="item text-center">
-                                    <img alt="{{$topDonorsDatum['name']}}"  src="{{ $topDonorsDatum['profile_pic'] ?? '' }}">
+                                    <img alt="{{ $topDonorsDatum['name'] }}"
+                                        src="{{ $topDonorsDatum['profile_pic'] ?? '' }}">
                                     <div class="donor-details bg-white">
                                         <h4 class="m-0 pt-10 text-theme-colored">{{ $topDonorsDatum['name'] ?? '' }}</h4>
                                         <p class="font-12 pb-10">Donated :
@@ -469,105 +470,134 @@
                     </div>
                 </div>
                 <div class="section-content">
-                    <div class="row">
-                        @foreach ($recentCauses as $recentCausesKey => $recentCausesDatum)
-                            <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
-                                <div class="image-box-thum">
-                                    <a href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">
-                                        <img height="239" class="img-fullwidth" style=" border-radius:5px 5px 0 0;"
-                                            alt=""
-                                            src="{{ asset('/public/uploads') . '/' . imageName($recentCausesDatum->cover_image,'-cropped') }}">
-                                    </a>
-                                </div>
-                                <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
-                                    <h3 class="title mt-0 mb-5"><a
-                                            href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">{{ substr($recentCausesDatum->title, 0, 100) }}</a>
-                                    </h3>
-                                    <div class="project-meta mb-10 font-12">
-                                        <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                                href="#">{{ $recentCausesDatum->category->title }}</a></span>
-                                        <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
-                                                class="fa fa-money mr-5 text-theme-colored"></i>
-                                            {{ $recentCausesDatum->total_number_donation }}
-                                            Donations</span>
-                                        <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
-                                                class="fa fa-eye mr-5 text-theme-colored"></i>
-                                            {{ $recentCausesDatum->total_visits }} Views</span>
-                                    </div>
-                                    <p class="desc mb-10">
-                                        {{ substr($recentCausesDatum->description, 0, 100) }}... <br> <a
-                                            href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}"
-                                            class="text-info"> Read More...</a>
-                                    </p>
-                                    <div class="progress-item mt-0">
-                                        <div class="progress mb-10">
-                                            <div data-percent="{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}"
-                                                class="progress-bar"><span class="percent">0</span></div>
-                                        </div>
-                                        @if ($recentCausesDatum->campaign_status == 'running')
-                                            <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
-                                                href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">Donate
-                                                Now</a>
-                                        @elseif (in_array($recentCausesDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
-                                            <a href="#"
-                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10">Completed</a>
-                                        @else
-                                            <a href="#"
-                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10">Expired</a>
-                                        @endif
-                                    </div>
-                                    <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
-                                        <li class="current-fund">
-                                            <strong>{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}%</strong>funded
-                                        </li>
-                                        <li class="target-fund">
-                                            <strong>{{ priceToNprFormat($recentCausesDatum->goal_amount) }}</strong>target
-                                        </li>
-                                        <li class="remaining-days">
-                                            @if (!in_array($recentCausesDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
-                                                <strong>{{ getDaysDiffByToday($recentCausesDatum->end_date) }}</strong>days
-                                                to go
-                                            @else
-                                                Settled on {{ $recentCausesDatum?->end_date?->format('Y-M-d') }}
-                                            @endif
+                    @php $rowCountRecentCampaign=1;@endphp
 
-                                        </li>
-                                    </ul>
-                                </div>
+                    @foreach ($recentCauses as $recentCausesKey => $recentCausesDatum)
+                        @if (($rowCountRecentCampaign-1) % 3 == 0 || $rowCountRecentCampaign == 1)
+                            <div class="row">
+                        @endif
+                        <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
+                            <div class="image-box-thum">
+                                <a href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">
+                                    <img height="239" class="img-fullwidth" style=" border-radius:5px 5px 0 0;"
+                                        alt=""
+                                        src="{{ asset('/public/uploads') . '/' . imageName($recentCausesDatum->cover_image, '-cropped') }}">
+                                </a>
                             </div>
-                        @endforeach
+                            <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
+                                <h3 class="title mt-0 mb-5"><a
+                                        href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">{{ substr($recentCausesDatum->title, 0, 100) }}</a>
+                                </h3>
+                                <div class="project-meta mb-10 font-12">
+                                    <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
+                                            href="#">{{ $recentCausesDatum->category->title }}</a></span>
+                                    <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
+                                            class="fa fa-money mr-5 text-theme-colored"></i>
+                                        {{ $recentCausesDatum->total_number_donation }}
+                                        Donations</span>
+                                    <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
+                                            class="fa fa-eye mr-5 text-theme-colored"></i>
+                                        {{ $recentCausesDatum->total_visits }} Views</span>
+                                </div>
+                                <p class="desc mb-10">
+                                    {{ substr($recentCausesDatum->description, 0, 100) }}... <br> <a
+                                        href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}"
+                                        class="text-info"> Read More...</a>
+                                </p>
+                                <div class="progress-item mt-0">
+                                    <div class="progress mb-10">
+                                        <div data-percent="{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}"
+                                            class="progress-bar"><span class="percent">0</span></div>
+                                    </div>
+                                    @if ($recentCausesDatum->campaign_status == 'running')
+                                        <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
+                                            href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">Donate
+                                            Now</a>
+                                    @elseif (in_array($recentCausesDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
+                                        <a href="#"
+                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10">Completed</a>
+                                    @else
+                                        <a href="#"
+                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10">Expired</a>
+                                    @endif
+                                </div>
+                                <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
+                                    <li class="current-fund">
+                                        <strong>{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}%</strong>funded
+                                    </li>
+                                    <li class="target-fund">
+                                        <strong>{{ priceToNprFormat($recentCausesDatum->goal_amount) }}</strong>target
+                                    </li>
+                                    <li class="remaining-days">
+                                        @if (!in_array($recentCausesDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
+                                            <strong>{{ getDaysDiffByToday($recentCausesDatum->end_date) }}</strong>days
+                                            to go
+                                        @else
+                                            Settled on {{ $recentCausesDatum?->end_date?->format('Y-M-d') }}
+                                        @endif
 
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                         {{-- <div class="col-md-12">
                             <div class="text-center">
                                 <a class="btn btn-default btn-lg" href="#">Show More Projects</a>
                             </div>
                         </div> --}}
+                        @if (($rowCountRecentCampaign) % 3 == 0 && $rowCountRecentCampaign!=1)
+                        </div>
+                        @endif
+                @php $rowCountRecentCampaign=$rowCountRecentCampaign+1;@endphp
+                @endforeach
+
+                </div>
+         </div>
+    </section>
+    <!-- Divider: testimonials -->
+    <section class="bg-light">
+        <div class="container pb-0">
+            <h3 class="mt-0 line-bottom mb-30"><span class="font-weight-300">Clients </span> Testimonials</h3>
+            <div class="row">
+                <div class="col-md-12 mb-30">
+                    <div class="owl-carousel-2col boxed" data-dots="true">
+                        @foreach ($testimonials as $testimonialsKey => $testimonialsDatum)
+                            <div class="item">
+                                <div class="testimonial pt-10">
+                                    <div class="thumb pull-left mb-0 mr-0 pr-20">
+                                        <img width="75" class="img-circle" alt=""
+                                            src="{{ asset('/public/uploads') . '/' . imageName($testimonialsDatum->profile_picture, '-cropped') }}">
+                                    </div>
+                                    <div class="ml-100 ">
+                                        <h4 class="mt-0 font-weight-300">{{ $testimonialsDatum->message }}</h4>
+                                        <p class="author mt-20">- <span
+                                                class="text-black-333">{{ $testimonialsDatum->name }},</span>
+                                            <small><em>{{ $testimonialsDatum->designation }}</em></small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Divider: testimonials -->
-        <section class="bg-light">
-            <div class="container pb-0">
-                <h3 class="mt-0 line-bottom mb-30"><span class="font-weight-300">Clients </span> Testimonials</h3>
+        </div>
+    </section>
+
+    <section>
+        <div class="container pb-30">
+            <div class="section-content">
                 <div class="row">
-                    <div class="col-md-12 mb-30">
-                        <div class="owl-carousel-2col boxed" data-dots="true">
-                            @foreach ($testimonials as $testimonialsKey => $testimonialsDatum)
+                    <div class="col-md-12">
+                        <div class="owl-carousel-6col clients-logo text-center">
+                            @foreach ($partners as $partnersKey => $partnersDatum)
                                 <div class="item">
-                                    <div class="testimonial pt-10">
-                                        <div class="thumb pull-left mb-0 mr-0 pr-20">
-                                            <img width="75" class="img-circle" alt=""
-                                                src="{{ asset('/public/uploads') . '/' . imageName($testimonialsDatum->profile_picture, '-cropped') }}">
-                                        </div>
-                                        <div class="ml-100 ">
-                                            <h4 class="mt-0 font-weight-300">{{ $testimonialsDatum->message }}</h4>
-                                            <p class="author mt-20">- <span
-                                                    class="text-black-333">{{ $testimonialsDatum->name }},</span>
-                                                <small><em>{{ $testimonialsDatum->designation }}</em></small>
-                                            </p>
-                                        </div>
-                                    </div>
+                                    <a href="{{ $partnersDatum->website }}" target="_blank">
+                                        <img class="img-responsive"
+                                            src="{{ asset('/public/uploads') . '/' . imageName($partnersDatum->logo, '-small') }}"
+                                            alt="">
+                                    </a>
                                 </div>
                             @endforeach
 
@@ -575,30 +605,8 @@
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section>
-            <div class="container pb-30">
-                <div class="section-content">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="owl-carousel-6col clients-logo text-center">
-                                @foreach ($partners as $partnersKey => $partnersDatum)
-                                    <div class="item">
-                                        <a href="{{ $partnersDatum->website }}" target="_blank">
-                                            <img class="img-responsive"
-                                                src="{{ asset('/public/uploads') . '/' . imageName($partnersDatum->logo, '-small') }}"
-                                                alt="">
-                                        </a>
-                                    </div>
-                                @endforeach
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
+    </section>
     </div>
     <!-- end main-content -->
 @endsection
