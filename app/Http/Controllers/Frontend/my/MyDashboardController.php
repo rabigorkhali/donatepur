@@ -52,7 +52,7 @@ class MyDashboardController extends Controller
             $data['total_campaign'] = Campaign::where('public_user_id', $request->user->id)->count();
             $data['total_collection'] = CampaignView::where('public_user_id', $request->user->id)->sum('summary_total_collection');
             $data['net_collection'] = CampaignView::where('public_user_id', $request->user->id)->sum('net_amount_collection');
-            $data['total_donation_made'] = Donation::where('giver_public_user_id', $request->user->id)->where('payment_status', 'successful')->sum('amount');
+            $data['total_donation_made'] = Donation::where('giver_public_user_id', $request->user->id)->wherein('payment_status', ['completed'])->sum('amount');
             $dataRelatedIds = Campaign::where('public_user_id', $request->user->id)->pluck('id')->toArray();
             $uniqueCoordinates = CampaignVisit::whereIn('campaign_id', $dataRelatedIds)
                 ->groupBy('latitude', 'longitude')

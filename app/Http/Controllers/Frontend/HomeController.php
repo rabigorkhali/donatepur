@@ -69,7 +69,7 @@ class HomeController extends FrontendBaseController
             }
             return $this->renderView($this->parentViewFolder() . '.page', $data);
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             return redirect('/');
         }
@@ -77,7 +77,7 @@ class HomeController extends FrontendBaseController
 
     public function index(Request $request)
     {
-        // return $this->renderView('email.reset-password',[]); testing email view
+        // return $this->renderView('email.donation-receiver', []);
         try {
             $data = array();
             $data['featuredCauses'] = CampaignView::where('status', true)
@@ -108,12 +108,10 @@ class HomeController extends FrontendBaseController
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
                 if ($donationRawDatum->donor_display_image) {
-                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image,'-medium');
-                }
-                else if ($donationRawDatum?->giver?->profile_picture) {
+                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image, '-medium');
+                } else if ($donationRawDatum?->giver?->profile_picture) {
                     $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
-                }
-                else {
+                } else {
                     $topDonors['profile_pic'] = asset('public/uploads/static-images/images/usernotfound.png');
                 }
 
@@ -128,7 +126,7 @@ class HomeController extends FrontendBaseController
             $data['partners'] = Partner::get();
             return $this->renderView($this->viewFolder(), $data);
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
     }
@@ -159,7 +157,7 @@ class HomeController extends FrontendBaseController
             $data['campaignCategories'] = CampaignCategory::where('status', 1)->orderby('title', 'asc')->get();
             return $this->renderView($this->parentViewFolder() . '.campaign-list', $data);
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;
 
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
@@ -189,7 +187,7 @@ class HomeController extends FrontendBaseController
             $data['postCategories'] = Category::orderby('name', 'asc')->get();
             return $this->renderView($this->parentViewFolder() . '.blog-list', $data);
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
     }
@@ -205,7 +203,7 @@ class HomeController extends FrontendBaseController
             $data['latestPosts'] = Post::orderby('id', 'desc')->where('status', 'PUBLISHED')->get();
             return $this->renderView($this->parentViewFolder() . '.blog-detail', $data);
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
     }
@@ -243,7 +241,7 @@ class HomeController extends FrontendBaseController
             // return false;
             // return $this->renderView($this->parentViewFolder() . '.contact-us', $data);
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             return false;
         }
@@ -352,16 +350,14 @@ class HomeController extends FrontendBaseController
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
                 if ($donationRawDatum->donor_display_image) {
-                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image,'-medium');
-                }
-                else if ($donationRawDatum?->giver?->profile_picture) {
+                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image, '-medium');
+                } else if ($donationRawDatum?->giver?->profile_picture) {
                     $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
-                }
-                else {
+                } else {
                     $topDonors['profile_pic'] = asset('public/uploads/static-images/images/usernotfound.png');
                 }
-                
-            
+
+
                 $topDonors['amount'] = $donationRawDatum->amount;
                 $topDonors['is_anonymous'] = $donationRawDatum->is_anonymous;
                 $topDonors['donation_date'] = $donationRawDatum->created_at->format('Y-M-d');
@@ -371,7 +367,7 @@ class HomeController extends FrontendBaseController
             $data['topDonors'] = $topDonorsList;
             return $this->renderView($this->parentViewFolder() . '.campaign-detail', $data);
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
     }
@@ -383,7 +379,7 @@ class HomeController extends FrontendBaseController
         try {
             $userCurrent = Auth::guard('frontend_users')->user() ?? null;
             /* validation */
-            $dataRequest=$request->all();
+            $dataRequest = $request->all();
             $paymentGateWayDetails = PaymentGateway::where('slug', 'khalti')->where('status', 1)->first();
             $campaignDetails = CampaignView::where('status', 1)->where('id', $dataRequest['campaign_id'])->first();
 
@@ -459,6 +455,7 @@ class HomeController extends FrontendBaseController
                 $insertData['is_anonymous'] = 0;
                 $insertData['payment_gateway_all_response'] = json_encode($response);
                 $insertData['is_verified'] = 1; //by system admin manually
+
                 $resp = Donation::create($insertData);
                 $data['type'] = 'success';
                 $data['msg'] = 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.';
@@ -496,7 +493,7 @@ class HomeController extends FrontendBaseController
             $data['type'] = 'error';
             $data['msg'] = 'Something went wrong';
             $data['msg'] = $th->getMessage();
-            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;
             return $data;
         }
     }
@@ -542,7 +539,7 @@ class HomeController extends FrontendBaseController
     //     } catch (Throwable $th) {
     //         $data['payment_gateway']='esewa';
     //         $data['payment_verification']='failed';
-    //         SystemErrorLog::insert(['message' => $th->getMessage()]);
+    //         SystemErrorLog::insert(['message' => $th->getMessage(),'created_at' => date('Y-m-d H:i:s')]);;
     //         Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
     //         return redirect()->back()->with(['esewaCheckSuccessData'=>$data]);;
     //     }
@@ -684,7 +681,7 @@ class HomeController extends FrontendBaseController
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->route('campaignDetailPage', ['slug' => $campaignDetails->slug]);
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);
             Session::flash('error', 'Sorry. Your recent transaction had an issue. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             // return redirect()->route('campaignDetailPage', ['slug' => $campaignDetails->slug]);
@@ -708,7 +705,7 @@ class HomeController extends FrontendBaseController
             }
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
@@ -729,7 +726,7 @@ class HomeController extends FrontendBaseController
             }
             return 'true';
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;
             return 'false';
         }
     }
@@ -740,7 +737,7 @@ class HomeController extends FrontendBaseController
             Campaign::wheredate('end_date', '<', date('Y-m-d'))->where('campaign_status', '!=', 'completed')->update(['campaign_status' => 'completed']);
             return 'true';
         } catch (Throwable $th) {
-            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;
             dump($th);
             return 'false';
         }
