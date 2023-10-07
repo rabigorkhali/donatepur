@@ -193,7 +193,7 @@ function frontendActiveButton($routeNameParam = '')
 
 function getCampaignStatusThatCantBeShown()
 {
-    return ['pending', 'rejected', 'accepted'];
+    return ['pending', 'rejected', 'accepted','stopped'];
 }
 
 function getPaymentConfigs($gatewaySlug)
