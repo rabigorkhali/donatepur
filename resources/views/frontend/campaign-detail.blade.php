@@ -821,10 +821,15 @@
                 ],
                 "eventHandler": {
                     onSuccess(payload) {
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-Token': '{{csrf_token()}}'
+                            }
+                        });
                         $.ajax({
                             // url: app_url + '/payment/khalti/verfication',
                             url: "{{ getPaymentConfigs('khalti')['callback_url'] ?? '' }}",
-                            type: 'GET',
+                            type: 'POST',
                             data: {
                                 amount: payload.amount,
                                 trans_token: payload.token,

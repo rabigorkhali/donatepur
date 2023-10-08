@@ -22,7 +22,7 @@ Route::post('/save-location/{campaign}', [HomeController::class, 'saveLocation']
 Route::get('/sync-expired-campaigns', [HomeController::class, 'syncExpiredCampaigns'])->name('syncExpiredCampaigns');
 
 /* DONATION PAYMENT URLS */
-Route::get('/payment/khalti/verfication', [HomeController::class, 'khaltiPaymentVerification'])->name('khaltiPaymentVerification');
+Route::post('/payment/khalti/verfication', [HomeController::class, 'khaltiPaymentVerification'])->name('khaltiPaymentVerification');
 Route::post('/donation', [HomeController::class, 'getDonation'])->name('getDonation');
 Route::get('/esewa/payment', [HomeController::class, 'esewaPayment'])->name('esewaPayment');
 Route::get('/esewa/success', [HomeController::class, 'esewaPaymentSuccess'])->name('esewaSuccess');

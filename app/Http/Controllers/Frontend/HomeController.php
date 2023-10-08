@@ -305,7 +305,7 @@ class HomeController extends FrontendBaseController
             $insertData['is_anonymous'] = 0;
             $insertData['is_verified'] = 0; //by system admin manually
             if ($request->file('payment_receipt')) {
-                $insertData['payment_receipt'] = 'donations/' . $this->uploadImage($this->dir, 'payment_receipt', true, 700, null);
+                $insertData['payment_receipt'] = 'donations/' . $this->uploadImageSingle($this->dir, 'payment_receipt', true, 600, null);
             }
             $resp = Donation::create($insertData);
 
@@ -450,23 +450,27 @@ class HomeController extends FrontendBaseController
                 /* donateaoro */
                 $insertData = [];
                 $insertData['amount'] = $response->amount / 100;
-                $insertData['fullname'] = trim($formDataArray['fullname']);
-                $insertData['mobile_number'] = trim($formDataArray['mobile_number']);
-                $insertData['country'] = trim($formDataArray['country']);
-                $insertData['email'] = trim($formDataArray['email']);
-                $insertData['address'] = trim($formDataArray['address']);
-                $insertData['description'] = trim($formDataArray['description']);
+                $insertData['fullname'] = trim($formDataArray['fullname']??'error');
+                $insertData['mobile_number'] = trim($formDataArray['mobile_number']??'error');
+                $insertData['country'] = trim($formDataArray['country']??'error');
+                $insertData['email'] = trim($formDataArray['email']??'error');
+                $insertData['address'] = trim($formDataArray['address']??'error');
+                $insertData['description'] = trim($formDataArray['description']??'error');
                 $insertData['payment_gateway_id'] = $paymentGateWayDetails->id;
                 $insertData['campaign_id'] = $request->input('campaign_id');
                 $insertData['receiver_public_user_id'] = $campaignDetails->public_user_id;
-                $insertData['giver_public_user_id'] = $userCurrent->id ?? null;
+                $insertData['giver_public_user_id'] = $userCurrent?->id?? null;
                 $insertData['created_at'] = date('Y-m-d H:i:s');
                 $insertData['transaction_id'] = $response->idx ?? null;
                 $insertData['service_charge_percentage'] = 7;
                 $insertData['payment_status'] = strtolower($response?->state?->name ?? '');
                 $insertData['is_anonymous'] = 0;
+                $insertData['created_at'] = date('Y-m-d H:i:s');
+                $insertData['updated_at'] = date('Y-m-d H:i:s');
                 $insertData['payment_gateway_all_response'] = json_encode($response);
                 $insertData['is_verified'] = 1; //by system admin manually
+                dump($formDataArray,'from form');
+                dump($insertData);
 
                 $resp = Donation::create($insertData);
                 $data['type'] = 'success';
