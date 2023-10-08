@@ -772,8 +772,7 @@
                                 amount: payload.amount,
                                 trans_token: payload.token,
                                 form_data: $("#khaltiDonateForm").serializeArray(),
-                                campaign_id: "{{ $campaignDetails->id }}",
-                                donor_id: "{{ $campaignDetails->id }}",
+                                campaign_id: "{{ $campaignDetails->id }}"
                             },
                             success: function(responseSuccess) {
                                 $("#preloader").hide();
@@ -798,6 +797,7 @@
                                 }, 1000);
                             },
                             error: function(error) {
+                                console.log(error,'verification error');
                                 $("#preloader").hide();
                                 Swal.fire('Error!', 'Error. Please try again.', 'error');
                             },
