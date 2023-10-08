@@ -347,6 +347,11 @@ class HomeController extends FrontendBaseController
             $campaignDetails = CampaignView::where('status', true)
                 ->where('campaign_status', '!=', 'pending')
                 ->where('slug', $slug)->first();
+
+            if (!$campaignDetails) {
+                Session::flash('error', 'Bad request.');
+                return redirect()->route('campaignList');
+            }
             $data['campaignDetails'] = $campaignDetails;
             $data['countries'] = Country::orderby('name', 'asc')->get();
             $data['paymentGateways'] = PaymentGateway::orderby('position', 'asc')->where('status', 1)->where('show_in_frontend', 1)->get();
