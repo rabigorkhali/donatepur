@@ -32,7 +32,7 @@ class DonationGivenEmail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Donation Delivered.',
+            subject: 'Donation delivered.',
         );
     }
 
@@ -44,7 +44,7 @@ class DonationGivenEmail extends Mailable
     public function build()
     {
         return $this->view('email.donation-given')
-            ->subject('Donation Delivered.')
+            ->subject('Donation delivered.')
             ->with($this->data);
     }
     /**
