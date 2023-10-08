@@ -21,6 +21,27 @@ trait ImageTrait
 
     //     return $fileName;
     // }
+    public function uploadImageSingle($dir, $input, $resize = false, $width = '', $height = '')
+    {
+        $directory = public_path() . $dir;
+        if (is_dir($directory) != true) \File::makeDirectory($directory, $mode = 0775, true);
+        $fileName = uniqid();
+        $fileThumbnail = $fileName . '-medium.' . Request::file($input)->getClientOriginalExtension();;
+        $fileSmall = $fileName . '-small.' . Request::file($input)->getClientOriginalExtension();;
+        $fileName = $fileName . '.' . Request::file($input)->getClientOriginalExtension();
+        $image = Image::make(Request::file($input));
+        $image->orientate();
+        if ($resize && $image->width()>$width) {
+            $image = $image->resize($width, $height, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        }
+
+        $image->save($directory . '/' . $fileName, 70);
+
+
+        return $fileName;
+    }
 
     public function uploadImage($dir, $input, $resize = false, $width = '', $height = '')
     {

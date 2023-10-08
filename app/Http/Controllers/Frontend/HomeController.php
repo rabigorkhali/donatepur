@@ -264,7 +264,7 @@ class HomeController extends FrontendBaseController
             'address' => 'required|string|max:255',
             'amount' => 'required|numeric|min:10|max:1000000',
             'description' => 'required|string|max:500|min:10',
-            'payment_receipt' => 'required|mimes:jpeg,png,pdf|max:4048',
+            'payment_receipt' => 'required|image|max:4048',
             // 'payment_receipt' => 'required_if:payment_gateway,bank|mimes:jpeg,png,pdf|max:2048',
             // 'payment_gateway' => 'required',
             'mobile_number' => 'required|string|min:5|max:15',
@@ -334,6 +334,7 @@ class HomeController extends FrontendBaseController
             Session::flash('success', 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.');
             return redirect()->back();
         } catch (Throwable $th) {
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;            // Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
             Session::flash('error', 'Sorry. Something went wrong. Please try again later or contact our support team.');
             return redirect()->back();

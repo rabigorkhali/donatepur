@@ -7,7 +7,7 @@
     <div class="main-content">
         <!-- Section: inner-header -->
         <section class="inner-header divider parallax layer-overlay overlay-dark-5" data-stellar-background-ratio="0.5"
-            data-bg-img="{{ asset('/public/uploads/static-images/images/banner-small.jpeg')  }}"
+            data-bg-img="{{ asset('/public/uploads/static-images/images/banner-small.jpeg') }}"
             style="background-image: url(&quot;images/bg/bg1.jpg&quot;); background-position: 50% 61px;">
             <div class="container pt-100 pb-50">
                 <!-- Section Content -->
@@ -170,19 +170,20 @@
                                 </div>
                                 {{-- ONLY FOR ESEWA --}}
 
-        
 
-                                <form id="esewaDonateFormWithCustomFields" class="esewa-donate-form d-none"
-                                    method="POST" action="{{route('esewaPaymentInitiateV2')}}">
+
+                                <form id="esewaDonateFormWithCustomFields" class="esewa-donate-form d-none" method="POST"
+                                    action="{{ route('esewaPaymentInitiateV2') }}">
                                     {{-- ESEWA DWFAULT --}}
                                     <input value="0" name="tAmt" id="esewaTotalAmount" type="hidden">
                                     <input value="0" name="amt" id="esewaAmount" type="hidden">
                                     <input value="0" name="txAmt" id="esewaTaxAmount" type="hidden">
                                     <input value="0" name="psc" id="esewaProductServiceCharge" type="hidden">
                                     <input value="0" name="pdc" id="esewaProductDeliveryCharge" type="hidden">
-                                    <input value="{{getPaymentConfigs('esewa')['public_key']?? 'EPAYTEST'}}" name="scd" type="hidden" id="esewaMerchantSecretCode">
+                                    <input value="{{ getPaymentConfigs('esewa')['public_key'] ?? 'EPAYTEST' }}"
+                                        name="scd" type="hidden" id="esewaMerchantSecretCode">
                                     <input
-                                        value="campaignid_{{ $campaignDetails->id . '_' . microtime(true) . 'donatepur'.mt_rand(0, 99999999) }}"
+                                        value="campaignid_{{ $campaignDetails->id . '_' . microtime(true) . 'donatepur' . mt_rand(0, 99999999) }}"
                                         name="pid" type="hidden" id="esewaUniqueProductKey">
                                     <input value="{{ route('esewaSuccess') }}?q=su" id="esewaSuccessUrl" type="hidden"
                                         name="su">
@@ -200,8 +201,7 @@
                                         <div class="col-sm-12 @if ($errors->first('fullname') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Full Name</strong><span class="text-danger">*</span></label>
-                                                <input 
-                                                    id="esewaFullname" required type="text" maxlength="100"
+                                                <input id="esewaFullname" required type="text" maxlength="100"
                                                     name="fullname" min="7"
                                                     value="{{ old('fullname') ?? Auth::guard('frontend_users')->user()?->full_name }}"
                                                     placeholder="Rama Namaya" class="form-control">
@@ -214,10 +214,10 @@
 
                                         <div class="col-sm-12  @if ($errors->first('mobile_number') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Mobile Number</strong><span class="text-danger">*</span></label>
-                                                <input  required
-                                                    id="esewaMobileNumber" type="text" maxlength="15" minlength="10"
-                                                    name="mobile_number"
+                                                <label><strong>Mobile Number</strong><span
+                                                        class="text-danger">*</span></label>
+                                                <input required id="esewaMobileNumber" type="text" maxlength="15"
+                                                    minlength="10" name="mobile_number"
                                                     value="{{ old('mobile_number') ?? Auth::guard('frontend_users')->user()?->mobile_number }}"
                                                     placeholder="9841000000" class="form-control">
                                                 @if ($errors->first('mobile_number') && old('payment_gateway_dynamic') == 'esewa')
@@ -230,8 +230,7 @@
                                         <div class="col-sm-12 @if ($errors->first('country')) has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Country</strong><span class="text-danger">*</span></label>
-                                                <select 
-                                                    id="esewaCountry" required name="country" class="form-control">
+                                                <select id="esewaCountry" required name="country" class="form-control">
                                                     @foreach ($countries as $keyCountries => $datumCountries)
                                                         <option
                                                             @if (!old('country')) @if ($datumCountries->name == 'Nepal') selected @endif
@@ -251,8 +250,7 @@
                                         <div class="col-sm-12 @if ($errors->first('address') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Address</strong><span class="text-danger">*</span></label>
-                                                <input  required
-                                                    id="esewaAddress" type="text" maxlength="100"
+                                                <input required id="esewaAddress" type="text" maxlength="100"
                                                     value="{{ old('address') ?? Auth::guard('frontend_users')->user()?->address }}"
                                                     name="address" placeholder="Tinkune-7,Kathmandu"
                                                     class="form-control">
@@ -267,8 +265,7 @@
                                         <div class="col-sm-12 @if ($errors->first('email') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
                                                 <label><strong>Email</strong><span class="text-danger">*</span></label>
-                                                <input  required
-                                                    id="esewaEmail" required type="email"
+                                                <input required id="esewaEmail" required type="email"
                                                     value="{{ old('email') ?? Auth::guard('frontend_users')->user()?->email }}"
                                                     name="email" placeholder="example@example.com"
                                                     class="form-control">
@@ -281,11 +278,12 @@
 
                                         <div class="col-sm-12 @if ($errors->first('amount') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Amount (Rs.)</strong><span class="text-danger">*</span></label>
-                                                <input onkeyup="" required onchange=""
-                                                    id="esewaDonationAmount" type="number" min="10"
-                                                    max="100000" value="{{ old('amount') }}" placeholder="1000"
-                                                    name="amount" class="form-control">
+                                                <label><strong>Amount (Rs.)</strong><span
+                                                        class="text-danger">*</span></label>
+                                                <input onkeyup="" required onchange="" id="esewaDonationAmount"
+                                                    type="number" min="10" max="100000"
+                                                    value="{{ old('amount') }}" placeholder="1000" name="amount"
+                                                    class="form-control">
                                                 @if ($errors->first('amount') && old('payment_gateway_dynamic') == 'esewa')
                                                     <span
                                                         class="text-danger display-block">{{ $errors->first('amount') }}</span>
@@ -295,10 +293,10 @@
 
                                         <div class="col-sm-12 @if ($errors->first('description') && old('payment_gateway_dynamic') == 'esewa') has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Description</strong><span class="text-danger">*</span></label>
-                                                <textarea required minlength="15" maxlength="100" 
-                                                    rows="6" id="esewaDescription" name="description" class="form-control" value="description"
-                                                    placeholder="Description">{{ old('description') }}</textarea>
+                                                <label><strong>Description</strong><span
+                                                        class="text-danger">*</span></label>
+                                                <textarea required minlength="15" maxlength="100" rows="6" id="esewaDescription" name="description"
+                                                    class="form-control" value="description" placeholder="Description">{{ old('description') }}</textarea>
                                                 @if ($errors->first('description') && old('payment_gateway_dynamic') == 'esewa')
                                                     <span
                                                         class="text-danger display-block">{{ $errors->first('description') }}</span>
@@ -309,8 +307,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
 
-                                                <button type="submit" class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
-                                                    data-loading-text="Please wait..." id="esewaDonateBtn">Donate with Esewa</button>
+                                                <button type="submit"
+                                                    class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
+                                                    data-loading-text="Please wait..." id="esewaDonateBtn">Donate with
+                                                    Esewa</button>
 
                                             </div>
                                         </div>
@@ -342,7 +342,8 @@
 
                                         <div class="col-sm-12  @if ($errors->first('mobile_number')) has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Mobile Number</strong><span class="text-danger">*</span></label>
+                                                <label><strong>Mobile Number</strong><span
+                                                        class="text-danger">*</span></label>
                                                 <input required id="khaltiMobileNumber" type="text" maxlength="15"
                                                     minlength="10" name="mobile_number"
                                                     value="{{ old('mobile_number') ?? Auth::guard('frontend_users')->user()?->mobile_number }}"
@@ -405,7 +406,8 @@
 
                                         <div class="col-sm-12 @if ($errors->first('amount')) has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Amount (Rs.)</strong><span class="text-danger">*</span></label>
+                                                <label><strong>Amount (Rs.)</strong><span
+                                                        class="text-danger">*</span></label>
                                                 <input required id="khaltiDonationAmount" type="number" min="10"
                                                     max="1000000" value="{{ old('amount') }}" placeholder="1000"
                                                     name="amount" class="form-control">
@@ -418,7 +420,8 @@
 
                                         <div class="col-sm-12 @if ($errors->first('description')) has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Description</strong><span class="text-danger">*</span></label>
+                                                <label><strong>Description</strong><span
+                                                        class="text-danger">*</span></label>
                                                 <textarea required minlength="15" maxlength="100" rows="6" id="khaltiDescription" name="description"
                                                     class="form-control" value="description" placeholder="Description">{{ old('description') }}</textarea>
                                                 @if ($errors->first('description') && old('payment_gateway_dynamic') == 'khalti')
@@ -451,11 +454,14 @@
                                         <div class="col-md-12" style="border: 1px solid #000; margin: 10px;">
                                             <div class="form-group mb-20 ">
                                                 <h4>Please transfer your donation amount in following bank details.</h4>
-                                                <label>Account Name: </label>{{ getPaymentConfigs('bank')['account_name']??'N/A' }}<br>
-                                                <label>Account No: </label>{{ getPaymentConfigs('bank')['account_number']??'N?A' }}</br>
-                                                <label>Bank Name: </label>{{ !empty(($paymentConfigs = getPaymentConfigs('bank'))['fullname']) ? $paymentConfigs['fullname'] : setting('bank.bank_name') }}</br>
+                                                <label>Account Name:
+                                                </label>{{ getPaymentConfigs('bank')['account_name'] ?? 'N/A' }}<br>
+                                                <label>Account No:
+                                                </label>{{ getPaymentConfigs('bank')['account_number'] ?? 'N?A' }}</br>
+                                                <label>Bank Name:
+                                                </label>{{ !empty(($paymentConfigs = getPaymentConfigs('bank'))['fullname']) ? $paymentConfigs['fullname'] : setting('bank.bank_name') }}</br>
                                                 <label>QR: </label><br> <img height="100"
-                                                    src="{{ asset('/public/uploads') . '/' . getPaymentConfigs('bank')['qr_image']??setting('bank.bank_qr') }}">
+                                                    src="{{ asset('/public/uploads') . '/' . getPaymentConfigs('bank')['qr_image'] ?? setting('bank.bank_qr') }}">
                                             </div>
                                         </div>
 
@@ -475,7 +481,8 @@
 
                                         <div class="col-sm-12  @if ($errors->first('mobile_number')) has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Mobile Number</strong><span class="text-danger">*</span></label>
+                                                <label><strong>Mobile Number</strong><span
+                                                        class="text-danger">*</span></label>
                                                 <input required id="mobileNumber" type="text" maxlength="15"
                                                     minlength="10" name="mobile_number"
                                                     value="{{ old('mobile_number') ?? Auth::guard('frontend_users')->user()?->mobile_number }}"
@@ -538,7 +545,8 @@
 
                                         <div class="col-sm-12 @if ($errors->first('amount')) has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Amount (Rs.)</strong><span class="text-danger">*</span></label>
+                                                <label><strong>Amount (Rs.)</strong><span
+                                                        class="text-danger">*</span></label>
                                                 <input required id="donationAmount" type="number" min="10"
                                                     max="500000" value="{{ old('amount') }}" placeholder="1000"
                                                     name="amount" class="form-control">
@@ -563,7 +571,8 @@
                                         </div>
                                         <div class="col-sm-12 @if ($errors->first('description')) has-error @endif">
                                             <div class="form-group mb-20">
-                                                <label><strong>Description</strong><span class="text-danger">*</span></label>
+                                                <label><strong>Description</strong><span
+                                                        class="text-danger">*</span></label>
                                                 <textarea required minlength="15" maxlength="100" rows="6" id="description" name="description"
                                                     class="form-control" value="description" placeholder="Description">{{ old('description') }}</textarea>
                                                 @if ($errors->first('description'))
@@ -653,10 +662,57 @@
                     $('.esewa-donate-form').removeClass('d-none');
                     esewaDataMappingWithourSessionSet();
                 }
+                
             }
         </script>
 
         <script>
+            function scrollToAnyError() {
+                let ifAnyError = "{{ $errors->any() }}";
+                if (ifAnyError == 1) {
+
+                    Swal.fire({
+                        title: 'Invalid data given!',
+                        text: "Please look at the form you submitted.",
+                        icon: "error",
+                        showCancelButton: false
+                    }).then((result) => {
+                        let donationAmount = document.getElementById("donationAmount");
+                            if ($('input[name="payment_gateway"]:checked').val()=='bank') {
+                                donationAmount.scrollIntoView({
+                                    behavior: "smooth"
+                                });
+                            }
+                        if (result.isConfirmed) {
+                             let donateFormElement = document.getElementById("khaltiDonationAmount");
+                            if ($('input[name="payment_gateway"]:checked').val()=='khalti') {
+                                donateFormElement.scrollIntoView({
+                                    behavior: "instant"
+                                });
+                            } 
+
+                            let donationAmount = document.getElementById("donationAmount");
+                            if ($('input[name="payment_gateway"]:checked').val()=='bank') {
+                                donationAmount.scrollIntoView({
+                                    behavior: "instant"
+                                });
+                            }
+
+
+                             let esewaDonationAmount = document.getElementById("esewaDonationAmount");
+                            if ($('input[name="payment_gateway"]:checked').val()=='esewa') {
+                                esewaDonationAmount.scrollIntoView({
+                                    behavior: "instant"
+                                });
+                            } 
+                        }
+                    });
+
+
+
+                }
+            }
+
             $(document).ready(function() {
                 $(window).scroll(function() {
                     paymentGateway($('input[name="payment_gateway"]:checked').val());
@@ -711,6 +767,8 @@
                     paymentGateway($('input[name="payment_gateway"]:checked').val());
                 });
                 /* hover */
+                scrollToAnyError();
+
 
             });
         </script>
@@ -721,7 +779,6 @@
                 const form = document.getElementById("offlineDonateForm");
                 if (!form.checkValidity()) {
                     // Display validation messages
-                    console.log(form.elements);
                     for (const element of form.elements) {
                         if (element.tagName === "INPUT" && !element.validity.valid) {
                             showKhaltiForm = false;
@@ -746,7 +803,7 @@
         <script>
             var price = 0;
             // var public_key = "{{ env('KHALTI_PUBLIC_KEY') }}";
-            var public_key = "{{ getPaymentConfigs('khalti')['public_key']??'' }}";
+            var public_key = "{{ getPaymentConfigs('khalti')['public_key'] ?? '' }}";
             var app_url = "{{ env('APP_URL') }}";
             var app_name = "{{ env('APP_NAME') }}";
             var config = {
@@ -766,7 +823,7 @@
                     onSuccess(payload) {
                         $.ajax({
                             // url: app_url + '/payment/khalti/verfication',
-                            url: "{{getPaymentConfigs('khalti')['callback_url']??''}}",
+                            url: "{{ getPaymentConfigs('khalti')['callback_url'] ?? '' }}",
                             type: 'GET',
                             data: {
                                 amount: payload.amount,
@@ -797,7 +854,7 @@
                                 }, 1000);
                             },
                             error: function(error) {
-                                console.log(error,'verification error');
+                                console.log(error, 'verification error');
                                 $("#preloader").hide();
                                 Swal.fire('Error!', 'Error. Please try again.', 'error');
                             },
