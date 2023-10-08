@@ -152,6 +152,7 @@ class MyCampaignController extends Controller
             $data['public_user_id'] = $request->user->id;
             $data['anonymous'] = 0;
             $data['campaign_status'] = 'pending';
+            $data['created_at'] = date('Y-m-d H:i:s');
             DB::beginTransaction();
             $campaignCreateResponse = Campaign::insertGetId($data);
             $slugExists = Campaign::where('slug', $slug)->count();
@@ -260,6 +261,7 @@ class MyCampaignController extends Controller
             } else {
                 $data['slug'] = $slug;
             }
+            $data['updated_at'] = date('Y-m-d H:i:s');
             Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->update($data);
             Session::flash('success', 'Success! Data saved successfully.');
             return redirect()->route('my.campaigns.list')->withInput();
