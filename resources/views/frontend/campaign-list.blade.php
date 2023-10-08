@@ -54,74 +54,76 @@
 
                 </div>
                 <div class="section-content">
-                    <div class="row">
-                        @foreach ($causesList as $causesListKey => $causesListDatum)
-                            <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
-                                <div class="image-box-thum">
-                                    <a href="{{ route('campaignDetailPage', $causesListDatum->slug) }}">
-                                        <img height="239" class="img-fullwidth " style=" border-radius:5px 5px 0 0;"
-                                            alt=""
-                                            src="{{ asset('/public/uploads') . '/' . imageName($causesListDatum->cover_image,'-cropped') }}">
-                                    </a>
+                    @php $rowCountRecentCampaign=1;@endphp
+                    @foreach ($causesList as $causesListKey => $causesListDatum)
+                        @if (($rowCountRecentCampaign - 1) % 3 == 0 || $rowCountRecentCampaign == 1)
+                            <div class="row">
+                        @endif
+                        <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
+                            <div class="image-box-thum">
+                                <a href="{{ route('campaignDetailPage', $causesListDatum->slug) }}">
+                                    <img height="239" class="img-fullwidth " style=" border-radius:5px 5px 0 0;"
+                                        alt=""
+                                        src="{{ asset('/public/uploads') . '/' . imageName($causesListDatum->cover_image, '-cropped') }}">
+                                </a>
+                            </div>
+                            <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
+                                <h3 class="title mt-0 mb-5"><a
+                                        href="{{ route('campaignDetailPage', $causesListDatum->slug) }}">{{ substr($causesListDatum->title, 0, 100) }}</a>
+                                </h3>
+                                <div class="project-meta mb-10 font-12">
+                                    <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
+                                            href="#">{{ $causesListDatum->category->title }}</a></span>
+                                    <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
+                                            class="fa fa-money mr-5 text-theme-colored"></i>
+                                        {{ $causesListDatum->total_number_donation }}
+                                        Donations</span>
+                                    <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
+                                            class="fa fa-eye mr-5 text-theme-colored"></i>
+                                        {{ $causesListDatum->total_visits }} Views</span>
                                 </div>
-                                <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
-                                    <h3 class="title mt-0 mb-5"><a
-                                            href="{{ route('campaignDetailPage', $causesListDatum->slug) }}">{{ substr($causesListDatum->title, 0, 100) }}</a>
-                                    </h3>
-                                    <div class="project-meta mb-10 font-12">
-                                        <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                                href="#">{{ $causesListDatum->category->title }}</a></span>
-                                        <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
-                                                class="fa fa-money mr-5 text-theme-colored"></i>
-                                            {{ $causesListDatum->total_number_donation }}
-                                            Donations</span>
-                                        <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
-                                                class="fa fa-eye mr-5 text-theme-colored"></i>
-                                            {{ $causesListDatum->total_visits }} Views</span>
+                                <p class="desc mb-10">
+                                    {{ substr($causesListDatum->description, 0, 100) }}... <br> <a
+                                        href="{{ route('campaignDetailPage', $causesListDatum->slug) }}" class="text-info">
+                                        Read More...</a>
+                                </p>
+                                <div class="progress-item mt-0">
+                                    <div class="progress mb-10">
+                                        <div data-percent="{{ calculatePercentageMaxTo100($causesListDatum->summary_total_collection, $causesListDatum->goal_amount) }}"
+                                            class="progress-bar"><span class="percent">0</span></div>
                                     </div>
-                                    <p class="desc mb-10">
-                                        {{ substr($causesListDatum->description, 0, 100) }}... <br> <a
-                                            href="{{ route('campaignDetailPage', $causesListDatum->slug) }}"
-                                            class="text-info"> Read More...</a>
-                                    </p>
-                                    <div class="progress-item mt-0">
-                                        <div class="progress mb-10">
-                                            <div data-percent="{{ calculatePercentageMaxTo100($causesListDatum->summary_total_collection, $causesListDatum->goal_amount) }}"
-                                                class="progress-bar"><span class="percent">0</span></div>
-                                        </div>
-                                        @if ($causesListDatum->campaign_status == 'running')
-                                            <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
-                                                href="{{ route('campaignDetailPage', $causesListDatum->slug) }}">Donate
-                                                Now</a>
-                                        @elseif (in_array($causesListDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
-                                            <a href="#"
-                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 mb-10 disabled">Completed</a>
-                                        @else
-                                            <a href="#"
-                                                class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 mb-10 disabled">Expired</a>
-                                        @endif
+                                    @if ($causesListDatum->campaign_status == 'running')
+                                        <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mb-10"
+                                            href="{{ route('campaignDetailPage', $causesListDatum->slug) }}">Donate
+                                            Now</a>
+                                    @elseif (in_array($causesListDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
+                                        <a href="#"
+                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 mb-10 disabled">Completed</a>
+                                    @else
+                                        <a href="#"
+                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 mb-10 disabled">Expired</a>
+                                    @endif
 
-                                    </div>
-                                    <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
-                                        <li class="current-fund">
-                                            <strong>{{ priceToNprFormat($causesListDatum->summary_total_collection)}}</strong>funded
-                                        </li>
-                                        <li class="target-fund">
-                                            <strong>{{ priceToNprFormat($causesListDatum->goal_amount) }}</strong>target
-                                        </li>
-                                        <li class="remaining-days">
-                                            @if(!in_array($causesListDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
+                                </div>
+                                <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
+                                    <li class="current-fund">
+                                        <strong>{{ priceToNprFormat($causesListDatum->summary_total_collection) }}</strong>funded
+                                    </li>
+                                    <li class="target-fund">
+                                        <strong>{{ priceToNprFormat($causesListDatum->goal_amount) }}</strong>target
+                                    </li>
+                                    <li class="remaining-days">
+                                        @if (!in_array($causesListDatum->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                             <strong>{{ getDaysDiffByToday($causesListDatum->end_date) }}</strong>days
                                             to go
-                                            @else
-                                            Settled on {{$causesListDatum?->end_date?->format('Y-M-d')}}
-                                            @endif
-                                            
-                                        </li>
-                                    </ul>
-                                </div>
+                                        @else
+                                            Settled on {{ $causesListDatum?->end_date?->format('Y-M-d') }}
+                                        @endif
+
+                                    </li>
+                                </ul>
                             </div>
-                        @endforeach
+                        </div>
                         @if (!$causesList->count())
                             <div class="col-md-5">
                             </div>
@@ -136,16 +138,22 @@
                                 <a class="btn btn-default btn-lg" href="#">Show More Projects</a>
                             </div>
                         </div> --}}
-                    </div>
+                        @if ($rowCountRecentCampaign % 3 == 0 && $rowCountRecentCampaign != 1)
                 </div>
+                @endif
+                @php $rowCountRecentCampaign=$rowCountRecentCampaign+1;@endphp
+                @endforeach
 
-                <div class="d-flex justify-content-center float-right">
-
-                    {{ $causesList->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
-
-                </div>
             </div>
-        </section>
+
+
+            <div class="d-flex justify-content-center float-right">
+
+                {{ $causesList->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
+
+            </div>
+    </div>
+    </section>
     </div>
     <!-- end main-content -->
 @endsection
