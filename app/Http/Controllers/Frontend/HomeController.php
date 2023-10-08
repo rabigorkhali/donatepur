@@ -77,7 +77,13 @@ class HomeController extends FrontendBaseController
 
     public function index(Request $request)
     {
-        //  return $this->renderView('email.donation-receiver', []);
+        $views = $request->get('check-views');
+        if ($views == 'donation-given') {
+            return $this->renderView('email.donation-given', []);
+        }
+        if ($views == 'donation-receiver') {
+            return $this->renderView('email.donation-receiver', []);
+        }
         try {
             $data = array();
             $data['featuredCauses'] = CampaignView::where('status', true)
@@ -102,7 +108,7 @@ class HomeController extends FrontendBaseController
             $totalDonars = $this->donation->wherein('payment_status', ['completed'])->count();
             $data['total_donars'] = $totalDonars + $this->donation->wherein('payment_status', ['completed', 'successful'])->where('is_verified', 1)->where('giver_public_user_id', null)->count();
             $data['total_public_users'] = PublicUser::where('status', 1)->count();
-            $donationRaw = $this->donation->with('giver')->wherein('payment_status', ['completed'])->where('is_verified', 1)->orderby('amount','desc')->get();
+            $donationRaw = $this->donation->with('giver')->wherein('payment_status', ['completed'])->where('is_verified', 1)->orderby('amount', 'desc')->get();
             $topDonorsList = [];
             foreach ($donationRaw as $donationRawKey => $donationRawDatum) {
                 $topDonors = [];
@@ -147,7 +153,7 @@ class HomeController extends FrontendBaseController
             if ($category) {
                 $campaignQuery = $campaignQuery->where('campaign_category_id', $categoryDetails?->id);
             }
-            $campaignQuery = $campaignQuery->wherenotin('campaign_status', ['pending','s']);
+            $campaignQuery = $campaignQuery->wherenotin('campaign_status', ['pending', 's']);
             $campaignQuery = $campaignQuery->orderby('id', 'desc')
                 ->orderby('summary_total_collection', 'desc')
                 ->where('campaign_status', '!=', 'pending')->where('status', 1)
@@ -345,7 +351,7 @@ class HomeController extends FrontendBaseController
             $data['countries'] = Country::orderby('name', 'asc')->get();
             $data['paymentGateways'] = PaymentGateway::orderby('position', 'asc')->where('status', 1)->where('show_in_frontend', 1)->get();
             $topDonorsList = [];
-            $donationRaw = $this->donation->with('giver')->where('campaign_id', $campaignDetails->id)->wherein('payment_status', ['completed','stopped'])->where('is_verified', 1)->orderby('amount', 'desc')->get();
+            $donationRaw = $this->donation->with('giver')->where('campaign_id', $campaignDetails->id)->wherein('payment_status', ['completed', 'stopped'])->where('is_verified', 1)->orderby('amount', 'desc')->get();
             foreach ($donationRaw as $donationRawKey => $donationRawDatum) {
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
@@ -492,7 +498,7 @@ class HomeController extends FrontendBaseController
             // return redirect()->back();
             $data['type'] = 'error';
             $data['msg'] = 'Something went wrong';
-            SystemErrorLog::insert(['message' => 'khalti verification'.$th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;
+            SystemErrorLog::insert(['message' => 'khalti verification' . $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;
             return $data;
         }
     }
