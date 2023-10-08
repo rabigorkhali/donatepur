@@ -473,7 +473,7 @@
                     @php $rowCountRecentCampaign=1;@endphp
 
                     @foreach ($recentCauses as $recentCausesKey => $recentCausesDatum)
-                        @if (($rowCountRecentCampaign-1) % 3 == 0 || $rowCountRecentCampaign == 1)
+                        @if (($rowCountRecentCampaign - 1) % 3 == 0 || $rowCountRecentCampaign == 1)
                             <div class="row">
                         @endif
                         <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
@@ -540,19 +540,22 @@
                                 </ul>
                             </div>
                         </div>
-                        {{-- <div class="col-md-12">
-                            <div class="text-center">
-                                <a class="btn btn-default btn-lg" href="#">Show More Projects</a>
-                            </div>
-                        </div> --}}
-                        @if (($rowCountRecentCampaign) % 3 == 0 && $rowCountRecentCampaign!=1)
-                        </div>
-                        @endif
+
+                        @if ($rowCountRecentCampaign % 3 == 0 && $rowCountRecentCampaign != 1)
+                </div>
+                @endif
                 @php $rowCountRecentCampaign=$rowCountRecentCampaign+1;@endphp
                 @endforeach
-
+                <div class="row">
+                    {{-- {{ $recentCauses->appends(request()->except('page'))->links('pagination::bootstrap-4') }} --}}
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <a class="btn btn-default btn-lg" href="{{route('campaignList')}}">Show More</a>
+                        </div>
+                    </div>
                 </div>
-         </div>
+            </div>
+    </div>
     </section>
     <!-- Divider: testimonials -->
     <section class="bg-light">
