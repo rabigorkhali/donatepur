@@ -20,7 +20,16 @@
     RewriteRule ^ index.php [L]
 
     <Files .env>
-    Order allow,deny
-    Deny from all
+        Order allow,deny
+        Deny from all
     </Files>
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Header set Access-Control-Allow-Origin "https://www.donatepur.com"
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    # Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-csrf-token"
+    Header set Access-Control-Allow-Headers "*"
+    Header set Access-Control-Allow-Credentials "true"
 </IfModule>
