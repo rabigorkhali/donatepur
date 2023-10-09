@@ -470,9 +470,6 @@ class HomeController extends FrontendBaseController
                 $insertData['updated_at'] = date('Y-m-d H:i:s');
                 $insertData['payment_gateway_all_response'] = json_encode($response);
                 $insertData['is_verified'] = 1; //by system admin manually
-                dump($formDataArray,'from form');
-                dump($insertData);
-
                 $resp = Donation::create($insertData);
                 $data['type'] = 'success';
                 $data['msg'] = 'Thank You for your kindness. Your donation has been successfully received. Please wait for the verification.';
