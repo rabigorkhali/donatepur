@@ -112,8 +112,8 @@ return [
             'path' => env('APP_URL').'/static-images/donatepur_logo.png',
             'alt' => ' Loading..',
             'effect' => 'animation__shake',
-            'width' => 450,
-            'height' => 200,
+            'width' => 220,
+            'height' => 100,
         ],
     ],
 
