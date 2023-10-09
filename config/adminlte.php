@@ -110,10 +110,10 @@ return [
         'enabled' => true,
         'img' => [
             'path' => env('APP_URL').'/static-images/donatepur_logo.png',
-            'alt' => 'AdminLTE Preloader Image',
+            'alt' => ' Loading..',
             'effect' => 'animation__shake',
-            'width' => 60,
-            'height' => 60,
+            'width' => 450,
+            'height' => 200,
         ],
     ],
 
