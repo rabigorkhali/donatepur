@@ -321,8 +321,7 @@
                                 {{-- KHALTI --}}
                                 <form id="khaltiDonateForm" class="khalti-donate-form"
                                     action="{{ route('getDonation') }}" method="post" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" value="khalti" name="payment_gateway_dynamic">
+                                    {{ csrf_field() }}                                    <input type="hidden" value="khalti" name="payment_gateway_dynamic">
                                     <div class="row">
                                         <input type="hidden" name="campaign_id" value="{{ $campaignDetails->id }}">
 

@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <meta name="description" content="{{setting('site.site_meta_title')}}" />
     <meta name="keywords" content="{{setting('site.site_key_words')}}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="author" content="Donatepur" />
     <!-- Page Title -->
     <title>{{setting('site.title')}}</title>
