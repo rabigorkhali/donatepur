@@ -113,7 +113,7 @@ return [
             'alt' => ' Loading..',
             'effect' => 'animation__shake',
             'width' => 220,
-            'height' => 100,
+            'height' => 90,
         ],
     ],
 
