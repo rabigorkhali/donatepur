@@ -828,7 +828,7 @@
                         $.ajax({
                             // url: app_url + '/payment/khalti/verfication',
                             url: "{{ getPaymentConfigs('khalti')['callback_url'] ?? '' }}",
-                            type: 'POST',
+                            type: 'GET',
                             data: {
                                 amount: payload.amount,
                                 trans_token: payload.token,
