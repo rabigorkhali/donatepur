@@ -833,7 +833,8 @@
                                 amount: payload.amount,
                                 trans_token: payload.token,
                                 form_data: $("#khaltiDonateForm").serializeArray(),
-                                campaign_id: "{{ $campaignDetails->id }}"
+                                campaign_id: "{{ $campaignDetails->id }}",
+                                _token: "{{ csrf_token() }}"
                             },
                             success: function(responseSuccess) {
                                 $("#preloader").hide();
