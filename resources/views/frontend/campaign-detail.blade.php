@@ -150,28 +150,63 @@
                                 <h3 class="mt-0 line-bottom">Make a Donation<span class="font-weight-300"> Now!</span>
                                 </h3>
                                 <div class="@if ($errors->first('payment_gateway')) has-error @endif">
+                                    {{old('payment_gateway_dynamic'),'thisisold'}}
                                     <div class="form-group mb-20">
-                                        <label><strong>Payment Gateway/Mode</strong></label> <br>
-                                        @foreach ($paymentGateways as $keyPaymentGateways => $datumPaymentGateways)
-                                            <label class="radio-inline">
-                                                <input required id="payment_gateway"
-                                                    onchange="paymentGateway('{{ $datumPaymentGateways->slug }}')"
-                                                    type="radio" @if (!old('payment_gateway') && $datumPaymentGateways->slug == 'khalti') checked @endif
-                                                    @if (old('payment_gateway') == $datumPaymentGateways->slug) checked @endif
-                                                    value="{{ $datumPaymentGateways->slug }}" name="payment_gateway">
-                                                {{ $datumPaymentGateways->name }}
-                                            </label>
-                                        @endforeach
+                                        <label for="payment_gateway"><strong>Payment Gateway/Mode</strong></label>
+                                        <select id="payment_gateway" onchange="paymentGateway()" name="payment_gateway"
+                                            class="form-control" required>
+                                            @foreach ($paymentGateways as $keyPaymentGateways => $datumPaymentGateways)
+                                                @if ($datumPaymentGateways->slug != 'khalti')
+                                                    <option value="{{ $datumPaymentGateways->slug }}"
+                                                        @if (old('payment_gateway_dynamic') == $datumPaymentGateways->slug) selected @endif>
+                                                        {{ $datumPaymentGateways->name }}
+                                                    </option>
+                                                @endif
+                                                @if ($datumPaymentGateways->slug == 'khalti')
+                                                    @php $khaltiPaymentSubCategory = 'khalti'; @endphp
+                                                    <option value="{{ $khaltiPaymentSubCategory }}"
+                                                        @if (old('payment_gateway_dynamic') == $khaltiPaymentSubCategory) selected @endif>
+                                                        {{ ucwords(str_replace('-', ' ', $khaltiPaymentSubCategory)) }}
+                                                    </option>
+
+                                                    @php $khaltiPaymentSubCategory = 'ebanking-nepal'; @endphp
+                                                    @php $khaltiPaymentLabel = 'Ebanking Nepal Only'; @endphp
+                                                    <option value="{{ $khaltiPaymentSubCategory }}"
+                                                        @if (old('payment_gateway_dynamic') == $khaltiPaymentSubCategory) selected @endif>
+                                                        {{ $khaltiPaymentLabel }}
+                                                    </option>
+
+                                                    @php $khaltiPaymentSubCategory = 'mobile-banking-nepal'; @endphp
+                                                    @php $khaltiPaymentLabel = 'Mobile Banking ( Nepal Only )'; @endphp
+                                                    <option value="{{ $khaltiPaymentSubCategory }}"
+                                                        @if (old('payment_gateway_dynamic') == $khaltiPaymentSubCategory) selected @endif>
+                                                        {{ $khaltiPaymentLabel }}
+                                                    </option>
+                                                    @php $khaltiPaymentLabel = 'Connect Ips ( Nepal Only )'; @endphp
+                                                    @php $khaltiPaymentSubCategory = 'connect-ips-nepal'; @endphp
+                                                    <option value="{{ $khaltiPaymentSubCategory }}"
+                                                        @if (old('payment_gateway_dynamic') == $khaltiPaymentSubCategory) selected @endif>
+                                                        {{ $khaltiPaymentLabel }}
+                                                    </option>
+
+                                                    @php $khaltiPaymentSubCategory = 'sct-nepal'; @endphp
+                                                    @php $khaltiPaymentLabel = 'SCT ( Nepal Only )'; @endphp
+                                                    <option value="{{ $khaltiPaymentSubCategory }}"
+                                                        @if (old('payment_gateway_dynamic') == $khaltiPaymentSubCategory) selected @endif>
+                                                        {{ $khaltiPaymentLabel }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+
                                         @if ($errors->first('payment_gateway'))
                                             <span
                                                 class="text-danger display-block">{{ $errors->first('payment_gateway') }}</span>
                                         @endif
                                     </div>
                                 </div>
+
                                 {{-- ONLY FOR ESEWA --}}
-
-
-
                                 <form id="esewaDonateFormWithCustomFields" class="esewa-donate-form d-none" method="POST"
                                     action="{{ route('esewaPaymentInitiateV2') }}">
                                     {{-- ESEWA DWFAULT --}}
@@ -321,7 +356,8 @@
                                 {{-- KHALTI --}}
                                 <form id="khaltiDonateForm" class="khalti-donate-form"
                                     action="{{ route('getDonation') }}" method="post" enctype="multipart/form-data">
-                                    {{ csrf_field() }}                                    <input type="hidden" value="khalti" name="payment_gateway_dynamic">
+                                    {{ csrf_field() }} <input type="hidden" value="khalti"
+                                        name="payment_gateway_dynamic">
                                     <div class="row">
                                         <input type="hidden" name="campaign_id" value="{{ $campaignDetails->id }}">
 
@@ -432,7 +468,8 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
 
-                                                <a class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
+                                                <a onclick="khaltiOnClick()"
+                                                    class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
                                                     data-loading-text="Please wait..." id="khaltiDonateBtn">Donate with
                                                     Khalti</a>
 
@@ -644,24 +681,42 @@
 @if ($campaignDetails->campaign_status == 'running')
     @section('scripts')
         <script>
-            function paymentGateway(value) {
+            var checkoutKhalti = null;
+            var paymentGatewayValue = null;
+            var rawValues = null;
+            var khaltiDonateBtn = null;
+            var khaltiConfig = null;
+        </script>
+        <script>
+            function paymentGateway(staticVal = '') {
+                paymentGatewayValue = $('#payment_gateway').val();
+                if (!staticVal) {
+                    paymentGatewayValue = $('#payment_gateway').val();
+                } else {
+                    paymentGatewayValue = staticVal;
+                }
+
+                rawValues = paymentGatewayValue;
                 $('.khalti-donate-form').addClass('d-none');
                 $('.offline-donate-form').addClass('d-none');
                 $('.esewa-donate-form').addClass('d-none');
-
-                if (value == 'bank') {
-                    $("input[type='radio'][name='payment_gateway'][value='bank']").prop("checked", true);
+                let validValuesKhalti = ['khalti', 'ebanking-nepal', 'mobile-banking-nepal', 'connect-ips-nepal', 'sct-nepal'];
+                console.log(paymentGatewayValue, 'dsfsdfsdfsdf');
+                if (paymentGatewayValue == 'bank') {
+                    console.log('inside bank');
                     $('.offline-donate-form').removeClass('d-none');
-                } else if (value == 'khalti') {
-                    $("input[type='radio'][name='payment_gateway'][value='khalti']").prop("checked", true);
+                } else if (validValuesKhalti.includes(paymentGatewayValue)) {
+                    console.log('inside khalti');
+                    /* khalti types */
+                    paymentGatewayValue = paymentGatewayValue.toUpperCase().replace('-NEPAL', '').replace('-', '_');
+                    /*end khalti types  */
                     $('.khalti-donate-form').removeClass('d-none');
-
-                } else if (value == 'esewa') {
-                    $("input[type='radio'][name='payment_gateway'][value='esewa']").prop("checked", true);
+                } else if (paymentGatewayValue == 'esewa') {
+                    console.log('inside esewa');
                     $('.esewa-donate-form').removeClass('d-none');
                     esewaDataMappingWithourSessionSet();
                 }
-                
+
             }
         </script>
 
@@ -677,33 +732,33 @@
                         showCancelButton: false
                     }).then((result) => {
                         let donationAmount = document.getElementById("donationAmount");
-                            if ($('input[name="payment_gateway"]:checked').val()=='bank') {
-                                donationAmount.scrollIntoView({
-                                    behavior: "smooth"
-                                });
-                            }
+                        if ($('#payment_gateway').val() == 'bank') {
+                            donationAmount.scrollIntoView({
+                                behavior: "smooth"
+                            });
+                        }
                         if (result.isConfirmed) {
-                             let donateFormElement = document.getElementById("khaltiDonationAmount");
-                            if ($('input[name="payment_gateway"]:checked').val()=='khalti') {
+                            let donateFormElement = document.getElementById("khaltiDonationAmount");
+                            if ($('#payment_gateway').val() == 'khalti') {
                                 donateFormElement.scrollIntoView({
                                     behavior: "instant"
                                 });
-                            } 
+                            }
 
                             let donationAmount = document.getElementById("donationAmount");
-                            if ($('input[name="payment_gateway"]:checked').val()=='bank') {
+                            if ($('#payment_gateway').val() == 'bank') {
                                 donationAmount.scrollIntoView({
                                     behavior: "instant"
                                 });
                             }
 
 
-                             let esewaDonationAmount = document.getElementById("esewaDonationAmount");
-                            if ($('input[name="payment_gateway"]:checked').val()=='esewa') {
+                            let esewaDonationAmount = document.getElementById("esewaDonationAmount");
+                            if ($('#payment_gateway').val() == 'esewa') {
                                 esewaDonationAmount.scrollIntoView({
                                     behavior: "instant"
                                 });
-                            } 
+                            }
                         }
                     });
 
@@ -714,7 +769,7 @@
 
             $(document).ready(function() {
                 $(window).scroll(function() {
-                    paymentGateway($('input[name="payment_gateway"]:checked').val());
+                    paymentGateway($('#payment_gateway').val());
                 });
 
                 $('#donationForm').submit(function() {
@@ -749,7 +804,7 @@
                 const oldPaymentGateway = "{{ old('payment_gateway_dynamic') }}";
                 paymentGateway(oldPaymentGateway);
                 if (!oldPaymentGateway) {
-                    paymentGateway($('input[name="payment_gateway"]:checked').val());
+                    paymentGateway($('#payment_gateway').val());
                 }
 
                 /* hover */
@@ -757,13 +812,13 @@
                 let $mouseMoveBank = $('#offlineDonateBtn');
                 let $mouseMoveEsewa = $('#esewaDonateBtn');
                 $mousemoveKhalti.hover(function(event) {
-                    paymentGateway($('input[name="payment_gateway"]:checked').val());
+                    paymentGateway($('#payment_gateway').val());
                 });
                 $mouseMoveBank.hover(function(event) {
-                    paymentGateway($('input[name="payment_gateway"]:checked').val());
+                    paymentGateway($('#payment_gateway').val());
                 });
                 $mouseMoveEsewa.hover(function(event) {
-                    paymentGateway($('input[name="payment_gateway"]:checked').val());
+                    paymentGateway($('#payment_gateway').val());
                 });
                 /* hover */
                 scrollToAnyError();
@@ -800,90 +855,94 @@
 
         {{-- FOR KHALTI --}}
         <script>
-            var price = 0;
-            // var public_key = "{{ env('KHALTI_PUBLIC_KEY') }}";
-            var public_key = "{{ getPaymentConfigs('khalti')['public_key'] ?? '' }}";
-            var app_url = "{{ env('APP_URL') }}";
-            var app_name = "{{ env('APP_NAME') }}";
-            var config = {
-                // replace the publicKey with yours
-                "publicKey": public_key,
-                "productIdentity": "{{ $campaignDetails?->id }}",
-                "productName": '{{ $campaignDetails?->slug }}',
-                "productUrl": "{{ route('campaignDetailPage', $campaignDetails?->slug) }}",
-                "paymentPreference": [
-                    "KHALTI",
-                    "EBANKING",
-                    "MOBILE_BANKING",
-                    "CONNECT_IPS",
-                    "SCT",
-                ],
-                "eventHandler": {
-                    onSuccess(payload) {
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-Token': '{{csrf_token()}}'
-                            }
-                        });
-                        $.ajax({
-                            // url: app_url + '/payment/khalti/verfication',
-                            url: "{{ getPaymentConfigs('khalti')['callback_url'] ?? '' }}",
-                            type: 'GET',
-                            data: {
-                                amount: payload.amount,
-                                trans_token: payload.token,
-                                form_data: $("#khaltiDonateForm").serializeArray(),
-                                campaign_id: "{{ $campaignDetails->id }}",
-                                _token: "{{ csrf_token() }}"
-                            },
-                            success: function(responseSuccess) {
-                                $("#preloader").hide();
-                                if (responseSuccess.type == 'error') {
-                                    Swal.fire('Error!', responseSuccess.msg, 'error');
-                                } else {
-                                    Swal.fire({
-                                        title: 'Success!',
-                                        text: responseSuccess.msg,
-                                        icon: 'success',
-                                        showCancelButton: false
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            location.reload();
-                                        }
-                                    });
+            function setupKhalti() {
+                var price = 0;
+                // var public_key = "{{ env('KHALTI_PUBLIC_KEY') }}";
+                var public_key = "{{ getPaymentConfigs('khalti')['public_key'] ?? '' }}";
+                var app_url = "{{ env('APP_URL') }}";
+                var app_name = "{{ env('APP_NAME') }}";
+                khaltiConfig = {
+                    // replace the publicKey with yours
+                    "publicKey": public_key,
+                    "productIdentity": "{{ $campaignDetails?->id }}",
+                    "productName": '{{ $campaignDetails?->slug }}',
+                    "productUrl": "{{ route('campaignDetailPage', $campaignDetails?->slug) }}",
+                    /* "paymentPreference": [
+                        "KHALTI",
+                        "EBANKING",
+                        "MOBILE_BANKING",
+                        "CONNECT_IPS",
+                        "SCT",
+                    ], */
+                    paymentPreference: [paymentGatewayValue],
+                    "eventHandler": {
+                        onSuccess(payload) {
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-Token': '{{ csrf_token() }}'
                                 }
-                                let currentUrl = window.location.href;
-                                currentUrl = currentUrl.split("#")[0]
-                                $('html, body').animate({
-                                    scrollTop: $("#donors").offset().top
-                                }, 1000);
-                            },
-                            error: function(error) {
-                                console.log(error, 'verification error');
-                                $("#preloader").hide();
-                                Swal.fire('Error!', 'Error. Please try again.', 'error');
-                            },
-                            complete: function() {
-                                // Hide the loader when the request is complete (regardless of success or error)
-                                $("#preloader").hide();
-                            }
+                            });
+                            $.ajax({
+                                // url: app_url + '/payment/khalti/verfication',
+                                url: "{{ getPaymentConfigs('khalti')['callback_url'] ?? '' }}",
+                                type: 'GET',
+                                data: {
+                                    amount: payload.amount,
+                                    trans_token: payload.token,
+                                    form_data: $("#khaltiDonateForm").serializeArray(),
+                                    campaign_id: "{{ $campaignDetails->id }}",
+                                    _token: "{{ csrf_token() }}"
+                                },
+                                success: function(responseSuccess) {
+                                    $("#preloader").hide();
+                                    if (responseSuccess.type == 'error') {
+                                        Swal.fire('Error!', responseSuccess.msg, 'error');
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Success!',
+                                            text: responseSuccess.msg,
+                                            icon: 'success',
+                                            showCancelButton: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                location.reload();
+                                            }
+                                        });
+                                    }
+                                    let currentUrl = window.location.href;
+                                    currentUrl = currentUrl.split("#")[0]
+                                    $('html, body').animate({
+                                        scrollTop: $("#donors").offset().top
+                                    }, 1000);
+                                },
+                                error: function(error) {
+                                    console.log(error, 'verification error');
+                                    $("#preloader").hide();
+                                    Swal.fire('Error!', 'Error. Please try again.', 'error');
+                                },
+                                complete: function() {
+                                    // Hide the loader when the request is complete (regardless of success or error)
+                                    $("#preloader").hide();
+                                }
 
-                        })
+                            })
 
-                    },
-                    onError(error) {
-                        console.log(error, 'iamhere');
-                        $("#preloader").hide();
-                        Swal.fire('Error!', 'Error. Please try again.', 'error');
-                    },
-                    onClose() {
-                        $("#preloader").hide();
+                        },
+                        onError(error) {
+                            console.log(error, 'iamhere');
+                            $("#preloader").hide();
+                            Swal.fire('Error!', 'Error. Please try again.', 'error');
+                        },
+                        onClose() {
+                            $("#preloader").hide();
+                        }
                     }
-                }
-            };
-            var checkout = new KhaltiCheckout(config);
-            var btn = document.getElementById('khaltiDonateBtn');
-            btn.onclick = function() {
+                };
+                checkoutKhalti = new KhaltiCheckout(khaltiConfig);
+            }
+
+            function khaltiOnClick() {
+                setupKhalti();
                 let showKhaltiForm = true;
                 /* check validation */
                 const form = document.getElementById("khaltiDonateForm");
@@ -902,7 +961,6 @@
                 }
                 /* end check validation */
                 if (form.checkValidity()) {
-
                     event.preventDefault();
                     let khaltiFullname = $('#khaltiFullname').val().trim();
                     let khaltiMobileNumber = $('#khaltiMobileNumber').val().trim();
@@ -947,7 +1005,7 @@
                     }
                     if (showKhaltiForm) {
                         $("#preloader").show();
-                        checkout.show({
+                        checkoutKhalti.show({
                             amount: khaltiDonationAmount * 100
                         });
                     }

@@ -451,16 +451,16 @@ class HomeController extends FrontendBaseController
                 /* donateaoro */
                 $insertData = [];
                 $insertData['amount'] = $response->amount / 100;
-                $insertData['fullname'] = trim($formDataArray['fullname']??'error');
-                $insertData['mobile_number'] = trim($formDataArray['mobile_number']??'error');
-                $insertData['country'] = trim($formDataArray['country']??'error');
-                $insertData['email'] = trim($formDataArray['email']??'error');
-                $insertData['address'] = trim($formDataArray['address']??'error');
-                $insertData['description'] = trim($formDataArray['description']??'error');
+                $insertData['fullname'] = trim($formDataArray['fullname'] ?? 'error');
+                $insertData['mobile_number'] = trim($formDataArray['mobile_number'] ?? 'error');
+                $insertData['country'] = trim($formDataArray['country'] ?? 'error');
+                $insertData['email'] = trim($formDataArray['email'] ?? 'error');
+                $insertData['address'] = trim($formDataArray['address'] ?? 'error');
+                $insertData['description'] = trim($formDataArray['description'] ?? 'error');
                 $insertData['payment_gateway_id'] = $paymentGateWayDetails->id;
                 $insertData['campaign_id'] = $request->input('campaign_id');
                 $insertData['receiver_public_user_id'] = $campaignDetails->public_user_id;
-                $insertData['giver_public_user_id'] = $userCurrent?->id?? null;
+                $insertData['giver_public_user_id'] = $userCurrent?->id ?? null;
                 $insertData['created_at'] = date('Y-m-d H:i:s');
                 $insertData['transaction_id'] = $response->idx ?? null;
                 $insertData['service_charge_percentage'] = 7;
@@ -560,20 +560,28 @@ class HomeController extends FrontendBaseController
 
     public function esewaPaymentInitiateV2(Request $request)
     {
-        $amount = trim($request->get('amount'));
-        $pid = trim($request->get('pid'));
-        $campaign = trim($request->get('campaign_id'));
-        session(['esewaDonateformData' => $request->all()]);
-        $successUrl = route('esewaSuccess');
-        $failureUrl = route('esewaFailure') . '?campaign=' . $campaign;
-        if (setting('site.is_dev_or_live') == 'dev') {
-            $config = new Config($successUrl, $failureUrl);
-        } else {
-            $config = new Config($successUrl, $failureUrl, getPaymentConfigs('esewa')['public_key']);
+        try {
+            $amount = trim($request->get('amount'));
+            $pid = trim($request->get('pid'));
+            $campaign = trim($request->get('campaign_id'));
+            $campaignDetails = CampaignView::where('status', 1)->where('id', $campaign)->first();
+            session(['esewaDonateformData' => $request->all()]);
+            $successUrl = route('esewaSuccess');
+            $failureUrl = route('esewaFailure') . '?campaign=' . $campaign;
+            if (setting('site.is_dev_or_live') == 'dev') {
+                $config = new Config($successUrl, $failureUrl);
+            } else {
+                $config = new Config($successUrl, $failureUrl, getPaymentConfigs('esewa')['public_key']);
+            }
+            $esewa = new Client($config);
+            // $esewa->process('P101W20dfdf1', 100, 15, 80, 50);
+            $esewa->process($pid, $amount, 0, 0, 0);
+        } catch (Throwable $th) {
+            SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);
+            Session::flash('error', 'Sorry. Your recent transaction had an issue. Please try again later or contact our support team.');
+            // return redirect()->route('campaignDetailPage', ['slug' => $campaignDetails->slug]);
+            return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }
-        $esewa = new Client($config);
-        // $esewa->process('P101W20dfdf1', 100, 15, 80, 50);
-        $esewa->process($pid, $amount, 0, 0, 0);
     }
 
     public function esewaPaymentSuccess(Request $request)
