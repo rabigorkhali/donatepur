@@ -164,25 +164,26 @@
                                                 @endif
                                                 @if ($datumPaymentGateways->slug == 'khalti')
                                                     @php $khaltiPaymentSubCategory = 'khalti'; @endphp
+                                                    @php $khaltiPaymentLabel = 'Khalti (Nepal Only)'; @endphp
                                                     <option value="{{ $khaltiPaymentSubCategory }}"
                                                         @if (old('payment_gateway_dynamic') == $khaltiPaymentSubCategory) selected @endif>
-                                                        {{ ucwords(str_replace('-', ' ', $khaltiPaymentSubCategory)) }}
+                                                        {{ $khaltiPaymentLabel }}
                                                     </option>
 
                                                     @php $khaltiPaymentSubCategory = 'ebanking-nepal'; @endphp
-                                                    @php $khaltiPaymentLabel = 'Ebanking Nepal Only'; @endphp
+                                                    @php $khaltiPaymentLabel = 'Ebanking (Nepal Only)'; @endphp
                                                     <option value="{{ $khaltiPaymentSubCategory }}"
                                                         @if (old('payment_gateway_dynamic') == $khaltiPaymentSubCategory) selected @endif>
                                                         {{ $khaltiPaymentLabel }}
                                                     </option>
 
                                                     @php $khaltiPaymentSubCategory = 'mobile-banking-nepal'; @endphp
-                                                    @php $khaltiPaymentLabel = 'Mobile Banking ( Nepal Only )'; @endphp
+                                                    @php $khaltiPaymentLabel = 'Mobile Banking (Nepal Only)'; @endphp
                                                     <option value="{{ $khaltiPaymentSubCategory }}"
                                                         @if (old('payment_gateway_dynamic') == $khaltiPaymentSubCategory) selected @endif>
                                                         {{ $khaltiPaymentLabel }}
                                                     </option>
-                                                    @php $khaltiPaymentLabel = 'Connect Ips ( Nepal Only )'; @endphp
+                                                    @php $khaltiPaymentLabel = 'Connect Ips (Nepal Only)'; @endphp
                                                     @php $khaltiPaymentSubCategory = 'connect-ips-nepal'; @endphp
                                                     <option value="{{ $khaltiPaymentSubCategory }}"
                                                         @if (old('payment_gateway_dynamic') == $khaltiPaymentSubCategory) selected @endif>
@@ -190,7 +191,7 @@
                                                     </option>
 
                                                     @php $khaltiPaymentSubCategory = 'sct-nepal'; @endphp
-                                                    @php $khaltiPaymentLabel = 'SCT ( Nepal Only )'; @endphp
+                                                    @php $khaltiPaymentLabel = 'SCT (Nepal Only)'; @endphp
                                                     <option value="{{ $khaltiPaymentSubCategory }}"
                                                         @if (old('payment_gateway_dynamic') == $khaltiPaymentSubCategory) selected @endif>
                                                         {{ $khaltiPaymentLabel }}
