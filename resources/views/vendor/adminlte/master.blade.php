@@ -123,7 +123,7 @@
             });
             setTimeout(function() {
                 $('.message-alert').fadeOut('slow');
-            }, 4000);
+            }, 10000);
         }
     });
 

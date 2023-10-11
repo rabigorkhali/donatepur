@@ -344,7 +344,7 @@
                                                                             style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 25.2px;">
                                                                             <span style="font-size:14px;">Welcome!
                                                                                 "{{ $full_name ?? 'N/A' }}",
-                                                                                We're thrilled to have you join our
+                                                                                we're thrilled to have you join our
                                                                                 mission of making a meaningful impact on
                                                                                 the lives of others.<br> Thank you!.
                                                                                 <br>

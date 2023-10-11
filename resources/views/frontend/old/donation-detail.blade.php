@@ -197,7 +197,7 @@
             Swal.fire({
                 icon: 'success',
                 title: 'Success!',
-                text: 'Your offline donation has been received. The world need more people like you. Thanks for joining our mission.',
+                text: 'Your donation has been received. The world need more people like you. Thanks for joining our mission.',
                 confirmButtonText: 'OK'
             });
         }
