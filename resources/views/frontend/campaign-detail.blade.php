@@ -471,8 +471,7 @@
 
                                                 <a onclick="khaltiOnClick()"
                                                     class="btn btn-flat btn-dark btn-theme-colored mt-10 pl-30 pr-30"
-                                                    data-loading-text="Please wait..." id="khaltiDonateBtn">Donate with
-                                                    Khalti</a>
+                                                    data-loading-text="Please wait..." id="khaltiDonateBtn">Donate</a>
 
                                             </div>
                                         </div>
