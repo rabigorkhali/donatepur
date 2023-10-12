@@ -150,7 +150,7 @@
                                 <h3 class="mt-0 line-bottom">Make a Donation<span class="font-weight-300"> Now!</span>
                                 </h3>
                                 <div class="@if ($errors->first('payment_gateway')) has-error @endif">
-                                    {{old('payment_gateway_dynamic'),'thisisold'}}
+                                    {{ old('payment_gateway_dynamic'), 'thisisold' }}
                                     <div class="form-group mb-20">
                                         <label for="payment_gateway"><strong>Payment Gateway/Mode</strong></label>
                                         <select id="payment_gateway" onchange="paymentGateway()" name="payment_gateway"
@@ -490,14 +490,18 @@
                                         <div class="col-md-12" style="border: 1px solid #000; margin: 10px;">
                                             <div class="form-group mb-20 ">
                                                 <h4>Please transfer your donation amount in following bank details.</h4>
+                                                <label>SWIFT CODE:
+                                                </label>{{ getPaymentConfigs('bank')['swift_code'] ?? 'KMBLNPKA' }}<br>
                                                 <label>Account Name:
                                                 </label>{{ getPaymentConfigs('bank')['account_name'] ?? 'N/A' }}<br>
                                                 <label>Account No:
                                                 </label>{{ getPaymentConfigs('bank')['account_number'] ?? 'N?A' }}</br>
                                                 <label>Bank Name:
                                                 </label>{{ !empty(($paymentConfigs = getPaymentConfigs('bank'))['fullname']) ? $paymentConfigs['fullname'] : setting('bank.bank_name') }}</br>
-                                                <label>QR: </label><br> <img height="100"
-                                                    src="{{ asset('/public/uploads') . '/' . getPaymentConfigs('bank')['qr_image'] ?? setting('bank.bank_qr') }}">
+                                                @if (getPaymentConfigs('bank')['qr_image'])
+                                                    <label>QR: </label><br> <img height="100"
+                                                        src="{{ asset('/public/uploads') . '/' . getPaymentConfigs('bank')['qr_image'] ?? setting('bank.bank_qr') }}">
+                                                @endif
                                             </div>
                                         </div>
 

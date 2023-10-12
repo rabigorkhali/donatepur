@@ -211,6 +211,7 @@ function getPaymentConfigs($gatewaySlug)
             $gatewayConfigs['qr_image'] = $paymentDetails->qr_image;
             $gatewayConfigs['private_key'] = $paymentDetails->private_key;
             $gatewayConfigs['public_key'] = $paymentDetails->public_key;
+            $gatewayConfigs['swift_code'] = $paymentDetails->swift_code??null;
             return $gatewayConfigs;
         } else {
             $gatewayConfigs['initiation_url'] = $paymentDetails->initiation_url_dev;
@@ -221,6 +222,7 @@ function getPaymentConfigs($gatewaySlug)
             $gatewayConfigs['qr_image'] = $paymentDetails->qr_image;
             $gatewayConfigs['private_key'] = $paymentDetails->private_key_dev;
             $gatewayConfigs['public_key'] = $paymentDetails->public_key_dev;
+            $gatewayConfigs['swift_code'] = $paymentDetails->swift_code??null;
             return $gatewayConfigs;
         }
     } catch (Throwable $th) {
