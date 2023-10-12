@@ -116,4 +116,4 @@
     @yield('js')
 @stop
 
-@include('frontend.partials.footer')
+{{-- @include('frontend.partials.footer') --}}

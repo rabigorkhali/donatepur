@@ -12,7 +12,7 @@
     {{-- Custom Meta Tags --}}
     <link rel="icon" href="{{ asset('/public/uploads') . '/' . imageName(setting('site.fav_icon')) }}" type="image/png">
 
-    <link href="{{ asset('/public/uploads') . '/' . imageName(setting('site.fav_icon')) }}" rel="shortcut icon" type="image/png">
+    {{-- <link href="{{ asset('/public/uploads') . '/' . imageName(setting('site.fav_icon')) }}" rel="shortcut icon" type="image/png"> --}}
 
     @yield('meta_tags')
 
