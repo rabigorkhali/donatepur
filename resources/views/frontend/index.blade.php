@@ -338,7 +338,7 @@
                                                 </div>
                                                 <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
                                                     <li class="current-fund">
-                                                        <strong>{{ calculatePercentageMaxTo100($featuredCausesDatum->summary_total_collection, $featuredCausesDatum->goal_amount) }}%</strong>funded
+                                                        <strong>{{ priceToNprFormat($featuredCausesDatum->summary_total_collection) }}</strong>funded
                                                     </li>
                                                     <li class="target-fund">
                                                         <strong>{{ priceToNprFormat($featuredCausesDatum->goal_amount) }}</strong>target
@@ -523,7 +523,7 @@
                                 </div>
                                 <ul class="list-inline project-conditions text-center bg-deep m-0 p-10">
                                     <li class="current-fund">
-                                        <strong>{{ calculatePercentageMaxTo100($recentCausesDatum->summary_total_collection, $recentCausesDatum->goal_amount) }}%</strong>funded
+                                        <strong>{{ priceToNprFormat($recentCausesDatum->summary_total_collection) }}</strong>funded
                                     </li>
                                     <li class="target-fund">
                                         <strong>{{ priceToNprFormat($recentCausesDatum->goal_amount) }}</strong>target
