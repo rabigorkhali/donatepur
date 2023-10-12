@@ -413,7 +413,7 @@
                                 <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom"
                                     data-value="{{ $total_donars }}" data-animation-duration="1500">0</h2>
                                 <div class="clearfix"></div>
-                                <h4 class="font-14">Happy Donators</h4>
+                                <h4 class="font-14">Total Donators</h4>
                             </div>
                         </div>
                     </div>
@@ -424,7 +424,7 @@
                                 <h2 class="animate-number text-theme-colored mt-0 font-48 line-bottom"
                                     data-value="{{ $total_campaign }}" data-animation-duration="1500">0</h2>
                                 <div class="clearfix"></div>
-                                <h4 class="font-14">Successful Campaigns</h4>
+                                <h4 class="font-14">Total Campaigns</h4>
                             </div>
                         </div>
                     </div>
