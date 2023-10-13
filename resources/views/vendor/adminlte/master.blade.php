@@ -182,7 +182,7 @@
 
     });
 
-    $(".ck-content").on("click focus", function() {
+    $(".ck-content").on("click", function() {
         $(".ck-editor").css({
             "height": "500px",
             "width": "100%",
