@@ -165,13 +165,15 @@ function getSiteDetails($siteType = 'Site')
 
 function getPostsBlogs($limit = '3')
 {
-    $posts = Post::where('status', 'published')->orderby('created_at', 'desc')->limit($limit)->get();
+    $posts = Post::where('status', 'published')->orwhere('status', 'PUBLISHED')->orderby('created_at', 'desc')->limit($limit)->get();
     return $posts;
 }
 
 function getLatestCampaigns($limit = '3')
 {
-    $campaigns = CampaignView::where('status', 1)->orderby('created_at', 'desc')->limit($limit)->get();
+    $campaigns = CampaignView::where('status', 1)->orderby('created_at', 'desc')
+    ->wherenotin('campaign_status', getCampaignStatusThatCantBeShown())
+    ->limit($limit)->get();
     return $campaigns;
 }
 
