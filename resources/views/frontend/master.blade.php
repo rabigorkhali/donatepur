@@ -111,10 +111,10 @@
         <div class="footer-bottom bg-black-333">
             <div class="container pt-20 pb-20">
                 <div class="row">
-                    <div class="col-md-6 sm-text-center">
+                    <div class="col-md-4 sm-text-center">
                         <p class="font-11 text-black-777 m-0">{{ setting('site.copy_right_footer_text') }}</p>
                     </div>
-                    <div class="col-md-6 text-right">
+                    <div class="col-md-8 text-right">
                         <div class="widget no-border m-0">
                             <ul class="list-inline sm-text-center mt-5 font-12">
                                 <li>
