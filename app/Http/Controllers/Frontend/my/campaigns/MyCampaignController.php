@@ -167,7 +167,6 @@ class MyCampaignController extends Controller
             return redirect('/my/campaigns');
         } catch (Throwable $th) {
             DB::rollback();
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
@@ -221,11 +220,15 @@ class MyCampaignController extends Controller
 
     public function update(Request $request, $campaignId)
     {
-
+        $campaign = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->where('status','pending')->first();
+        if (!$campaign) {
+            Session::flash('error', 'Bad request.');
+            return redirect()->route('my.campaigns.list');
+        }
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255|min:10',
             'goal_amount' => 'required|numeric|min:1000|max:10000000',
-            'start_date' => 'required|date|after_or_equal:today',
+            'start_date' => 'required|date|after_or_equal:'.$campaign->start_date,
             'end_date' => 'required|date|after:start_date',
             'campaign_category_id' => 'required|exists:campaign_categories,id',
             'address' => 'required|string|max:255',
@@ -240,11 +243,7 @@ class MyCampaignController extends Controller
         }
         try {
 
-            $campaign = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
-            if (!$campaign) {
-                Session::flash('error', 'Campaign not found.');
-                return redirect()->route('my.campaigns.list');
-            }
+            
             if (strtolower($campaign->campaign_status) !== 'pending') {
                 Session::flash('error', 'Only pending campaign can be updated.');
                 return redirect()->route('my.campaigns.list');

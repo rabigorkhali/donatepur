@@ -10,13 +10,19 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Custom Meta Tags --}}
-    <link rel="icon" href="{{ asset('/public/uploads') . '/' . imageName(setting('site.fav_icon')) }}" type="image/png">
+    <link rel="icon" href="{{ asset('/public/uploads') . '/' . imageName(setting('site.fav_icon')) }}"
+        type="image/png">
     <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 
     {{-- <link href="{{ asset('/public/uploads') . '/' . imageName(setting('site.fav_icon')) }}" rel="shortcut icon" type="image/png"> --}}
 
     @yield('meta_tags')
-
+    <style>
+        .ck-content {
+            height: 460px;
+            width: 100%;
+        }
+    </style>
     {{-- Title --}}
     <title>
         @yield('title_prefix', config('adminlte.title_prefix', ''))
@@ -130,12 +136,64 @@
 
     function clearFilters() {
         var inputs = document.querySelectorAll('input[type="text"]');
-            
-            for (var i = 0; i < inputs.length; i++) {
-                inputs[i].value = '';
-            }
+
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].value = '';
         }
+    }
 </script>
+
+{{-- edidot ck --}}
+<script>
+    // $('#description').summernote({
+    //     height: 400, // set editor height
+    //     width: 1140, // set editor height
+    //     focus: true
+    // });
+    $(document).ready(function() {
+        ClassicEditor
+            .create(document.querySelector('#description'), {
+                // Configuration options here
+                width: '100%',
+                height: '800px',
+                toolbar: ['heading','bold', 'italic','numberedlist','bulletedlist','fontSize','textcolor','undo','redo'],
+                fontSize: {
+                    options: [12, 14, 16, 18, 'default', 24, 28]
+                },
+                placeholder: 'Type your story here...'
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        // Set CSS styles for the selected elements
+        setTimeout(function() {
+            // Your code to be executed after 1 second goes here
+            // For example, you can do something like:
+            $(".ck-editor").css({
+                "height": "500px",
+                "width": "100%",
+            });
+            $(".ck-content").css({
+                "height": "460px",
+                "width": "100%",
+            });
+        }, 500); // 1000 milliseconds = 1 second
+
+    });
+
+    $(".ck-content").on("click focus", function() {
+        $(".ck-editor").css({
+            "height": "500px",
+            "width": "100%",
+        });
+        $(".ck-content").css({
+            "height": "460px",
+            "width": "100%",
+        });
+    });
+</script>
+{{-- editor ck --}}
 @yield('scripts')
 @if (strpos(url()->current(), '/my/') !== false)
     <footer class="main-footer">

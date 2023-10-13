@@ -20,7 +20,7 @@
         /* Ensure the background is behind the content */
         pointer-events: none;
         /* Allow clicks to pass through the background */
-    }
+    },
 </style>
 @php($dashboard_url = View::getSection('dashboard_url') ?? config('adminlte.dashboard_url', 'home'))
 
