@@ -157,8 +157,13 @@
                     // Configuration options here
                     width: '100%',
                     height: '800px',
-                    toolbar: ['heading', 'bold', 'italic', 'numberedlist', 'bulletedlist', 'fontSize',
-                        'textcolor', 'undo', 'redo','|', 'align:left', 'align:center', 'align:right'
+                    toolbar: ['alignment','heading', 'bold', 'italic', 'numberedlist', 'bulletedlist', 'fontSize',
+                        'textcolor', 'undo', 'redo', '|', 'align:left', 'align:center', 'align:right',
+                        'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyBlock', '|',
+                        'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor',
+                        '|','strikethrough', 'subscript', 'superscript', 'code',
+                        '|', 'link', 'blockQuote', 'codeBlock',
+                        '|','todoList', 'outdent', 'indent'
                     ],
                     fontSize: {
                         options: [12, 14, 16, 18, 'default', 24, 28]
