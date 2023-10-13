@@ -151,35 +151,38 @@
     //     focus: true
     // });
     $(document).ready(function() {
-        ClassicEditor
-            .create(document.querySelector('#description'), {
-                // Configuration options here
-                width: '100%',
-                height: '800px',
-                toolbar: ['heading','bold', 'italic','numberedlist','bulletedlist','fontSize','textcolor','undo','redo'],
-                fontSize: {
-                    options: [12, 14, 16, 18, 'default', 24, 28]
-                },
-                placeholder: 'Type your story here...'
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        if (document.querySelector('#description')) {
+            ClassicEditor
+                .create(document.querySelector('#description'), {
+                    // Configuration options here
+                    width: '100%',
+                    height: '800px',
+                    toolbar: ['heading', 'bold', 'italic', 'numberedlist', 'bulletedlist', 'fontSize',
+                        'textcolor', 'undo', 'redo','|', 'align:left', 'align:center', 'align:right'
+                    ],
+                    fontSize: {
+                        options: [12, 14, 16, 18, 'default', 24, 28]
+                    },
+                    placeholder: 'Type your story here...'
+                })
+                .catch(error => {
+                    console.error(error);
+                });
 
-        // Set CSS styles for the selected elements
-        setTimeout(function() {
-            // Your code to be executed after 1 second goes here
-            // For example, you can do something like:
-            $(".ck-editor").css({
-                "height": "500px",
-                "width": "100%",
-            });
-            $(".ck-content").css({
-                "height": "460px",
-                "width": "100%",
-            });
-        }, 500); // 1000 milliseconds = 1 second
-
+            // Set CSS styles for the selected elements
+            setTimeout(function() {
+                // Your code to be executed after 1 second goes here
+                // For example, you can do something like:
+                $(".ck-editor").css({
+                    "height": "500px",
+                    "width": "100%",
+                });
+                $(".ck-content").css({
+                    "height": "460px",
+                    "width": "100%",
+                });
+            }, 500); // 1000 milliseconds = 1 second
+        }
     });
 
     $(".ck-content").on("click", function() {
