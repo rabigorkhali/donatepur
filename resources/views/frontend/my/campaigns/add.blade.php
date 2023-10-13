@@ -4,22 +4,27 @@
 
 
 @section('content_header')
-<style>
-    /* Hide the main toolbar */
-    .note-toolbar {
-        display: none;
-    }
+    <style>
+        /* Hide the main toolbar */
+        .note-toolbar {
+            display: none;
+        }
 
-    /* Hide the air-mode toolbar */
-    .note-air-popover {
-        display: none;
-    }
+        /* Hide the air-mode toolbar */
+        .note-air-popover {
+            display: none;
+        }
 
-    /* Hide the popover toolbar */
-    .note-popover {
-        display: none;
-    }
-</style>
+        /* Hide the popover toolbar */
+        .note-popover {
+            display: none;
+        }
+
+        .ck-content {
+            height: 460px;
+            width: 100%;
+        }
+    </style>
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">
@@ -37,16 +42,13 @@
 @stop
 
 @section('content')
-    <form method="post" action="{{ route('my.campaigns.store') }}" class="mt-6 space-y-6"
-        enctype="multipart/form-data">
+    <form method="post" action="{{ route('my.campaigns.store') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         <div class="row">
 
             <div class="col-md-6">
                 @php $formInputName='title'; @endphp
-                <x-adminlte-input required name="{{ $formInputName }}"
-                    value="{{ old($formInputName) }}"
-                    fgroup-class=" " />
+                <x-adminlte-input required name="{{ $formInputName }}" value="{{ old($formInputName) }}" fgroup-class=" " />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -57,8 +59,7 @@
             <div class="col-md-6">
                 @php $formInputName='goal_amount'; @endphp
                 <x-adminlte-input required name="{{ $formInputName }}" label="Goal Amount (Rs.)"
-                    value="{{ old($formInputName) }}"
-                   fgroup-class=" " min="1000" type="number" />
+                    value="{{ old($formInputName) }}" fgroup-class=" " min="1000" type="number" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -69,8 +70,7 @@
             <div class="col-md-6">
                 @php $formInputName='start_date'; @endphp
                 <x-adminlte-input required name="{{ $formInputName }}" type='date' class="  "
-                    value="{{ old($formInputName) }}"
-                     fgroup-class="" />
+                    value="{{ old($formInputName) }}" fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -81,8 +81,7 @@
             <div class="col-md-6">
                 @php $formInputName='end_date'; @endphp
                 <x-adminlte-input required name="{{ $formInputName }}" type='date' class="  "
-                    value="{{ old($formInputName) }}"
-                    fgroup-class="" />
+                    value="{{ old($formInputName) }}" fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -92,9 +91,8 @@
 
             <div class="col-md-6">
                 @php $formInputName='campaign_category_id'; @endphp
-                <x-adminlte-select2 required name="{{ $formInputName }}"
-                    value="{{ old($formInputName) }}" label="Campaign Category"
-                    label-class="" data-placeholder="Select Campaign Category...">
+                <x-adminlte-select2 required name="{{ $formInputName }}" value="{{ old($formInputName) }}"
+                    label="Campaign Category" label-class="" data-placeholder="Select Campaign Category...">
                     @foreach ($campaignCategories as $campaignCategoriesDatum)
                         <option value="{{ $campaignCategoriesDatum->id }}"
                             @if (old($formInputName) == $campaignCategoriesDatum->title) selected @endif>
@@ -109,14 +107,12 @@
                 @endif
 
             </div>
-            
+
 
             <div class="col-md-6">
                 @php $formInputName='address'; @endphp
                 <x-adminlte-input required name="{{ $formInputName }}" type='textbox' class="  "
-                    label="{{ ucfirst($formInputName) }}"
-                    value="{{ old($formInputName) }}"
-                    fgroup-class="" />
+                    label="{{ ucfirst($formInputName) }}" value="{{ old($formInputName) }}" fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -126,9 +122,8 @@
 
             <div class="col-md-6">
                 @php $formInputName='country'; @endphp
-                <x-adminlte-select2 required name="{{ $formInputName }}"
-                    value="{{ old($formInputName) }}" label="Country" label-class=""
-                    data-placeholder="Select Country...">
+                <x-adminlte-select2 required name="{{ $formInputName }}" value="{{ old($formInputName) }}" label="Country"
+                    label-class="" data-placeholder="Select Country...">
                     <option value="nepal" @if (old($formInputName) == 'nepal') selected @endif>Nepal</option>
                     <option value="india" @if (old($formInputName) == 'india') selected @endif>India</option>
                 </x-adminlte-select2>
@@ -142,8 +137,7 @@
             <div class="col-md-6">
                 @php $formInputName='video_url'; @endphp
                 <x-adminlte-input name="{{ $formInputName }}" type='textbox' class="  "
-                    value="{{ old($formInputName) }}"
-                    fgroup-class="" />
+                    value="{{ old($formInputName) }}" fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
@@ -153,23 +147,22 @@
 
             <div class="col-md-6">
                 @php $formInputName='cover_image'; @endphp
-                <x-adminlte-input name="{{ $formInputName }}" required type='file' accept="image/*" class="  " value=""
-                    fgroup-class="" />
+                <x-adminlte-input name="{{ $formInputName }}" required type='file' accept="image/*" class="  "
+                    value="" fgroup-class="" />
                 @if ($errors->has($formInputName))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first($formInputName) }}</strong>
                     </span>
                 @endif
-    
+
             </div>
             <div class="col-md-6">
                 @php $formInputName='status'; @endphp
-                {{old($formInputName)}}
-                <x-adminlte-select2 required name="{{ $formInputName }}"
-                    value="{{ old($formInputName) }}" label="Status" label-class=""
-                    data-placeholder="Select Status">
+                {{ old($formInputName) }}
+                <x-adminlte-select2 required name="{{ $formInputName }}" value="{{ old($formInputName) }}" label="Status"
+                    label-class="" data-placeholder="Select Status">
                     <option value="1" @if (old($formInputName) == 1) selected @endif>Active</option>
-                    <option value="0" @if ( old($formInputName) === '0') selected @endif>Inactive</option>
+                    <option value="0" @if (old($formInputName) === '0') selected @endif>Inactive</option>
                 </x-adminlte-select2>
 
                 @if ($errors->has($formInputName))
@@ -180,18 +173,18 @@
             </div>
             <div class="col-md-12 mt-2">
                 @php $formInputName='description'; @endphp
-                <x-adminlte-textarea required 
-                label="Descriptions <br> To prevent fraud and money laundering, please do not mention personal bank account/payment gateway details in description."
-                maxlength="2000" minlength="100" required rows="20" label-class=""
+                <x-adminlte-textarea required
+                    label="Descriptions <br> To prevent fraud and money laundering, please do not mention personal bank account/payment gateway details in description."
+                    maxlength="2000" id="description" minlength="100" required rows="20" label-class=""
                     cols="10" name="{{ $formInputName }}" value="">
                     {{ old($formInputName) }}
-                    </x-adminlte-textarea>
-                    @if ($errors->has($formInputName))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first($formInputName) }}</strong>
-                        </span>
-                    @endif
-                    
+                </x-adminlte-textarea>
+                @if ($errors->has($formInputName))
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first($formInputName) }}</strong>
+                    </span>
+                @endif
+
             </div>
             <div class="flex items-center gap-4 mb-2">
                 <x-adminlte-button label="Primary" type="submit" theme="primary" label="Create" icon="fas fa-save" />
@@ -213,5 +206,47 @@
         //     width: 1140, // set editor height
         //     focus: true
         // });
+        $(document).ready(function() {
+            ClassicEditor
+                .create(document.querySelector('#description'), {
+                    // Configuration options here
+                    width: '100%',
+                    height: '800px',
+                    toolbar: ['heading','bold', 'italic','numberedlist','bulletedlist','fontSize','textcolor','undo','redo'],
+                    fontSize: {
+                        options: [12, 14, 16, 18, 'default', 24, 28]
+                    },
+                    placeholder: 'Type your story here...'
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            // Set CSS styles for the selected elements
+            setTimeout(function() {
+                // Your code to be executed after 1 second goes here
+                // For example, you can do something like:
+                $(".ck-editor").css({
+                    "height": "500px",
+                    "width": "100%",
+                });
+                $(".ck-content").css({
+                    "height": "460px",
+                    "width": "100%",
+                });
+            }, 500); // 1000 milliseconds = 1 second
+
+        });
+
+        $(".ck-content").on("click focus", function() {
+            $(".ck-editor").css({
+                "height": "500px",
+                "width": "100%",
+            });
+            $(".ck-content").css({
+                "height": "460px",
+                "width": "100%",
+            });
+        });
     </script>
 @stop

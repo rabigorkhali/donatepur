@@ -11,6 +11,7 @@
 
     {{-- Custom Meta Tags --}}
     <link rel="icon" href="{{ asset('/public/uploads') . '/' . imageName(setting('site.fav_icon')) }}" type="image/png">
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 
     {{-- <link href="{{ asset('/public/uploads') . '/' . imageName(setting('site.fav_icon')) }}" rel="shortcut icon" type="image/png"> --}}
 

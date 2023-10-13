@@ -71,6 +71,13 @@
         /* disable right click */
 </script>
 
+<script>
+    ClassicEditor
+        .create(document.querySelector('#description'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 
 @yield('scripts')
 
