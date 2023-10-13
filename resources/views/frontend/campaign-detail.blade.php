@@ -130,7 +130,7 @@
 
                         <div class="col-md-12">
                             <h2 class="mt-4"><a href="#"><u>STORY</u></a></h2>
-                            <p> {!! $campaignDetails->description !!} </p>
+                            <p> {{ $campaignDetails->description }} </p>
                             <div class="clearfix"></div>
                         </div>
                     </div>

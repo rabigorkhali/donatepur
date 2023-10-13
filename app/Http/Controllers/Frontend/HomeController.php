@@ -755,7 +755,7 @@ class HomeController extends FrontendBaseController
     function syncExpiredCampaigns(Request $request)
     {
         try {
-            Campaign::wheredate('end_date', '<', date('Y-m-d'))->where('campaign_status', '!=', 'completed')->update(['campaign_status' => 'completed']);
+            Campaign::wheredate('end_date', '<', date('Y-m-d'))->wherein('campaign_status', ['running'])->update(['campaign_status' => 'completed']);
             return 'true';
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;

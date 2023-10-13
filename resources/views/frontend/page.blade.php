@@ -28,9 +28,11 @@
                     <div class="col-md-12">
                         {{-- <img class="pull-left mr-15 thumbnail" src="http://placehold.it/430x240" alt=""> --}}
                         {{-- <img class="pull-left mr-15 thumbnail" src="http://placehold.it/430x240" alt=""> --}}
-                        <img class="pull-left mr-15 thumbnail"
-                            src="{{ asset('/public/uploads') . '/' . imageName($pageDetails->image, '-cropped') }}"
-                            alt="">
+                        @if ($pageDetails->image)
+                            <img class="pull-left mr-15 thumbnail"
+                                src="{{ asset('/public/uploads') . '/' . imageName($pageDetails->image, '-cropped') }}"
+                                alt="">
+                        @endif
                         <p> {!! $pageDetails->body !!} </p>
                         <div class="clearfix"></div>
                     </div>

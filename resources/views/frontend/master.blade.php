@@ -125,6 +125,15 @@
                                     <a href="{{ setting('site.footer_help_desk') }}">Help Desk</a>
                                 </li>
                                 <li>|</li>
+                                
+                                <li>
+                                    <a href="{{ setting('site.footer_termscondition_link') }}">Terms and Conditions</a>
+                                </li>
+                                <li>|</li>
+                                <li>
+                                    <a href="{{ setting('site.footer_privacy') }}">Privacy Policies</a>
+                                </li>
+                                <li>|</li>
                                 <li>
                                     <a href="{{ setting('site.footer_donate') }}">Donate</a>
                                 </li>
