@@ -395,6 +395,7 @@
                                                                 <p
                                                                     style="margin: 10; font-size: 14px; text-align: center; mso-line-height-alt: 25.2px;">
                                                                     <span style="font-size:14px;">
+                                                                        Regards,
                                                                         {{ setting('site.site_email') }},{{ setting('site.mobile_number') }}<br>
                                                                         {{ setting('site.site_address') }}<br>
                                                                         {{ setting('site.copy_right_footer_text') }}
