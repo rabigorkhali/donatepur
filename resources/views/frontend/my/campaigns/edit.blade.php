@@ -193,7 +193,7 @@
                 @php $formInputName='description'; @endphp
                 {{-- <textarea name="{{$formInputName}}" rows="20" required  style="width: 100%;"> {{ old($formInputName, $campaignDetail->$formInputName) }}</textarea> --}}
                 {{-- <textarea cols="200" rows="100">{{ old($formInputName, $campaignDetail->$formInputName) }}</textarea> --}}
-                <x-adminlte-textarea required
+                <x-adminlte-textarea id="description"
                     label="Descriptions <br> To prevent fraud and money laundering, please do not mention personal bank account/payment gateway details in description."
                     maxlength="2000" minlength="100"  rows="20" label-class="" cols="10"
                     name="{{ $formInputName }}" value="">

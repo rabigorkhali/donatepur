@@ -87,7 +87,7 @@
                             <tr>
                                 <th style="width:20%;">Description</th>
                                 <td>
-                                    <textarea rows="20" readonly style="width: 100%;"> {{ $campaignDetail->description }}</textarea>
+                                    <textarea id="description" rows="20" readonly style="width: 100%;"> {{ $campaignDetail->description }}</textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -111,11 +111,4 @@
 
 @section('js')
 
-    <script>
-        $('#description').summernote({
-            height: 400, // set editor height
-            width: 1140, // set editor height
-            focus: true
-        });
-    </script>
 @stop
