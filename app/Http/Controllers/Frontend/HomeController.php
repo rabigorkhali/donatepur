@@ -132,7 +132,6 @@ class HomeController extends FrontendBaseController
             $data['partners'] = Partner::get();
             return $this->renderView($this->viewFolder(), $data);
         } catch (Throwable $th) {
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;
             return $this->renderView($this->parentViewFolder() . '.errorpage', []);
         }

@@ -57,7 +57,7 @@
                                             data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1000"
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 7; white-space: nowrap; font-weight:600; border-radius: 30px;">
-                                            {{ $sliderBannersDatum->title }}
+                                            {{ strip_manual_tags($sliderBannersDatum->title) }}
                                         </div>
                                         <!-- LAYER NR. 3 -->
                                         <div class="tp-caption tp-resizeme text-white" id="rs-2-layer-3" data-x="['left']"
@@ -70,9 +70,9 @@
                                             data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1400"
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:0px; font-weight:400;">
-                                            {{ substr($sliderBannersDatum->description, 0, 50) }} <br>
-                                            {{ substr($sliderBannersDatum->description, 51, 100) }} <br>
-                                            {{ substr($sliderBannersDatum->description, 101, 150) }}....
+                                            {{ substr(strip_manual_tags($sliderBannersDatum->description), 0, 50) }} <br>
+                                            {{ substr(strip_manual_tags($sliderBannersDatum->description), 51, 100) }} <br>
+                                            {{ substr(strip_manual_tags($sliderBannersDatum->description), 101, 150) }}....
                                         </div>
                                         <!-- LAYER NR. 4 -->
                                         <div class="tp-caption tp-resizeme" id="rs-2-layer-4" data-x="['left']"
@@ -300,11 +300,11 @@
                                             </div>
                                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
                                                 <h3 class="title mt-0 mb-5"><a
-                                                        href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ $featuredCausesDatum->title }}</a>
+                                                        href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ substr(strip_manual_tags($featuredCausesDatum->title),0,33) }}</a>
                                                 </h3>
                                                 <div class="project-meta mb-10 font-12">
                                                     <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ $featuredCausesDatum->category->title }}</a></span>
+                                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ substr(strip_manual_tags($featuredCausesDatum->category->title),0,15) }}</a></span>
                                                     <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                                             class="fa fa-money mr-5 text-theme-colored"></i>
                                                         {{ $featuredCausesDatum->total_number_donation }}
@@ -314,7 +314,7 @@
                                                         {{ $featuredCausesDatum->total_visits }} Views</span>
                                                 </div>
                                                 <p class="desc mb-10">
-                                                    {{ substr($featuredCausesDatum->description, 0, 100) }}... <br> <a
+                                                    {{ substr(strip_manual_tags($featuredCausesDatum->description), 0, 100) }}... <br> <a
                                                         href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}"
                                                         class="text-info"> Read More...</a>
                                                 </p>
@@ -372,7 +372,7 @@
                         <div class="section-title">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h5 class="font-weight-300 m-0">Happy Donate</h5>
+                                    <h5 class="font-weight-300 m-0">Take a moment to admire these lovely spirits.</h5>
                                     <h2 class="mt-0 text-uppercase font-28">Our <span
                                             class="font-30 text-theme-colored">Donors.</span></h2>
                                     <div class="icon">
@@ -486,11 +486,11 @@
                             </div>
                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
                                 <h3 class="title mt-0 mb-5"><a
-                                        href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">{{ substr($recentCausesDatum->title, 0, 100) }}</a>
+                                        href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">{{ substr(strip_manual_tags($recentCausesDatum->title), 0, 33) }}</a>
                                 </h3>
                                 <div class="project-meta mb-10 font-12">
                                     <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                            href="#">{{ $recentCausesDatum->category->title }}</a></span>
+                                            href="#">{{ substr($recentCausesDatum->category->title,0,15) }}</a></span>
                                     <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                             class="fa fa-money mr-5 text-theme-colored"></i>
                                         {{ $recentCausesDatum->total_number_donation }}
@@ -500,7 +500,7 @@
                                         {{ $recentCausesDatum->total_visits }} Views</span>
                                 </div>
                                 <p class="desc mb-10">
-                                    {{ substr($recentCausesDatum->description, 0, 100) }}... <br> <a
+                                    {{ substr(strip_manual_tags($recentCausesDatum->description), 0, 100) }}... <br> <a
                                         href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}"
                                         class="text-info"> Read More...</a>
                                 </p>

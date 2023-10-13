@@ -7,9 +7,6 @@
 
             <div class="container">
                 <div class="section-title">
-
-
-
                     <div class="row">
                         <div class="col-md-2">
                         </div>
@@ -68,10 +65,10 @@
                                 </a>
                             </div>
                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
-                                <h3 class="title mt-0 mb-5"><a
-                                        href="{{ route('campaignDetailPage', $causesListDatum->slug) }}">{{ substr($causesListDatum->title, 0, 100) }}</a>
-                                </h3>
-                                <div class="project-meta mb-10 font-12">
+                                 <h3 class="title mt-0 mb-5"><a
+                                        href="{{ route('campaignDetailPage', $causesListDatum->slug) }}">{{ substr(strip_manual_tags($causesListDatum->title??''), 0, 33) }}</a>
+                                </h3> 
+                                 <div class="project-meta mb-10 font-12">
                                     <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
                                             href="#">{{ $causesListDatum->category->title }}</a></span>
                                     <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
@@ -81,12 +78,12 @@
                                     <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                             class="fa fa-eye mr-5 text-theme-colored"></i>
                                         {{ $causesListDatum->total_visits }} Views</span>
-                                </div>
-                                <p class="desc mb-10">
-                                    {{ substr($causesListDatum->description, 0, 100) }}... <br> <a
+                                </div> 
+                                 <p class="desc mb-10">
+                                    {{ substr(strip_manual_tags($causesListDatum->description), 0, 100) }}... <br> <a
                                         href="{{ route('campaignDetailPage', $causesListDatum->slug) }}" class="text-info">
                                         Read More...</a>
-                                </p>
+                                </p> 
                                 <div class="progress-item mt-0">
                                     <div class="progress mb-10">
                                         <div data-percent="{{ calculatePercentageMaxTo100($causesListDatum->summary_total_collection, $causesListDatum->goal_amount) }}"
@@ -133,16 +130,11 @@
                             </div>
                         @endif
 
-                        {{-- <div class="col-md-12">
-                            <div class="text-center">
-                                <a class="btn btn-default btn-lg" href="#">Show More Projects</a>
-                            </div>
-                        </div> --}}
                         @if ($rowCountRecentCampaign % 3 == 0 && $rowCountRecentCampaign != 1)
-                </div>
-                @endif
-                @php $rowCountRecentCampaign=$rowCountRecentCampaign+1;@endphp
-                @endforeach
+                             </div>
+                        @endif
+                    @php $rowCountRecentCampaign=$rowCountRecentCampaign+1;@endphp
+                    @endforeach
 
             </div>
 

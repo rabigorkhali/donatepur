@@ -228,4 +228,11 @@ function getPaymentConfigs($gatewaySlug)
     } catch (Throwable $th) {
         return null;
     }
+
+
+}
+
+function strip_manual_tags($text)
+{
+    return strip_tags(str_replace('&nbsp;',' ',  strip_tags(str_replace('`','',$text))));
 }

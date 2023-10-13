@@ -57,8 +57,10 @@
                                     <article class="post clearfix mb-30 bg-lighter">
                                         <div class="entry-header">
                                             <div class="post-thumb thumb">
+                                                <a href="{{ route('postDetailPage', $postListDatum->slug) }}">
                                                 <img src="{{ asset('/public/uploads') . '/' . imageName($postListDatum->image, '-cropped') }}"
                                                     alt="" class="img-responsive img-fullwidth">
+                                                </a>
                                             </div>
                                         </div>
                                         <div class="entry-content p-20 pr-10">
@@ -75,7 +77,7 @@
                                                 <div class="media-body pl-15">
                                                     <div class="event-content pull-left flip">
                                                         <h4 class="entry-title text-white text-uppercase m-0 mt-5"><a
-                                                                href="#">{{ substr($postListDatum->title, 0, 100) }}</a>
+                                                                href="{{ route('postDetailPage', $postListDatum->slug) }}">{{ substr(strip_manual_tags($postListDatum->title), 0, 33) }}</a>
                                                         </h4>
                                                         {{-- <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                                                 class="fa fa-commenting-o mr-5 text-theme-colored"></i> 214
@@ -86,7 +88,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <p class="mt-10"> {!! substr($postListDatum->body, 0, 100) !!}....</p>
+                                            <a href="{{ route('postDetailPage', $postListDatum->slug) }}">
+                                            <p class="mt-10"> {{ substr(strip_manual_tags($postListDatum->body), 0, 100) }}....</p>
+                                            </a>
                                             <a href="{{ route('postDetailPage', $postListDatum->slug) }}"
                                                 class="btn-read-more">Read more</a>
                                             <div class="clearfix"></div>
