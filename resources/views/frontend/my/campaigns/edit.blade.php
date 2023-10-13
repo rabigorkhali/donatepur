@@ -195,7 +195,7 @@
                 {{-- <textarea cols="200" rows="100">{{ old($formInputName, $campaignDetail->$formInputName) }}</textarea> --}}
                 <x-adminlte-textarea required
                     label="Descriptions <br> To prevent fraud and money laundering, please do not mention personal bank account/payment gateway details in description."
-                    maxlength="2000" minlength="100" required rows="20" label-class="" cols="10"
+                    maxlength="2000" minlength="100"  rows="20" label-class="" cols="10"
                     name="{{ $formInputName }}" value="">
                     {{ old($formInputName, $campaignDetail->$formInputName) }}
                     </x-adminlte-textarea>
