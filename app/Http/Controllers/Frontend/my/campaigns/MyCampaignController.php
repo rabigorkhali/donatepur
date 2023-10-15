@@ -220,7 +220,7 @@ class MyCampaignController extends Controller
 
     public function update(Request $request, $campaignId)
     {
-        $campaign = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->where('status','pending')->first();
+        $campaign = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->where('campaign_status','pending')->first();
         if (!$campaign) {
             Session::flash('error', 'Bad request.');
             return redirect()->route('my.campaigns.list');
