@@ -86,7 +86,7 @@
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:1px;"><a
                                                 class="btn btn-colored btn-lg btn-theme-colored pl-20 pr-20"
-                                                href="{{ $sliderBannersDatum->got_to_link }}">{{ $sliderBannersDatum->btn_text ?? 'Donate Now' }}</a>
+                                                href="{{ $sliderBannersDatum->go_to_link }}">{{ $sliderBannersDatum->btn_text ?? 'Donate Now' }}</a>
                                         </div>
                                     </li>
                                 @else
@@ -159,7 +159,7 @@
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:1px;"><a
                                                 class="btn btn-colored btn-lg btn-flat btn-theme-colored pl-20 pr-20"
-                                                href="{{ $sliderBannersDatum->got_to_link }}">{{ $sliderBannersDatum->btn_text ?? 'Donate Now' }}</a>
+                                                href="{{ $sliderBannersDatum->go_to_link }}">{{ $sliderBannersDatum->btn_text ?? 'Donate Now' }}</a>
                                         </div>
                                     </li>
                                 @endif
