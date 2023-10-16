@@ -94,7 +94,7 @@
                                 <div class="row">
                                     <div class="col-md-12 text-center">
                                         <img width="200" class="img-circle" alt="" style="margin: 7px;"
-                                            src="{{ asset('/public/uploads') . '/' . imageName($campaignDetails?->owner?->profile_pic, '-medium') }}">
+                                            src="{{ asset('/public/uploads') . '/' . imageName($campaignDetails?->owner?->profile_picture, '-medium') }}">
                                     </div>
                                     <div class="col-md-12 text-center">
                                         <ul class="list-inline clearfix  mb-20">
