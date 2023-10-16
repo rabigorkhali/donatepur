@@ -89,7 +89,24 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4">
+
                             <div class="target-information pb-sm-20 bg-light pr-0 pb-50 pl-0">
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <img width="200" class="img-circle" alt="" style="margin: 7px;"
+                                            src="{{ asset('/public/uploads') . '/' . imageName($campaignDetails->owner->cover_image, '-medium') }">
+                                    </div>
+                                    <div class="col-md-12 text-center">
+                                        <ul class="list-inline clearfix  mb-20">
+                                            <li class="text-theme-colored ">Campaign By: <span class="font-weight-700">{{$campaignDetails->owner->full_name}}
+                                        </span>
+                                            </li>
+                                            
+                                            <li class="text-theme-colored ">Address: <span class="font-weight-700">{{$campaignDetails?->owner?->address??'N/A'}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 <div class="text-center">
 
                                     <h2
@@ -128,9 +145,7 @@
                                 </div>
 
                             </div>
-                            {{-- <div class="thumb pull-left mb-0 mr-0 pr-20">
-                                <img width="75" class="img-circle" alt="" src="https://donatepur.com/public/uploads/public-users/651e3f56c666d-medium.png">
-                            </div> --}}
+
                             {{-- <h2 class="bg-theme-colored text-white text-uppercase font-weight-600 p-10 pl-30 pr-30 mt-10">
                                 BY: {{ $campaignDetails->owner->full_name }} <img
                                     src="{{ asset('public/uploads/' . $campaignDetails->owner->profile_picture, '-medium') }}">
