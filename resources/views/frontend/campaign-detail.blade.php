@@ -101,7 +101,7 @@
                                             <li class="text-theme-colored ">Campaign By: <span
                                                     class="font-weight-700">{{ $campaignDetails->owner->full_name }}
                                                 </span>
-                                            </li>
+                                            </li><br>
 
                                             <li class="text-theme-colored ">Address: <span
                                                     class="font-weight-700">{{ $campaignDetails?->owner?->address ?? 'N/A' }}</span>
