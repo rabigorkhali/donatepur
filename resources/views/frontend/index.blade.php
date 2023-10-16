@@ -300,11 +300,12 @@
                                             </div>
                                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
                                                 <h3 class="title mt-0 mb-5"><a
-                                                        href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ substr(strip_manual_tags($featuredCausesDatum->title),0,33) }}</a>
+                                                        href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ substr(strip_manual_tags($featuredCausesDatum->title), 0, 33) }}</a>
                                                 </h3>
                                                 <div class="project-meta mb-10 font-12">
-                                                    <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                                            href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ substr(strip_manual_tags($featuredCausesDatum->category->title),0,15) }}</a></span>
+                                                    <span class="mr-10"><i class="fa fa-user"></i> <a rel="tag"
+                                                            {{-- href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ substr(strip_manual_tags($featuredCausesDatum->category->title),0,15) }}</a></span> --}}
+                                                            href="#">By: {{ substr(strip_manual_tags($featuredCausesDatum->owner->full_name), 0, 25) }}</a></span>
                                                     <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                                             class="fa fa-money mr-5 text-theme-colored"></i>
                                                         {{ $featuredCausesDatum->total_number_donation }}
@@ -314,7 +315,8 @@
                                                         {{ $featuredCausesDatum->total_visits }} Views</span>
                                                 </div>
                                                 <p class="desc mb-10">
-                                                    {{ substr(strip_manual_tags($featuredCausesDatum->description), 0, 100) }}... <br> <a
+                                                    {{ substr(strip_manual_tags($featuredCausesDatum->description), 0, 100) }}...
+                                                    <br> <a
                                                         href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}"
                                                         class="text-info"> Read More...</a>
                                                 </p>
@@ -489,8 +491,10 @@
                                         href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">{{ substr(strip_manual_tags($recentCausesDatum->title), 0, 33) }}</a>
                                 </h3>
                                 <div class="project-meta mb-10 font-12">
+                                    {{-- <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
+                                            href="#">{{ substr($recentCausesDatum->category->title,0,15) }}</a></span> --}}
                                     <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                            href="#">{{ substr($recentCausesDatum->category->title,0,15) }}</a></span>
+                                            href="#">By: {{ substr($featuredCausesDatum->owner->full_name, 0, 15) }}</a></span>
                                     <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                             class="fa fa-money mr-5 text-theme-colored"></i>
                                         {{ $recentCausesDatum->total_number_donation }}
@@ -550,7 +554,7 @@
                     {{-- {{ $recentCauses->appends(request()->except('page'))->links('pagination::bootstrap-4') }} --}}
                     <div class="col-md-12">
                         <div class="text-center">
-                            <a class="btn btn-default btn-lg" href="{{route('campaignList')}}">Show More</a>
+                            <a class="btn btn-default btn-lg" href="{{ route('campaignList') }}">Show More</a>
                         </div>
                     </div>
                 </div>

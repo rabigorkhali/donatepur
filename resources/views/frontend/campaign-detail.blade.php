@@ -91,6 +91,7 @@
                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <div class="target-information pb-sm-20 bg-light pr-0 pb-50 pl-0">
                                 <div class="text-center">
+
                                     <h2
                                         class="bg-theme-colored text-white text-uppercase font-weight-600 p-10 pl-30 pr-30 mt-0">
                                         Target</h2>
@@ -107,6 +108,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div id="legacy-clock" class="flip sm-text-center font-14 mt-10 pt-5 mb-sm-20"></div>
 
                                     @if ($campaignDetails->campaign_status == 'running')
@@ -122,9 +124,19 @@
                                             class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired
                                             ON {{ $campaignDetails->end_date->format('Y-M-d') }}</a>
                                     @endif
+
                                 </div>
+
                             </div>
+                            {{-- <div class="thumb pull-left mb-0 mr-0 pr-20">
+                                <img width="75" class="img-circle" alt="" src="https://donatepur.com/public/uploads/public-users/651e3f56c666d-medium.png">
+                            </div> --}}
+                            {{-- <h2 class="bg-theme-colored text-white text-uppercase font-weight-600 p-10 pl-30 pr-30 mt-10">
+                                BY: {{ $campaignDetails->owner->full_name }} <img
+                                    src="{{ asset('public/uploads/' . $campaignDetails->owner->profile_picture, '-medium') }}">
+                            </h2> --}}
                         </div>
+
                     </div>
                     <div class="row">
 
@@ -208,8 +220,8 @@
                                 </div>
 
                                 {{-- ONLY FOR ESEWA --}}
-                                <form id="esewaDonateFormWithCustomFields" class="esewa-donate-form d-none" method="POST"
-                                    action="{{ route('esewaPaymentInitiateV2') }}">
+                                <form id="esewaDonateFormWithCustomFields" class="esewa-donate-form d-none"
+                                    method="POST" action="{{ route('esewaPaymentInitiateV2') }}">
                                     {{-- ESEWA DWFAULT --}}
                                     <input value="0" name="tAmt" id="esewaTotalAmount" type="hidden">
                                     <input value="0" name="amt" id="esewaAmount" type="hidden">
