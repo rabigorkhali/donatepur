@@ -305,7 +305,7 @@
                                                 <div class="project-meta mb-10 font-12">
                                                     <span class="mr-10"><i class="fa fa-user"></i> <a rel="tag"
                                                             {{-- href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">{{ substr(strip_manual_tags($featuredCausesDatum->category->title),0,15) }}</a></span> --}}
-                                                            href="#">By: {{ substr(strip_manual_tags($featuredCausesDatum->owner->full_name), 0, 25) }}</a></span>
+                                                            href="#">By: {{ substr(strip_manual_tags($featuredCausesDatum->owner->full_name), 0, 20) }}</a></span>
                                                     <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                                             class="fa fa-money mr-5 text-theme-colored"></i>
                                                         {{ $featuredCausesDatum->total_number_donation }}
@@ -494,7 +494,7 @@
                                     {{-- <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
                                             href="#">{{ substr($recentCausesDatum->category->title,0,15) }}</a></span> --}}
                                     <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                            href="#">By: {{ substr($featuredCausesDatum->owner->full_name, 0, 15) }}</a></span>
+                                            href="#">By: {{ substr($featuredCausesDatum->owner->full_name, 0, 20) }}</a></span>
                                     <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                             class="fa fa-money mr-5 text-theme-colored"></i>
                                         {{ $recentCausesDatum->total_number_donation }}

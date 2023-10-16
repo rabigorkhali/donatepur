@@ -70,7 +70,11 @@
                                 </h3> 
                                  <div class="project-meta mb-10 font-12">
                                     <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
-                                            href="#">{{ $causesListDatum->category->title }}</a></span>
+                                            href="#">By: {{ substr($causesListDatum->owner->full_name, 0, 20) }}</a>
+                                    </span>
+                                        {{-- <span class="mr-10"><i class="fa fa-tags"></i> <a rel="tag"
+                                            href="#">{{ $causesListDatum->category->title }}</a>
+                                        </span> --}}
                                     <span class="mb-10 text-gray-darkgray mr-10 font-13"><i
                                             class="fa fa-money mr-5 text-theme-colored"></i>
                                         {{ $causesListDatum->total_number_donation }}
