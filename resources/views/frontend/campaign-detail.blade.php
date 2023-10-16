@@ -93,7 +93,6 @@
                             <div class="target-information pb-sm-20 bg-light pr-0 pb-50 pl-0">
                                 <div class="row">
                                     <div class="col-md-12 text-center">
-                                        {{ asset('/public/uploads') . '/' . imageName($campaignDetails?->owner?->profile_picture, '-medium') }}                                        <img width="200" class="img-circle" alt="" style="margin: 7px;"
                                             src="{{ asset('/public/uploads') . '/' . imageName($campaignDetails?->owner?->profile_picture, '-medium') }}">
                                     </div>
                                     <div class="col-md-12 text-center">
