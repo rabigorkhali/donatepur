@@ -105,7 +105,7 @@
                     label-class="" data-placeholder="Select Campaign Category...">
                     @foreach ($campaignCategories as $campaignCategoriesDatum)
                         <option value="{{ $campaignCategoriesDatum->id }}"
-                            @if ($campaignDetail->$formInputName == $campaignCategoriesDatum->title) selected @endif>
+                            @if ($campaignDetail->category->title == $campaignCategoriesDatum->title) selected @endif>
                             {{ $campaignCategoriesDatum->title }}</option>
                     @endforeach
                 </x-adminlte-select2>

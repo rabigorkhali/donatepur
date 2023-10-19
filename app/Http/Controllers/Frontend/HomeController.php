@@ -739,8 +739,10 @@ class HomeController extends FrontendBaseController
             $data['latitude'] = $request->input('latitude') ?? null;
             $data['longitude'] = $request->input('longitude') ?? null;
             $data['campaign_id'] = $request->input('campaign_id') ?? null;
-            $data['created_at'] = date('Y-m-d');
-            $ifExists = CampaignVisit::where('ip', $data['ip'])->where('campaign_id', $data['campaign_id'])->wheredate('created_at', date('Y-m-d'))->count();
+            $data['created_at'] = date('Y-m-d H:i:s');
+            $currentDateTime = now(); 
+            $oneHourAgo = $currentDateTime->subHour(); 
+            $ifExists = CampaignVisit::where('ip', $data['ip'])->where('campaign_id', $data['campaign_id'])->where('created_at', '>=', $oneHourAgo)->count();
             if (!$ifExists) {
                 CampaignVisit::insert($data);
             }
@@ -754,7 +756,7 @@ class HomeController extends FrontendBaseController
     function syncExpiredCampaigns(Request $request)
     {
         try {
-            Campaign::wheredate('end_date', '<', date('Y-m-d'))->wherein('campaign_status', ['running','stopped'])->update(['campaign_status' => 'completed']);
+            Campaign::wheredate('end_date', '<', date('Y-m-d'))->wherein('campaign_status', ['running', 'stopped'])->update(['campaign_status' => 'completed']);
             return 'true';
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage(), 'created_at' => date('Y-m-d H:i:s')]);;

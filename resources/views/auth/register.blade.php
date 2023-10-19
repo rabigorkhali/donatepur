@@ -2,15 +2,15 @@
 
 @extends('adminlte::auth.auth-page', ['auth_type' => 'register'])
 
-@php( $login_url = View::getSection('login_url') ?? config('adminlte.login_url', 'login') )
-@php( $register_url = View::getSection('register_url') ?? config('adminlte.register_url', 'register') )
+@php($login_url = View::getSection('login_url') ?? config('adminlte.login_url', 'login'))
+@php($register_url = View::getSection('register_url') ?? config('adminlte.register_url', 'register'))
 
 @if (config('adminlte.use_route_url', false))
-    @php( $login_url = $login_url ? route($login_url) : '' )
-    @php( $register_url = $register_url ? route($register_url) : '' )
+    @php($login_url = $login_url ? route($login_url) : '')
+    @php($register_url = $register_url ? route($register_url) : '')
 @else
-    @php( $login_url = $login_url ? url($login_url) : '' )
-    @php( $register_url = $register_url ? url($register_url) : '' )
+    @php($login_url = $login_url ? url($login_url) : '')
+    @php($register_url = $register_url ? url($register_url) : '')
 @endif
 
 @section('auth_header', __('adminlte::adminlte.register_message'))
@@ -23,7 +23,7 @@
         <div class="input-group mb-3">
             <label class="input-group mb-1">Full Name</label>
             <input required type="text" name="full_name" class="form-control @error('full_name') is-invalid @enderror"
-                   value="{{ old('full_name') }}" placeholder="{{ __('adminlte::adminlte.full_name') }}" autofocus>
+                value="{{ old('full_name') }}" placeholder="{{ __('adminlte::adminlte.full_name') }}" autofocus>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -42,7 +42,7 @@
         <div class="input-group mb-3">
             <label class="input-group mb-1">Email</label>
             <input required type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                   value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}">
+                value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}">
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -59,8 +59,9 @@
 
         <div class="input-group mb-3">
             <label class="input-group mb-1">Profile Picture</label>
-            <input required type="file" name="profile_picture" class="form-control @error('profile_picture') is-invalid @enderror"
-                   value="{{ old('profile_picture') }}" placeholder="" autofocus>
+            <input required type="file" name="profile_picture"
+                class="form-control @error('profile_picture') is-invalid @enderror" value="{{ old('profile_picture') }}"
+                placeholder="" autofocus>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -79,7 +80,7 @@
         <div class="input-group mb-3">
             <label class="input-group mb-1">Password</label>
             <input required type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                   placeholder="{{ __('adminlte::adminlte.password') }}">
+                placeholder="{{ __('adminlte::adminlte.password') }}">
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -98,8 +99,8 @@
         <div class="input-group mb-3">
             <label class="input-group mb-1">Confirm Password</label>
             <input required type="password" name="password_confirmation"
-                   class="form-control @error('password_confirmation') is-invalid @enderror"
-                   placeholder="{{ __('adminlte::adminlte.retype_password') }}">
+                class="form-control @error('password_confirmation') is-invalid @enderror"
+                placeholder="{{ __('adminlte::adminlte.retype_password') }}">
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -108,6 +109,19 @@
             </div>
 
             @error('password_confirmation')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
+
+        <div class="input-group ">
+            <input checked required type="checkbox" name="term_and_condition"
+                class="mr-1 @error('term_and_condition') is-invalid @enderror" placeholder="">
+            <label class="" style="display:contents;">By continuing, you agree to the Donatepur's <a
+                    href="https://donatepur.com/page/terms-and-conditions" target="_blank" class="mr-1">terms of service</a> and <a
+                    href="https://donatepur.com/page/privacy-policies" target="_blank" class="ml-1">privacy notice</a>.</label>
+            @error('term_and_condition')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -130,4 +144,3 @@
         </a>
     </p>
 @stop
-

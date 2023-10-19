@@ -53,6 +53,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'profile_picture' => ['required', 'image', 'max:25000'],
             'full_name' => ['required', 'string', 'max:100'],
+            'term_and_condition' => ['required'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:public_users'],
             'password' => ['required', 'confirmed', 'max:100', 'min:6'],
         ]);
