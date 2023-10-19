@@ -27,7 +27,7 @@
             <div class="container">
                 <div class="section-content">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-md-8 pb-sm-20">
+                        <div class="col-xs-12 col-sm-12 col-md-12 pb-sm-20">
                             <div class="causes maxwidth500 mb-sm-50">
                                 <div class="row">
                                     <div class="col-md-5">
@@ -88,10 +88,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="col-xs-12 col-sm-12 col-md-12 mt-20 bg-light">
 
                             <div class="target-information pb-sm-20 bg-light pr-0 pb-50 pl-0">
-                                <div class="row">
+                                <div class="col-md-6">
                                     <div class="col-md-12 text-center">
                                         <img width="200" class="img-circle" alt="" style="margin: 7px;"
                                             src="{{ asset('/public/uploads') . '/' . imageName($campaignDetails?->owner?->profile_picture, '-medium') }}">
@@ -109,7 +109,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="text-center">
+                                <div class="col-md-6 text-center">
 
                                     <h2
                                         class="bg-theme-colored text-white text-uppercase font-weight-600 p-10 pl-30 pr-30 mt-0">
