@@ -129,7 +129,7 @@ class MyPublicUserPaymentGatewayController extends Controller
             throw new ValidationException($validator);
         }
         try {
-            $data = $request->only('mobile_number', 'bank_name', 'payment_gateway_name', 'status', 'detail', 'bank_account_number', 'bank_name', 'bank_address');
+            $data = $request->only('mobile_number', 'bank_name', 'payment_gateway_name', 'status', 'detail', 'bank_account_number', 'bank_name', 'bank_address','swift_code');
             $countPaymentGateway = UserPaymentGateway::where('public_user_id', $request->user->id)->count();
             if ($countPaymentGateway >= 3) {
                 Session::flash('error', 'You can only add upto 3 payment gateways.');
