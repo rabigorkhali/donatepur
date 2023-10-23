@@ -157,7 +157,6 @@ class MyPublicUserPaymentGatewayController extends Controller
             Session::flash('success', 'Success! Payment gateway installed successfully.');
             return redirect($this->url);
         } catch (Throwable $th) {
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }

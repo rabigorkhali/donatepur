@@ -79,6 +79,18 @@
                 @endif
             </div>
 
+            <div class="col-md-6 bank" class="bank">
+                @php $formInputName='swift_code'; @endphp
+                <x-adminlte-input  pattern=".{0,20}" title="Please enter a value below 20 characters"
+                    name="{{ $formInputName }}" value="{{ old($formInputName) }}" placeholder="Bank Name" fgroup-class=" "
+                    class="bank" />
+                @if ($errors->has($formInputName))
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first($formInputName) }}</strong>
+                    </span>
+                @endif
+            </div>
+
             <div class="col-md-6 bank">
                 @php $formInputName='bank_address'; @endphp
                 <x-adminlte-input required pattern=".{0,100}" class="bank" title="Please enter a value below 100 characters"
@@ -161,7 +173,7 @@
 
         $('#payment_gateway_name').change(function() {
             let paymentGateWayName = $(this).val();
-            if (paymentGateWayName == 'Bank') {
+            if (paymentGateWayName == 'Bank' || paymentGateWayName == 'Bank (National/International)') {
                 $('.bank input').attr('required','required');
                 $('.bank').show();
             } else {

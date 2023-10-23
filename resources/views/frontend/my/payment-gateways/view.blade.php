@@ -38,10 +38,14 @@
                                 <th style="width:20%;">Mobile Number</th>
                                 <td>{{ $thisModelDetail->mobile_number }}</td>
                             </tr>
-                            @if (strtolower($thisModelDetail?->payment_gateway_name) == 'bank')
+                            @if (strtolower($thisModelDetail?->payment_gateway_name) == 'bank' || strtolower($thisModelDetail?->payment_gateway_name) == 'bank (national/international)' )
                                 <tr>
                                     <th style="width:20%">Bank Name:</th>
                                     <td>{{ $thisModelDetail?->bank_name ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width:20%">Swift Code:</th>
+                                    <td>{{ $thisModelDetail?->swift_code ?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
                                     <th style="width:20%">Bank Account Number:</th>
