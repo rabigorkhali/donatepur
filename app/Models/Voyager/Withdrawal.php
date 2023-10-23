@@ -18,6 +18,6 @@ class Withdrawal extends Model
 
     public function userPaymentGateway()
     {
-        return $this->belongsTo(UserPaymentGateway::class, 'user_payment_gateway_id', 'id');
+        return $this->belongsTo(UserPaymentGateway::class, 'user_payment_gateway_id', 'id')->withTrashed();
     }
 }

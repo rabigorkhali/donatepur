@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\my;
+namespace App\Http\Controllers\Frontend\mysuperuser;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Frontend\FrontendBaseController;
@@ -41,7 +41,7 @@ class MyDashboardController extends Controller
 
     public function renderView($viewFile, $data)
     {
-        return view('frontend.my.' . $viewFile, $data)->render();
+        return view('frontendsuperuser.my' . $viewFile, $data)->render();
     }
 
     public function index(Request $request)
@@ -82,7 +82,7 @@ class MyDashboardController extends Controller
             ->where('public_user_id', $request->user->id)->get();
         // $data['campaigns'] = Campaign::get();
         $data['paymentGateways'] = UserPaymentGateway::where('status', 1)->where('public_user_id', $request->user->id)->get();
-        return view('frontend.my.withdrawals.add', $data);
+        return view('frontend.mysuperuser.withdrawals.add', $data);
     }
     public function store(Request $request)
     {
@@ -136,7 +136,7 @@ class MyDashboardController extends Controller
             Campaign::where('id', $campaignId)->update(['campaign_status' => 'withdraw-processing']);
             DB::commit();
             Session::flash('success', 'Success! Withdrawal request sent successfully.');
-            return redirect('/my/withdrawals');
+            return redirect('/mysuperuser/withdrawals');
         } catch (Throwable $th) {
             DB::rollback();
             SystemErrorLog::insert(['message' => $th->getMessage()]);
@@ -195,7 +195,7 @@ class MyDashboardController extends Controller
                 Session::flash('error', 'Bad request.');
                 return redirect()->back();
             }
-            return view('frontend.my.withdrawals.view', $data);
+            return view('frontend.mysuperuser.withdrawals.view', $data);
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');

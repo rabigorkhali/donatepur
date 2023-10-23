@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\my;
+namespace App\Http\Controllers\Frontend\mysuperuser\withdrawals;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Models\Voyager\Campaign;
 use App\Models\Voyager\CampaignCategory;
 use App\Models\Voyager\CampaignView;
-use App\Models\Voyager\CampaignVisit;
 use App\Models\Voyager\Donation;
 use App\Models\Voyager\PaymentGateway;
 use App\Models\Voyager\SystemErrorLog;
@@ -23,14 +22,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
-class MyDashboardController extends Controller
+class MyWithdrawalsController extends Controller
 {
     use ImageTrait;
 
-    public $dir = "/uploads/dashboard";
+    public $dir = "/uploads/withdrawals";
     public $mainDirectory = "/uploads";
-    public $dirforDb = "/dashboard/";
-    public $pageTitle = "Dashboard";
+    public $dirforDb = "/withdrawals/";
+    public $pageTitle = "Withdrawals";
 
     public function __construct()
     {
@@ -41,34 +40,82 @@ class MyDashboardController extends Controller
 
     public function renderView($viewFile, $data)
     {
-        return view('frontend.my.' . $viewFile, $data)->render();
+        return view('frontendsuperuser.my.withdrawals' . $viewFile, $data)->render();
     }
 
     public function index(Request $request)
     {
         try {
+            /* TEST */
+            /* DELETE ONLY IF WITHDRAWALSTATUS IS PENDING */
+            /* END TEST */
             $data = array();
             $data['page_title'] = $this->pageTitle;
-            $data['total_campaign'] = Campaign::where('public_user_id', $request->user->id)->count();
-            $data['total_collection'] = CampaignView::where('public_user_id', $request->user->id)->sum('summary_total_collection');
-            $data['net_collection'] = CampaignView::where('public_user_id', $request->user->id)->sum('net_amount_collection');
-            $data['total_donation_made'] = Donation::where('giver_public_user_id', $request->user->id)->wherein('payment_status', ['completed'])->sum('amount');
-            $dataRelatedIds = Campaign::where('public_user_id', $request->user->id)->pluck('id')->toArray();
-            $uniqueCoordinates = CampaignVisit::whereIn('campaign_id', $dataRelatedIds)
-                ->groupBy('latitude', 'longitude')
-                ->select('latitude', 'longitude')
-                ->get();
-            $locationArray = [];
-            foreach ($uniqueCoordinates as $key => $uniqueCoordinatesDatum) {
-                $locationArrayDatum = [];
-                if ($uniqueCoordinatesDatum->latitude) {
-                    $locationArrayDatum['latitude'] = $uniqueCoordinatesDatum->latitude;
-                    $locationArrayDatum['longitude'] = $uniqueCoordinatesDatum->longitude;
-                    array_push($locationArray, $locationArrayDatum);
+            $data['heads'] = [
+                'SN',
+                'Campaign',
+                'Goal Amt (Rs.)',
+                'Collected Amt (Rs.)',
+                'Service Charge (Rs.)',
+                'Net Withdrawal Amt (Rs.)',
+                'Withdrawal Status',
+                'Payment Gateway',
+                'Withdrawal Request Date',
+                ['label' => 'Actions', 'no-export' => true, 'width' => 5],
+            ];
+
+            $thisModelDataList = Withdrawal::whereHas('campaign', function ($query) use ($request) {
+                $query->where('public_user_id', $request->user->id);
+            })->orderby('updated_at', 'desc')->get();
+            $thisModelDataListArray = [];
+            $sn = 1;
+            $thisArray = [];
+            foreach ($thisModelDataList as $thisModelDataListKey => $thisModelDataListDatum) {
+                $btnDelete = '';
+                if ($thisModelDataListDatum->withdrawal_status == 'pending') {
+                    $btnDelete = '<a onclick="deleteBtn(' . $thisModelDataListDatum->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
+                              <i class="fa fa-lg fa-fw fa-trash"></i>
+                          </a>';
                 }
+
+                $btnDetails = '<a target="_blank" href="' . route('my.withdrawals.view', $thisModelDataListDatum->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
+                               <i class="fa fa-lg fa-fw fa-eye"></i>
+                           </a>';
+
+                $amountDetails =   $this->campaignService->campaignSummary($request, $thisModelDataListDatum->campaign_id);
+
+                $paymentGatewayDetails = $thisModelDataListDatum->userPaymentGateway->withTrashed()->first();
+                $paymentGatewayName = $paymentGatewayDetails->payment_gateway_name;
+
+                if ($paymentGatewayDetails->payment_gateway_name !== 'Bank') {
+                    $paymentGatewayName .= '<br>' . $paymentGatewayDetails->mobile_number;
+                } else {
+                    $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_name;
+                    $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_account_number;
+                }
+                $thisArray = [
+                    $sn,
+                    $thisModelDataListDatum->campaign->title,
+                    priceToNprFormat($thisModelDataListDatum->campaign->goal_amount),
+                    $amountDetails['campaign']->summary_total_collection ?? 0,
+                    $amountDetails['campaign']->summary_service_charge_amount ?? 0,
+                    $amountDetails['campaign']->net_amount_collection ?? 0,
+                    ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
+                    $paymentGatewayName,
+                    ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
+                    '<nobr>' . $btnDelete . $btnDetails . '</nobr>'
+                ];
+                $sn = $sn + 1;
+                array_push($thisModelDataListArray, $thisArray);
             }
-            $data['locationArray'] = json_encode($locationArray);
-            return $this->renderView('.dashboard', $data);
+            $data['config'] = [
+                'data' => $thisModelDataListArray,
+                // 'order' => [[1, 'asc']],
+                'beautify' => true,
+                'columns' => [null, null, null, null, null, null, null, null, null, ['orderable' => false]],
+            ];
+
+            return $this->renderView('.index', $data);
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
@@ -82,7 +129,7 @@ class MyDashboardController extends Controller
             ->where('public_user_id', $request->user->id)->get();
         // $data['campaigns'] = Campaign::get();
         $data['paymentGateways'] = UserPaymentGateway::where('status', 1)->where('public_user_id', $request->user->id)->get();
-        return view('frontend.my.withdrawals.add', $data);
+        return view('frontend.my.superuser.withdrawals.add', $data);
     }
     public function store(Request $request)
     {
@@ -108,10 +155,14 @@ class MyDashboardController extends Controller
             $campaignId = $request->get('campaign_id');
             $alreadyInwithdrawal = Withdrawal::where('campaign_id', $campaignId)->first();
             if ($alreadyInwithdrawal) {
-                Session::flash('error', 'Bad request.');
+                Session::flash('error', 'Bad request. Withdrawal request already made.');
                 return redirect()->back()->withErrors($validator)->withInput();
             }
             $campaignData = CampaignView::where('campaign_status', 'completed')->where('public_user_id', $request->user->id)->find($campaignId);
+            if (!$campaignData->summary_total_collection || $campaignData->summary_total_collection < 11) {
+                Session::flash('error', 'The minimum fund that can be withdrawn must be greater  than Rs. 9.');
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
             if (!$campaignData) {
                 Session::flash('error', 'Bad request.');
                 return redirect()->back()->withErrors($validator)->withInput();
@@ -133,7 +184,7 @@ class MyDashboardController extends Controller
             // $data['bank_account_address'] = $paymentGateways->bank_account_address;
             DB::beginTransaction();
             Withdrawal::insert($data);
-            Campaign::where('id', $campaignId)->update(['campaign_status' => 'withdraw-processing']);
+            Campaign::where('id', $campaignId)->update(['campaign_status' => 'withdrawal-processing']);
             DB::commit();
             Session::flash('success', 'Success! Withdrawal request sent successfully.');
             return redirect('/my/withdrawals');
@@ -152,6 +203,7 @@ class MyDashboardController extends Controller
         - Check withdrawal belongs to valid user
         */
         /* TEST CASE */
+        DB::beginTransaction();
         $thisId = $request->get('id');
         $thisDataDetails = Withdrawal::where('public_user_id', $request->user->id)
             ->where('withdrawal_status', 'pending')->where('id', $thisId)->first();
@@ -170,7 +222,9 @@ class MyDashboardController extends Controller
             Session::flash('error', 'Bad request.');
             return redirect()->back();
         }
+        Campaign::where('id', $thisDataDetails->campaign->id)->update(['campaign_status' => 'completed']);
         Session::flash('success', 'Withdrawal Request cancelled successfully.');
+        DB::commit();
         return redirect()->back();
     }
 
@@ -195,7 +249,7 @@ class MyDashboardController extends Controller
                 Session::flash('error', 'Bad request.');
                 return redirect()->back();
             }
-            return view('frontend.my.withdrawals.view', $data);
+            return view('frontend.my.superuser.withdrawals.view', $data);
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');

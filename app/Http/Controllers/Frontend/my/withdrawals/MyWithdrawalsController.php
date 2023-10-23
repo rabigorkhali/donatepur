@@ -83,14 +83,16 @@ class MyWithdrawalsController extends Controller
                            </a>';
 
                 $amountDetails =   $this->campaignService->campaignSummary($request, $thisModelDataListDatum->campaign_id);
-                $paymentGatewayDetails = $thisModelDataListDatum->userPaymentGateway->payment_gateway_name;
-                if ($thisModelDataListDatum->userPaymentGateway->payment_gateway_name !== 'Bank') {
-                    $paymentGatewayDetails .= '<br>' . $thisModelDataListDatum->userPaymentGateway->mobile_number;
-                } else {
-                    $paymentGatewayDetails .= '<br>' . $thisModelDataListDatum->userPaymentGateway->bank_name;
-                    $paymentGatewayDetails .= '<br>' . $thisModelDataListDatum->userPaymentGateway->bank_account_number;
-                }
 
+                $paymentGatewayDetails = $thisModelDataListDatum->userPaymentGateway->withTrashed()->first();
+                $paymentGatewayName = $paymentGatewayDetails->payment_gateway_name;
+
+                if ($paymentGatewayDetails->payment_gateway_name !== 'Bank') {
+                    $paymentGatewayName .= '<br>' . $paymentGatewayDetails->mobile_number;
+                } else {
+                    $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_name;
+                    $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_account_number;
+                }
                 $thisArray = [
                     $sn,
                     $thisModelDataListDatum->campaign->title,
@@ -99,8 +101,7 @@ class MyWithdrawalsController extends Controller
                     $amountDetails['campaign']->summary_service_charge_amount ?? 0,
                     $amountDetails['campaign']->net_amount_collection ?? 0,
                     ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
-
-                    $paymentGatewayDetails,
+                    $paymentGatewayName,
                     ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
                     '<nobr>' . $btnDelete . $btnDetails . '</nobr>'
                 ];
