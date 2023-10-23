@@ -17,7 +17,7 @@ use TCG\Voyager\Facades\Voyager;
 |
 */
 
-Route::group(['as' => 'voyager.','prefix' => 'admin',], function () {
+Route::group(['as' => 'voyager.','prefix' => 'superuserpanel',], function () {
     event(new Routing());
 
     // $namespacePrefix = '\\'.config('voyager.controllers.namespace').'\\';
