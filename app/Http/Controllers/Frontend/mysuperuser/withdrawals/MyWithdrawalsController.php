@@ -83,6 +83,7 @@ class MyWithdrawalsController extends Controller
                 $amountDetails =   $this->campaignService->campaignSummary($request, $thisModelDataListDatum->campaign_id);
 
                 $paymentGatewayDetails = $thisModelDataListDatum->userPaymentGateway->withTrashed()->first();
+
                 $paymentGatewayName = $paymentGatewayDetails->payment_gateway_name ?? null;
                 if ($paymentGatewayName) {
 
@@ -93,7 +94,8 @@ class MyWithdrawalsController extends Controller
                         $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_account_number;
                     }
                     if ($thisModelDataListDatum->campaign->withTrashed()->first()) {
-                        $thisCampaign=$thisModelDataListDatum->campaign->withTrashed()->first();
+
+                        $thisCampaign = $thisModelDataListDatum->campaign->withTrashed()->first();
                         $thisArray = [
                             $sn,
                             $thisCampaign->title,
@@ -120,6 +122,7 @@ class MyWithdrawalsController extends Controller
 
             return $this->renderView('.index', $data);
         } catch (Throwable $th) {
+            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }

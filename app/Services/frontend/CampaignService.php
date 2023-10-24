@@ -44,8 +44,14 @@ class CampaignService
     {
         try {
             $data = [];
-            $campaignData = CampaignView::select('start_date', 'end_date', 'cover_image', 'goal_amount', 'summary_total_collection', 'net_amount_collection', 'summary_service_charge_amount', 'total_number_donation', 'campaign_status')
-                ->where('public_user_id', $request->user->id)->where('id', $id)->first();
+            if ($request->user->is_superuser) {
+                $campaignData = CampaignView::select('start_date', 'end_date', 'cover_image', 'goal_amount', 'summary_total_collection', 'net_amount_collection', 'summary_service_charge_amount', 'total_number_donation', 'campaign_status')
+                    ->withTrashed()->where('id', $id)->first();
+            } else {
+                $campaignData = CampaignView::select('start_date', 'end_date', 'cover_image', 'goal_amount', 'summary_total_collection', 'net_amount_collection', 'summary_service_charge_amount', 'total_number_donation', 'campaign_status')
+                   ->withTrashed() ->where('public_user_id', $request->user->id)->where('id', $id)->first();
+            }
+
             if (!$campaignData) {
                 Session::flash('error', 'Bad request.');
                 return redirect()->back()->withInput();
@@ -54,10 +60,10 @@ class CampaignService
             $campaignData->net_amount_collection = priceToNprFormat($campaignData->net_amount_collection);
             $campaignData->summary_service_charge_amount = priceToNprFormat($campaignData->summary_service_charge_amount);
             $campaignData->goal_amount = priceToNprFormat($campaignData->goal_amount);
-            $campaignData->start_date= $campaignData->start_date->format('Y-m-d');
-            $campaignData->start_date_format= $campaignData->start_date->format('Y-m-d');
-            $campaignData->end_date= $campaignData->end_date->format('Y-m-d');
-            $campaignData->end_date_format= $campaignData->end_date->format('Y-m-d');
+            $campaignData->start_date = $campaignData->start_date->format('Y-m-d');
+            $campaignData->start_date_format = $campaignData->start_date->format('Y-m-d');
+            $campaignData->end_date = $campaignData->end_date->format('Y-m-d');
+            $campaignData->end_date_format = $campaignData->end_date->format('Y-m-d');
             $data['campaign'] = $campaignData;
             return $data;
         } catch (Throwable $th) {
