@@ -3,10 +3,12 @@
 namespace App\Models\Voyager;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CampaignView extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'campaigns_summary_view';
 
     protected $dates = ['end_date','start_date'];
