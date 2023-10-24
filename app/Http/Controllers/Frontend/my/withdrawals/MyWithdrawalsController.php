@@ -94,12 +94,12 @@ class MyWithdrawalsController extends Controller
                         $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_name;
                         $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_account_number;
                     }
-                    if ($thisModelDataListDatum->campaign->withTrashed()) {
-
+                    if ($thisModelDataListDatum->campaign->withTrashed()->first()) {
+                        $thisCampaign=$thisModelDataListDatum->campaign->withTrashed()->first();
                         $thisArray = [
                             $sn,
-                            $thisModelDataListDatum->campaign->withTrashed()->title,
-                            priceToNprFormat($thisModelDataListDatum->campaign->goal_amount),
+                            $thisCampaign->title,
+                            priceToNprFormat($thisCampaign->goal_amount),
                             $amountDetails['campaign']->summary_total_collection ?? 0,
                             $amountDetails['campaign']->summary_service_charge_amount ?? 0,
                             $amountDetails['campaign']->net_amount_collection ?? 0,
