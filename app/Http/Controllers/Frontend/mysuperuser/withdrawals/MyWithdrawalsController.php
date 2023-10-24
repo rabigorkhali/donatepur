@@ -83,29 +83,31 @@ class MyWithdrawalsController extends Controller
                 $amountDetails =   $this->campaignService->campaignSummary($request, $thisModelDataListDatum->campaign_id);
 
                 $paymentGatewayDetails = $thisModelDataListDatum->userPaymentGateway->withTrashed()->first();
-                $paymentGatewayName = $paymentGatewayDetails->payment_gateway_name;
+                $paymentGatewayName = $paymentGatewayDetails->payment_gateway_name ?? null;
+                if ($paymentGatewayName) {
 
-                if ($paymentGatewayDetails->payment_gateway_name !== 'Bank') {
-                    $paymentGatewayName .= '<br>' . $paymentGatewayDetails->mobile_number;
-                } else {
-                    $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_name;
-                    $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_account_number;
-                }
-                if ($thisModelDataListDatum->campaign->withTrashed()) {
-                    $thisArray = [
-                        $sn,
-                        $thisModelDataListDatum->campaign->withTrashed()->title,
-                        priceToNprFormat($thisModelDataListDatum->campaign->goal_amount),
-                        $amountDetails['campaign']->summary_total_collection ?? 0,
-                        $amountDetails['campaign']->summary_service_charge_amount ?? 0,
-                        $amountDetails['campaign']->net_amount_collection ?? 0,
-                        ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
-                        $paymentGatewayName,
-                        ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
-                        '<nobr>' . $btnDelete . $btnDetails . '</nobr>'
-                    ];
-                    $sn = $sn + 1;
-                    array_push($thisModelDataListArray, $thisArray);
+                    if ($paymentGatewayDetails->payment_gateway_name !== 'Bank') {
+                        $paymentGatewayName .= '<br>' . $paymentGatewayDetails->mobile_number;
+                    } else {
+                        $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_name;
+                        $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_account_number;
+                    }
+                    if ($thisModelDataListDatum->campaign->withTrashed()) {
+                        $thisArray = [
+                            $sn,
+                            $thisModelDataListDatum->campaign->withTrashed()->title,
+                            priceToNprFormat($thisModelDataListDatum->campaign->goal_amount),
+                            $amountDetails['campaign']->summary_total_collection ?? 0,
+                            $amountDetails['campaign']->summary_service_charge_amount ?? 0,
+                            $amountDetails['campaign']->net_amount_collection ?? 0,
+                            ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
+                            $paymentGatewayName,
+                            ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
+                            '<nobr>' . $btnDelete . $btnDetails . '</nobr>'
+                        ];
+                        $sn = $sn + 1;
+                        array_push($thisModelDataListArray, $thisArray);
+                    }
                 }
             }
             $data['config'] = [
