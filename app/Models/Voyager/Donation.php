@@ -15,21 +15,21 @@ class Donation extends Model
     ];
     public function receiver()
     {
-        return $this->belongsTo(PublicUser::class, 'receiver_public_user_id', 'id');
+        return $this->belongsTo(PublicUser::class, 'receiver_public_user_id', 'id')->withTrashed();
     }
 
     public function giver()
     {
-        return $this->belongsTo(PublicUser::class, 'giver_public_user_id', 'id');
+        return $this->belongsTo(PublicUser::class, 'giver_public_user_id', 'id')->withTrashed();
     }
 
     public function campaign()
     {
-        return $this->belongsTo(Campaign::class, 'campaign_id', 'id');
+        return $this->belongsTo(Campaign::class, 'campaign_id', 'id')->withTrashed();
     }
 
     public function paymentGateway()
     {
-        return $this->belongsTo(PaymentGateway::class, 'payment_gateway_id', 'id');
+        return $this->belongsTo(PaymentGateway::class, 'payment_gateway_id', 'id')->withTrashed();
     }
 }

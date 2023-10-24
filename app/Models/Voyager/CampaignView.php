@@ -15,11 +15,11 @@ class CampaignView extends Model
 
     public function category()
     {
-        return $this->belongsTo(CampaignCategory::class,'campaign_category_id');
+        return $this->belongsTo(CampaignCategory::class,'campaign_category_id')->withTrashed();
     }
 
     public function owner()
     {
-        return $this->belongsTo(PublicUser::class,'public_user_id');
+        return $this->belongsTo(PublicUser::class,'public_user_id')->withTrashed();
     }
 }

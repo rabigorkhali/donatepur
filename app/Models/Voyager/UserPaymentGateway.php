@@ -14,6 +14,6 @@ class UserPaymentGateway extends Model
 
     public function parentPaymentGateway()
     {
-        return $this->belongsTo(PaymentGateway::class, 'payment_gateway_id');
+        return $this->belongsTo(PaymentGateway::class, 'payment_gateway_id')->withTrashed();
     }
 }

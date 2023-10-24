@@ -82,7 +82,7 @@ class MyWithdrawalsController extends Controller
 
                 $amountDetails =   $this->campaignService->campaignSummary($request, $thisModelDataListDatum->campaign_id);
 
-                $paymentGatewayDetails = $thisModelDataListDatum->userPaymentGateway->withTrashed()->first();
+                $paymentGatewayDetails = $thisModelDataListDatum->userPaymentGateway;
 
                 $paymentGatewayName = $paymentGatewayDetails->payment_gateway_name ?? null;
                 if ($paymentGatewayName) {
@@ -93,9 +93,9 @@ class MyWithdrawalsController extends Controller
                         $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_name;
                         $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_account_number;
                     }
-                    if ($thisModelDataListDatum->campaign->withTrashed()->first()) {
+                    if ($thisModelDataListDatum->campaign) {
 
-                        $thisCampaign = $thisModelDataListDatum->campaign->withTrashed()->first();
+                        $thisCampaign = $thisModelDataListDatum->campaign;
                         $thisArray = [
                             $sn,
                             $thisCampaign->title,
