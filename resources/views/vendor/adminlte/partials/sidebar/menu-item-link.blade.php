@@ -1,12 +1,16 @@
 <li @isset($item['id']) id="{{ $item['id'] }}" @endisset class="nav-item">
 
+    @if (Auth::guard('frontend_users')->user()->is_superuser)
+        @php
+            $item['href'] = str_replace('my/', 'mysuperuser/', $item['href']);
+        @endphp
+    @endif
     <a class="nav-link {{ $item['class'] }} @isset($item['shift']) {{ $item['shift'] }} @endisset"
-       href="{{ $item['href'] }}" @isset($item['target']) target="{{ $item['target'] }}" @endisset
-       {!! $item['data-compiled'] ?? '' !!}>
+        href="{{ $item['href'] }}" @isset($item['target']) target="{{ $item['target'] }}" @endisset
+        {!! $item['data-compiled'] ?? '' !!}>
 
-        <i class="{{ $item['icon'] ?? 'far fa-fw fa-circle' }} {{
-            isset($item['icon_color']) ? 'text-'.$item['icon_color'] : ''
-        }}"></i>
+        <i
+            class="{{ $item['icon'] ?? 'far fa-fw fa-circle' }} {{ isset($item['icon_color']) ? 'text-' . $item['icon_color'] : '' }}"></i>
 
         <p>
             {{ $item['text'] }}
