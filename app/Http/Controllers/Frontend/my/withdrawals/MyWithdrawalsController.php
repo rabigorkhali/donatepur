@@ -95,7 +95,7 @@ class MyWithdrawalsController extends Controller
                 }
                 $thisArray = [
                     $sn,
-                    $thisModelDataListDatum->campaign->title,
+                    $thisModelDataListDatum->campaign->withTrashed()->title,
                     priceToNprFormat($thisModelDataListDatum->campaign->goal_amount),
                     $amountDetails['campaign']->summary_total_collection ?? 0,
                     $amountDetails['campaign']->summary_service_charge_amount ?? 0,
