@@ -64,7 +64,7 @@ class MyDonationReceivedController extends Controller
                 ['label' => 'Actions', 'no-export' => true, 'width' => 5],
             ];
 
-            $thisAllData = Donation::where('receiver_public_user_id', $request->user->id)->orderby('updated_at', 'desc')->get();
+            $thisAllData = Donation::orderby('updated_at', 'desc')->get();
             $thisAllDataArray = [];
             $sn = 1;
             $thisArray = [];
@@ -103,7 +103,7 @@ class MyDonationReceivedController extends Controller
                 ],
             ];
             $data['paymentGateways']= PaymentGateway::where('status',1)->orderby('name','asc')->get();
-            $data['campaigns']= CampaignView::where('status',1)->where('public_user_id',Auth::guard('frontend_users')->user()->id)->orderby('title','asc')->get();
+            $data['campaigns']= CampaignView::where('status',1)->orderby('title','asc')->get();
             return $this->renderView('index', $data);
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);
@@ -115,7 +115,7 @@ class MyDonationReceivedController extends Controller
     public function view(Request $request, $thisModelId)
     {
         $data['page_title'] = $this->pageTitle.' Detail';
-        $thisModelData = Donation::where('receiver_public_user_id', $request->user->id)->where('id', $thisModelId)->first();
+        $thisModelData = Donation::where('id', $thisModelId)->first();
         if (!$thisModelData) {
             Session::flash('error', 'Data not found.');
             return redirect()->back();

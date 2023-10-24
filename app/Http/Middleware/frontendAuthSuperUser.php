@@ -33,6 +33,14 @@ class frontendAuthSuperUser  extends Middleware
             $request->session()->regenerateToken();
             return redirect('/mysuperuser-login');
         }
+        if (Auth::guard('frontend_users')) {
+            if (!Auth::guard('frontend_users')->user()->is_superuser) {
+                Auth::guard('frontend_users')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return redirect('/mysuperuser/login');
+            }
+        }
         $request = $this->addUserToRequest($request);
         return $next($request);
     }

@@ -61,7 +61,7 @@ class MyCampaignController extends Controller
                 ['label' => 'Actions', 'no-export' => true, 'width' => 5],
             ];
 
-            $campaigns = Campaign::where('public_user_id', $request->user->id)->orderby('updated_at', 'desc')->get();
+            $campaigns = Campaign::orderby('updated_at', 'desc')->get();
             $campaignList = [];
 
             $sn = 1;
@@ -180,7 +180,7 @@ class MyCampaignController extends Controller
          */
         /* TEST CASES */
         $campaignId = $request->get('id');
-        $campaign = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
+        $campaign = Campaign::where('id', $campaignId)->first();
         if (!$campaign) {
             Session::flash('error', 'Campaign not found.');
             return redirect()->back();
@@ -190,14 +190,14 @@ class MyCampaignController extends Controller
             return redirect()->back();
         }
         if ($campaign->cover_image) $this->removeImageCampaign($this->mainDirectory, $campaign->cover_image);
-        Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->delete();
+        Campaign::where('id', $campaignId)->delete();
         Session::flash('success', 'Campaign deleted successfully.');
         return redirect()->back();
     }
     public function edit(Request $request, $campaignId)
     {
         $data['page_title'] = 'Campaign Edit';
-        $campaignDetails = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
+        $campaignDetails = Campaign::where('id', $campaignId)->first();
         $data['campaignDetail'] = $campaignDetails;
         if (!$campaignDetails) {
             Session::flash('error', 'Bad request.');
@@ -214,13 +214,13 @@ class MyCampaignController extends Controller
     public function view(Request $request, $campaignId)
     {
         $data['page_title'] = 'Campaign Detail';
-        $data['campaignDetail'] = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
+        $data['campaignDetail'] = Campaign::where('id', $campaignId)->first();
         return view('frontendsuperuser.my.campaignsview', $data);
     }
 
     public function update(Request $request, $campaignId)
     {
-        $campaign = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->where('campaign_status','pending')->first();
+        $campaign = Campaign::where('id', $campaignId)->where('campaign_status','pending')->first();
         if (!$campaign) {
             Session::flash('error', 'Bad request.');
             return redirect()->route('my.campaigns.list');
@@ -261,7 +261,7 @@ class MyCampaignController extends Controller
                 $data['slug'] = $slug;
             }
             $data['updated_at'] = date('Y-m-d H:i:s');
-            Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->update($data);
+            Campaign::where('id', $campaignId)->update($data);
             Session::flash('success', 'Success! Data saved successfully.');
             return redirect()->route('my.campaigns.list')->withInput();
         } catch (Throwable $th) {
@@ -277,7 +277,7 @@ class MyCampaignController extends Controller
             return $this->campaignService->campaignSummary($request, $id);
             $data = [];
             $campaignData = CampaignView::select('start_date', 'end_date', 'cover_image', 'goal_amount', 'summary_total_collection', 'net_amount_collection', 'summary_service_charge_amount', 'total_number_donation', 'campaign_status')
-                ->where('public_user_id', $request->user->id)->where('id', $id)->first();
+                ->where('id', $id)->first();
             if (!$campaignData) {
                 Session::flash('error', 'Bad request.');
                 return redirect()->back()->withInput();

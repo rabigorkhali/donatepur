@@ -63,7 +63,7 @@ class MyDonationController extends Controller
                 ['label' => 'Actions', 'no-export' => true, 'width' => 5],
             ];
 
-            $thisAllData = Donation::where('giver_public_user_id', $request->user->id)->orderby('updated_at', 'desc')->get();
+            $thisAllData = Donation::orderby('updated_at', 'desc')->get();
             $thisAllDataArray = [];
             $sn = 1;
             $thisArray = [];
@@ -114,7 +114,7 @@ class MyDonationController extends Controller
     public function view(Request $request, $thisModelId)
     {
         $data['page_title'] = $this->pageTitle.' Detail';
-        $thisModelData = Donation::where('giver_public_user_id', $request->user->id)->where('id', $thisModelId)->first();
+        $thisModelData = Donation::where('id', $thisModelId)->first();
         if (!$thisModelData) {
             Session::flash('error', 'Data not found.');
             return redirect()->back();

@@ -14,8 +14,8 @@
     </section>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="{{ url('/my/dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item "><a href="{{ url('/my/withdrawals') }}">Withdrawals</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/mysuperuser/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/mysuperuser/withdrawals') }}">Withdrawals</a></li>
             <li class="breadcrumb-item active"><a>Request</a></li>
         </ol>
     </nav>
@@ -184,7 +184,7 @@
             $('#campaign_id').change();
             function getCompaignDetails(campaignId) {
 
-                let fetchUrl = "{{ url('/my/campaigns-summary/') }}" + '/' + campaignId;
+                let fetchUrl = "{{ url('/mysuperuser/campaigns-summary/') }}" + '/' + campaignId;
                 $.ajax({
                     url: fetchUrl, // Replace with the API endpoint URL
                     type: 'GET',

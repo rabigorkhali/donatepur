@@ -14,8 +14,8 @@
     </section>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="{{ url('/my/dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item "><a href="{{ url('/my/payment-gateways') }}">Payment Gateway</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/mysuperuser/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/mysuperuser/payment-gateways') }}">Payment Gateway</a></li>
             <li class="breadcrumb-item active"><a>Detail</a></li>
         </ol>
 

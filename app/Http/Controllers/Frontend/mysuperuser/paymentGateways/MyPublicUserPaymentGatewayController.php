@@ -51,7 +51,7 @@ class MyPublicUserPaymentGatewayController extends Controller
                 ['label' => 'Actions', 'no-export' => true, 'width' => 5],
             ];
 
-            $paymentGateways = UserPaymentGateway::where('public_user_id', $request->user->id)->orderby('updated_at', 'desc')->get();
+            $paymentGateways = UserPaymentGateway::orderby('updated_at', 'desc')->get();
             $paymentGatewaysList = [];
 
             $sn = 1;
@@ -130,7 +130,7 @@ class MyPublicUserPaymentGatewayController extends Controller
         }
         try {
             $data = $request->only('mobile_number', 'bank_name', 'payment_gateway_name', 'status', 'detail', 'bank_account_number', 'bank_name', 'bank_address','swift_code');
-            $countPaymentGateway = UserPaymentGateway::where('public_user_id', $request->user->id)->count();
+            $countPaymentGateway = UserPaymentGateway::count();
             if ($countPaymentGateway >= 3) {
                 Session::flash('error', 'You can only add upto 3 payment gateways.');
                 return redirect()->back()->withErrors($validator)->withInput();
@@ -140,8 +140,7 @@ class MyPublicUserPaymentGatewayController extends Controller
             }
 
             $paymentGatewayDetails = PaymentGateway::where('name', $request->get('payment_gateway_name'))->first();
-            $alreadyExists = UserPaymentGateway::where('public_user_id', $request->user->id)
-                ->where('mobile_number', $data['mobile_number'])
+            $alreadyExists = UserPaymentGateway::where('mobile_number', $data['mobile_number'])
                 ->where('payment_gateway_name', $paymentGatewayDetails->name)
                 ->where('bank_account_number', $data['bank_account_number'])
                 ->where('bank_name', $data['bank_name'])
@@ -165,27 +164,27 @@ class MyPublicUserPaymentGatewayController extends Controller
     public function delete(Request $request)
     {
         $thisModelId = $request->get('id');
-        $thisModelData = UserPaymentGateway::where('public_user_id', $request->user->id)->where('id', $thisModelId)->first();
+        $thisModelData = UserPaymentGateway::where('id', $thisModelId)->first();
         // if ($thisModelData->qr_code) $this->removeImage($this->mainDirectory, $thisModelData->qr_code);
 
         if (!$thisModelData) {
             Session::flash('error', 'Data not found.');
             return redirect()->back();
         }
-        UserPaymentGateway::where('public_user_id', $request->user->id)->where('id', $thisModelId)->delete();
+        UserPaymentGateway::where('id', $thisModelId)->delete();
         Session::flash('success', 'Data deleted successfully.');
         return redirect()->back();
     }
 
     public function view(Request $request, $thisModelId)
     {
-        $thisModelData = UserPaymentGateway::where('public_user_id', $request->user->id)->where('id', $thisModelId)->first();
+        $thisModelData = UserPaymentGateway::where('id', $thisModelId)->first();
         if (!$thisModelData) {
             Session::flash('error', 'Data not found.');
             return redirect()->back();
         }
         $data['page_title'] = 'Payment Gateway Detail';
-        $data['thisModelDetail'] = UserPaymentGateway::where('public_user_id', $request->user->id)->where('id', $thisModelId)->first();
+        $data['thisModelDetail'] = UserPaymentGateway::where('id', $thisModelId)->first();
         return view('frontend.my.superuser.payment-gateways.view', $data);
     }
 }

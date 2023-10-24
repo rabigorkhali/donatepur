@@ -49,11 +49,11 @@ class MyDashboardController extends Controller
         try {
             $data = array();
             $data['page_title'] = $this->pageTitle;
-            $data['total_campaign'] = Campaign::where('public_user_id', $request->user->id)->count();
-            $data['total_collection'] = CampaignView::where('public_user_id', $request->user->id)->sum('summary_total_collection');
-            $data['net_collection'] = CampaignView::where('public_user_id', $request->user->id)->sum('net_amount_collection');
-            $data['total_donation_made'] = Donation::where('giver_public_user_id', $request->user->id)->wherein('payment_status', ['completed'])->sum('amount');
-            $dataRelatedIds = Campaign::where('public_user_id', $request->user->id)->pluck('id')->toArray();
+            $data['total_campaign'] = Campaign::count();
+            $data['total_collection'] = CampaignView::sum('summary_total_collection');
+            $data['net_collection'] = CampaignView::sum('net_amount_collection');
+            $data['total_donation_made'] = Donation::wherein('payment_status', ['completed'])->sum('amount');
+            $dataRelatedIds = Campaign::pluck('id')->toArray();
             $uniqueCoordinates = CampaignVisit::whereIn('campaign_id', $dataRelatedIds)
                 ->groupBy('latitude', 'longitude')
                 ->select('latitude', 'longitude')
@@ -79,9 +79,9 @@ class MyDashboardController extends Controller
     {
         $data['page_title'] = 'Request Withdrawal';
         $data['campaigns'] = Campaign::where('campaign_status', 'completed')
-            ->where('public_user_id', $request->user->id)->get();
+            ->get();
         // $data['campaigns'] = Campaign::get();
-        $data['paymentGateways'] = UserPaymentGateway::where('status', 1)->where('public_user_id', $request->user->id)->get();
+        $data['paymentGateways'] = UserPaymentGateway::where('status', 1)->get();
         return view('frontend.mysuperuser.withdrawals.add', $data);
     }
     public function store(Request $request)
@@ -111,12 +111,12 @@ class MyDashboardController extends Controller
                 Session::flash('error', 'Bad request.');
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            $campaignData = CampaignView::where('campaign_status', 'completed')->where('public_user_id', $request->user->id)->find($campaignId);
+            $campaignData = CampaignView::where('campaign_status', 'completed')->find($campaignId);
             if (!$campaignData) {
                 Session::flash('error', 'Bad request.');
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            $paymentGateways = UserPaymentGateway::where('public_user_id', $request->user->id)->where('id', $request->get('user_payment_gateway_id'))->first();
+            $paymentGateways = UserPaymentGateway::where('id', $request->get('user_payment_gateway_id'))->first();
             if (!$paymentGateways) {
                 Session::flash('error', 'Payment gateway invalid.');
                 return redirect()->back()->withErrors($validator)->withInput();
@@ -153,8 +153,7 @@ class MyDashboardController extends Controller
         */
         /* TEST CASE */
         $thisId = $request->get('id');
-        $thisDataDetails = Withdrawal::where('public_user_id', $request->user->id)
-            ->where('withdrawal_status', 'pending')->where('id', $thisId)->first();
+        $thisDataDetails = Withdrawal::where('withdrawal_status', 'pending')->where('id', $thisId)->first();
         // $thisDataDetails = Withdrawal::where('id', $thisId)->first();
         if (!$thisDataDetails) {
             Session::flash('error', 'Data not found.');
@@ -165,7 +164,7 @@ class MyDashboardController extends Controller
             return redirect()->back();
         }
         // $withdrawalRewuest=Withdrawal::where('id', $thisId)->delete();
-        $withdrawlDetails = Withdrawal::where('public_user_id', $request->user->id)->where('withdrawal_status', 'pending')->where('id', $thisId)->delete();
+        $withdrawlDetails = Withdrawal::where('withdrawal_status', 'pending')->where('id', $thisId)->delete();
         if (!$withdrawlDetails) {
             Session::flash('error', 'Bad request.');
             return redirect()->back();
@@ -184,13 +183,13 @@ class MyDashboardController extends Controller
             */
             /* TEST CASES */
             $data['page_title'] = $this->pageTitle;
-            $withdrawalDetails = Withdrawal::where('id', $id)->where('public_user_id', $request->user->id)->first();
+            $withdrawalDetails = Withdrawal::where('id', $id)->first();
             if (!$withdrawalDetails) {
                 Session::flash('error', 'Bad request.');
                 return redirect()->back();
             }
             $data['withdrawalDetails'] = $withdrawalDetails;
-            $data['campaignDetail'] = CampaignView::where('public_user_id', $request->user->id)->where('id', $withdrawalDetails->campaign_id)->first();
+            $data['campaignDetail'] = CampaignView::where('id', $withdrawalDetails->campaign_id)->first();
             if (!$data['campaignDetail']) {
                 Session::flash('error', 'Bad request.');
                 return redirect()->back();
@@ -224,7 +223,7 @@ class MyDashboardController extends Controller
         }
         try {
 
-            $campaign = Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->first();
+            $campaign = Campaign::where('id', $campaignId)->first();
             if (!$campaign) {
                 Session::flash('error', 'Campaign not found.');
                 return redirect()->back();
@@ -234,7 +233,7 @@ class MyDashboardController extends Controller
                 if ($campaign->cover_image) $this->removeImage($this->mainDirectory, $request->cover_image);
                 $data['cover_image'] = $this->dirforDb . $this->uploadImage($this->dir, 'cover_image', true, 1280, null);
             }
-            Campaign::where('public_user_id', $request->user->id)->where('id', $campaignId)->update($data);
+            Campaign::where('id', $campaignId)->update($data);
             Session::flash('success', 'Success! Data saved successfully.');
             return redirect()->back();
         } catch (Throwable $th) {
