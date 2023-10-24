@@ -93,20 +93,23 @@ class MyWithdrawalsController extends Controller
                     $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_name;
                     $paymentGatewayName .= '<br>' . $paymentGatewayDetails->bank_account_number;
                 }
-                $thisArray = [
-                    $sn,
-                    $thisModelDataListDatum->campaign->withTrashed()->title,
-                    priceToNprFormat($thisModelDataListDatum->campaign->goal_amount),
-                    $amountDetails['campaign']->summary_total_collection ?? 0,
-                    $amountDetails['campaign']->summary_service_charge_amount ?? 0,
-                    $amountDetails['campaign']->net_amount_collection ?? 0,
-                    ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
-                    $paymentGatewayName,
-                    ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
-                    '<nobr>' . $btnDelete . $btnDetails . '</nobr>'
-                ];
-                $sn = $sn + 1;
-                array_push($thisModelDataListArray, $thisArray);
+                if ($thisModelDataListDatum->campaign->withTrashed()) {
+
+                    $thisArray = [
+                        $sn,
+                        $thisModelDataListDatum->campaign->withTrashed()->title,
+                        priceToNprFormat($thisModelDataListDatum->campaign->goal_amount),
+                        $amountDetails['campaign']->summary_total_collection ?? 0,
+                        $amountDetails['campaign']->summary_service_charge_amount ?? 0,
+                        $amountDetails['campaign']->net_amount_collection ?? 0,
+                        ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
+                        $paymentGatewayName,
+                        ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
+                        '<nobr>' . $btnDelete . $btnDetails . '</nobr>'
+                    ];
+                    $sn = $sn + 1;
+                    array_push($thisModelDataListArray, $thisArray);
+                }
             }
             $data['config'] = [
                 'data' => $thisModelDataListArray,
