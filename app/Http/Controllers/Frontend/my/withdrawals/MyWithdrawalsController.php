@@ -250,7 +250,7 @@ class MyWithdrawalsController extends Controller
                 return redirect()->back();
             }
             $data['withdrawalDetails'] = $withdrawalDetails;
-            $data['campaignDetail'] = CampaignView::where('public_user_id', $request->user->id)->where('id', $withdrawalDetails->campaign_id)->first();
+            $data['campaignDetail'] = CampaignView::where('public_user_id', $request->user->id)->where('id', $withdrawalDetails->campaign_id)->withTrashed()->first();
             if (!$data['campaignDetail']) {
                 Session::flash('error', 'Bad request.');
                 return redirect()->back();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend\mysuperuser\withdrawals;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Frontend\FrontendBaseController;
+use App\Jobs\SendEmailAfterWithdrawMade;
 use App\Models\Voyager\Campaign;
 use App\Models\Voyager\CampaignCategory;
 use App\Models\Voyager\CampaignView;
@@ -70,13 +71,17 @@ class MyWithdrawalsController extends Controller
             $thisArray = [];
             foreach ($thisModelDataList as $thisModelDataListKey => $thisModelDataListDatum) {
                 $btnDelete = '';
+                $btnEdit = '';
+                $btnEdit = '<a href="' . route('mysuperuser.withdrawals.edit', $thisModelDataListDatum->id) . '" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
+                <i class="fa fa-edit"></i>
+            </a>';
                 if ($thisModelDataListDatum->withdrawal_status == 'pending') {
                     $btnDelete = '<a onclick="deleteBtn(' . $thisModelDataListDatum->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
                               <i class="fa fa-lg fa-fw fa-trash"></i>
                           </a>';
                 }
 
-                $btnDetails = '<a target="_blank" href="' . route('my.withdrawals.view', $thisModelDataListDatum->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
+                $btnDetails = '<a target="_blank" href="' . route('mysuperuser.withdrawals.view', $thisModelDataListDatum->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
                                <i class="fa fa-lg fa-fw fa-eye"></i>
                            </a>';
 
@@ -106,7 +111,7 @@ class MyWithdrawalsController extends Controller
                             ucfirst($thisModelDataListDatum->withdrawal_status ?? 'N/A'),
                             $paymentGatewayName,
                             ($thisModelDataListDatum->created_at) ? $thisModelDataListDatum->created_at->format('Y-m-d') : 'N/A',
-                            '<nobr>' . $btnDelete . $btnDetails . '</nobr>'
+                            '<nobr>' . $btnEdit . $btnDelete . $btnDetails . '</nobr>'
                         ];
                         $sn = $sn + 1;
                         array_push($thisModelDataListArray, $thisArray);
@@ -116,14 +121,13 @@ class MyWithdrawalsController extends Controller
             $data['config'] = [
                 'data' => $thisModelDataListArray,
                 // 'order' => [[1, 'asc']],
-                'scrollX'=> true,
+                'scrollX' => true,
                 'beautify' => true,
                 'columns' => [null, null, null, null, null, null, null, null, null, ['orderable' => false]],
             ];
 
             return $this->renderView('.index', $data);
         } catch (Throwable $th) {
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
@@ -232,7 +236,24 @@ class MyWithdrawalsController extends Controller
         DB::commit();
         return redirect()->back();
     }
-
+    public function edit(Request $request, $withdrawalId)
+    {
+        $data['page_title'] = 'Withdrawal Request Edit';
+        $withdrawalDetails = Withdrawal::where('id', $withdrawalId)->where('withdrawal_status', '!=', 'completedtemp')->first();
+        $data['withdrawalDetail'] = $withdrawalDetails;
+        if (!$withdrawalDetails) {
+            Session::flash('error', 'Bad request.');
+            return redirect()->route('mysuperuser.withdrawals.list');
+        }
+        if (strtolower($withdrawalDetails->withdrawal_status) == 'completedtemp') {
+            Session::flash('error', 'Withdrawn campaigns cannot be edited.');
+            return redirect()->route('mysuperuser.withdrawals.list');
+        }
+        $data['campaigns'] = Campaign::where('campaign_status', 'completed')->withTrashed()->get();
+        // $data['campaigns'] = Campaign::get();
+        $data['paymentGateways'] = UserPaymentGateway::where('status', 1)->get();
+        return $this->renderView('.edit', $data);
+    }
     public function view(Request $request, $id)
     {
         try {
@@ -249,7 +270,9 @@ class MyWithdrawalsController extends Controller
                 return redirect()->back();
             }
             $data['withdrawalDetails'] = $withdrawalDetails;
-            $data['campaignDetail'] = CampaignView::where('id', $withdrawalDetails->campaign_id)->first();
+
+            $data['campaignDetail'] = CampaignView::where('id', $withdrawalDetails->campaign_id)->withTrashed()->first();
+
             if (!$data['campaignDetail']) {
                 Session::flash('error', 'Bad request.');
                 return redirect()->back();
@@ -261,39 +284,34 @@ class MyWithdrawalsController extends Controller
         }
     }
 
-    public function update(Request $request, $campaignId)
+    public function update(Request $request, $withdrawalId)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'goal_amount' => 'required|numeric|min:1000|max:10000000',
-            'start_date' => 'required|date|after_or_equal:today',
-            'end_date' => 'required|date|after:start_date',
-            'campaign_category_id' => 'required|exists:campaign_categories,id',
-            'address' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'video_url' => 'nullable|url|max:500',
-            'status' => 'required|in:1,0',
-            'cover_image' => 'image|min:100|max:20480', // Max file size set to 2MB (2048 kilobytes)
-            'description' => 'required|string|min:100|max:20000',
+            'campaign_id' => 'required|exists:campaigns,id',
+            'withdrawal_status' => 'required|in:pending,reviewing,processing,rejected,approved,completed',
+            'user_payment_gateway_id' => 'required|exists:user_payment_gateways,id',
         ]);
-
-
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
         try {
-
-            $campaign = Campaign::where('id', $campaignId)->first();
-            if (!$campaign) {
-                Session::flash('error', 'Campaign not found.');
+            $withdrawal = Withdrawal::where('id', $withdrawalId)->where('withdrawal_status', '!=', 'completedtemp')->first();
+            if (!$withdrawal) {
+                Session::flash('error', 'Bad request.');
                 return redirect()->back();
             }
-            $data = $request->only('title', 'goal_amount', 'start_date', 'end_date', 'campaign_category_id', 'address', 'country', 'video_url', 'status', 'description');
-            if ($request->file('cover_image')) {
-                if ($campaign->cover_image) $this->removeImage($this->mainDirectory, $request->cover_image);
-                $data['cover_image'] = $this->dirforDb . $this->uploadImage($this->dir, 'cover_image', true, 1280, null);
+            $data = $request->only('withdrawal_status', 'user_payment_gateway_id', 'campaign_id');
+            Withdrawal::where('id', $withdrawalId)->update($data);
+            /*EMAIL  */
+
+            if ($data['withdrawal_status'] == 'completed') {
+                $mailData = [];
+                $mailData['withdrawalId'] = $withdrawalId;
+                $mailData['campaignDetails'] = $withdrawal->campaign;
+                $mailData['receiverEmail'] = $withdrawal->campaign->owner->email;
+                dispatch(new SendEmailAfterWithdrawMade($mailData));
             }
-            Campaign::where('id', $campaignId)->update($data);
+            /* EMAIL */
             Session::flash('success', 'Success! Data saved successfully.');
             return redirect()->back();
         } catch (Throwable $th) {

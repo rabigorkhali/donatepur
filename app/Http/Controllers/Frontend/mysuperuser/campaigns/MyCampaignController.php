@@ -70,17 +70,12 @@ class MyCampaignController extends Controller
             foreach ($campaigns as $keyCampaigns => $datumCampaign) {
                 $btnDelete = '';
                 $btnEdit = '';
-                if (strtolower($datumCampaign->campaign_status == 'pending')) {
-                    $btnEdit = '<a href="' . route('mysuperuser.campaigns.edit', $datumCampaign->id) . '" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
+                $btnEdit = '<a href="' . route('mysuperuser.campaigns.edit', $datumCampaign->id) . '" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                             <i class="fa fa-edit"></i>
                         </a>';
-                }
-                if (strtolower($datumCampaign->campaign_status == 'pending')) {
-                    $btnDelete = '<a onclick="deleteBtn(' . $datumCampaign->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
+                $btnDelete = '<a onclick="deleteBtn(' . $datumCampaign->id . ')" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
                               <i class="fa fa-lg fa-fw fa-trash"></i>
                           </a>';
-                }
-
                 $btnDetails = '<a target="_blank" href="' . route('mysuperuser.campaigns.view', $datumCampaign->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="View Details">
                                <i class="fa fa-lg fa-fw fa-eye"></i>
                            </a>';
@@ -106,7 +101,7 @@ class MyCampaignController extends Controller
             $data['config'] = [
                 'data' => $campaignList,
                 // 'order' => [[1, 'asc']],
-                'scrollX'=> true,
+                'scrollX' => true,
                 'beautify' => true,
                 'columns' => [null, null, null, null, null, null, null, null, null, ['orderable' => false]],
             ];
@@ -123,7 +118,6 @@ class MyCampaignController extends Controller
         $data['page_title'] = 'Campaign Add';
         $data['campaignCategories'] = CampaignCategory::where('status', 1)->orderby('title', 'asc')->get();
         return $this->renderView('.add', $data);
-
     }
     public function store(Request $request)
     {
@@ -205,13 +199,12 @@ class MyCampaignController extends Controller
             Session::flash('error', 'Bad request.');
             return redirect()->route('mysuperuser.campaigns.list');
         }
-        if (strtolower($campaignDetails->campaign_status) !== 'pending') {
-            Session::flash('error', 'Only pending campaigns can be edited.');
+        if (strtolower($campaignDetails->campaign_status) !== 'withdrawn') {
+            Session::flash('error', 'Withdrawn campaigns cannot be edited.');
             return redirect()->route('mysuperuser.campaigns.list');
         }
         $data['campaignCategories'] = CampaignCategory::where('status', 1)->orderby('title', 'asc')->get();
         return $this->renderView('.edit', $data);
-
     }
 
     public function view(Request $request, $campaignId)
@@ -223,7 +216,7 @@ class MyCampaignController extends Controller
 
     public function update(Request $request, $campaignId)
     {
-        $campaign = Campaign::where('id', $campaignId)->where('campaign_status','pending')->first();
+        $campaign = Campaign::where('id', $campaignId)->where('campaign_status','!=', 'withdrawn')->first();
         if (!$campaign) {
             Session::flash('error', 'Bad request.');
             return redirect()->route('mysuperuser.campaigns.list');
@@ -231,7 +224,7 @@ class MyCampaignController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255|min:10',
             'goal_amount' => 'required|numeric|min:1000|max:10000000',
-            'start_date' => 'required|date|after_or_equal:'.$campaign->start_date,
+            'start_date' => 'required|date|after_or_equal:' . $campaign->start_date,
             'end_date' => 'required|date|after:start_date',
             'campaign_category_id' => 'required|exists:campaign_categories,id',
             'address' => 'required|string|max:255',
@@ -246,9 +239,9 @@ class MyCampaignController extends Controller
         }
         try {
 
-            
-            if (strtolower($campaign->campaign_status) !== 'pending') {
-                Session::flash('error', 'Only pending campaign can be updated.');
+
+            if (strtolower($campaign->campaign_status) !== 'withdrawn') {
+                Session::flash('error', 'Withdrawn campaign cannot be updated.');
                 return redirect()->route('mysuperuser.campaigns.list');
             }
             $data = $request->only('title', 'goal_amount', 'start_date', 'end_date', 'campaign_category_id', 'address', 'country', 'video_url', 'status', 'description');
