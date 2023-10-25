@@ -22,7 +22,7 @@
 @stop
 
 @section('content')
-    <form method="post" action="{{ route('my.payment.gateways.store') }}" class="mt-6 space-y-6"
+    <form method="post" action="{{ route('mysuperuser.payment.gateways.store') }}" class="mt-6 space-y-6"
         enctype="multipart/form-data">
         @csrf
         <div class="row">

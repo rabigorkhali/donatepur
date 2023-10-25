@@ -42,7 +42,7 @@
 @stop
 
 @section('content')
-    <form method="post" action="{{ route('my.campaigns.store') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+    <form method="post" action="{{ route('mysuperuser.campaigns.store') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         <div class="row">
 

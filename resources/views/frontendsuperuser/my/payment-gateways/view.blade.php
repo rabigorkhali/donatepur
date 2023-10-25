@@ -75,7 +75,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th> <a href="{{ route('my.payment.gateways.list') }}" rel="noopener"
+                                <th> <a href="{{ route('mysuperuser.payment.gateways.list') }}" rel="noopener"
                                         class="btn btn-default float-left mb-4"><i class="fas fa-backward"></i> Back</a>
                                 </th>
                                 <td>

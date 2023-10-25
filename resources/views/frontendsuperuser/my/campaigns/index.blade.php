@@ -21,7 +21,7 @@
 
 @section('content')
     <div class="flex items-center gap-4 float-right mb-2">
-        <a href="{{ route('my.campaigns.create') }}" type="submit" class="btn btn-primary">
+        <a href="{{ route('mysuperuser.campaigns.create') }}" type="submit" class="btn btn-primary">
             <i class="fas fa-save mr-1"></i>Add New</a>
     </div>
     {{-- With buttons --}}
@@ -60,7 +60,7 @@
             }).then((result) => {
                 if (result.value) {
                     // Send request to delete route
-                    const deleteUrl = "{{ route('my.campaigns.delete') }}" + '?id=' + dataId;
+                    const deleteUrl = "{{ route('mysuperuser.campaigns.delete') }}" + '?id=' + dataId;
                     window.location.href = deleteUrl;
                     // location.reload();
                 }

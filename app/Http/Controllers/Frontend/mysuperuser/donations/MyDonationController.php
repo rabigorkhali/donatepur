@@ -96,6 +96,7 @@ class MyDonationController extends Controller
                 // 'order' => [[1, 'asc']],
                 'beautify' => true,
                 'scrollX'=> true,
+                'scrollX'=> true,
                 'columns' => [
                     null, null,null, null, null,null, null, null,null, null,null,
                     ['orderable' => false]

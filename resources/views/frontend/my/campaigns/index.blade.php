@@ -22,20 +22,16 @@
 @section('content')
     <div class="flex items-center gap-4 float-right mb-2">
         <a href="{{ route('my.campaigns.create') }}" type="submit" class="btn btn-primary">
-            <i class="fas fa-save mr-1"></i>Add New</a>
+            <i class="fas fa-save mr-1"></i>Add New
+        </a>
     </div>
+
     {{-- With buttons --}}
     <x-adminlte-datatable id="table7" :heads="$heads" head-theme="light" theme="" :config="$config" striped
         hoverable with-buttons />
 
     {{-- With buttons + customization --}}
-    @php
-        $config['dom'] = '<"row" <"col-sm-7" B> <"col-sm-5 d-flex justify-content-end" i> >
-                  <"row" <"col-12" tr> >
-                  <"row" <"col-sm-12 d-flex justify-content-start" f> >';
-        $config['paging'] = false;
-        $config['lengthMenu'] = [10, 50, 100, 500];
-    @endphp
+   
 
 @stop
 

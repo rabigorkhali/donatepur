@@ -116,6 +116,7 @@ class MyWithdrawalsController extends Controller
             $data['config'] = [
                 'data' => $thisModelDataListArray,
                 // 'order' => [[1, 'asc']],
+                'scrollX'=> true,
                 'beautify' => true,
                 'columns' => [null, null, null, null, null, null, null, null, null, ['orderable' => false]],
             ];
@@ -131,11 +132,10 @@ class MyWithdrawalsController extends Controller
     public function create(Request $request)
     {
         $data['page_title'] = 'Request Withdrawal';
-        $data['campaigns'] = Campaign::where('campaign_status', 'completed')
-            ->get();
+        $data['campaigns'] = Campaign::where('campaign_status', 'completed')->get();
         // $data['campaigns'] = Campaign::get();
         $data['paymentGateways'] = UserPaymentGateway::where('status', 1)->get();
-        return view('frontend.my.superuser.withdrawals.add', $data);
+        return view('frontendsuperuser.my.withdrawals.add', $data);
     }
     public function store(Request $request)
     {
@@ -254,7 +254,7 @@ class MyWithdrawalsController extends Controller
                 Session::flash('error', 'Bad request.');
                 return redirect()->back();
             }
-            return view('frontend.my.superuser.withdrawals.view', $data);
+            return view('frontendsuperuser.my.withdrawals.view', $data);
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');

@@ -98,7 +98,7 @@
             }).then((result) => {
                 if (result.value) {
                     // Send request to delete route
-                    const deleteUrl = "{{ route('my.payment.gateways.delete') }}" + '?id=' + dataId;
+                    const deleteUrl = "{{ route('mysuperuser.payment.gateways.delete') }}" + '?id=' + dataId;
                     window.location.href = deleteUrl;
                     // location.reload();
                 }

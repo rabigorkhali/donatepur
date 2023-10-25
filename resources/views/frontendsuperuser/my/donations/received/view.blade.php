@@ -158,7 +158,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th> <a href="{{ route('my.donations.received.list') }}" rel="noopener"
+                                <th> <a href="{{ route('mysuperuser.donations.received.list') }}" rel="noopener"
                                         class="btn btn-default float-left mb-4"><i class="fas fa-backward"></i> Back</a>
                                 </th>
                                 <td>

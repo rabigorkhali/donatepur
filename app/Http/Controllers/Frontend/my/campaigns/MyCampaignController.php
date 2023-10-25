@@ -106,6 +106,7 @@ class MyCampaignController extends Controller
             $data['config'] = [
                 'data' => $campaignList,
                 // 'order' => [[1, 'asc']],
+                'scrollX'=> true,
                 'beautify' => true,
                 'columns' => [null, null, null, null, null, null, null, null, null, ['orderable' => false]],
             ];

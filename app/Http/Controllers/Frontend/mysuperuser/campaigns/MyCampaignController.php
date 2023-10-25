@@ -71,7 +71,7 @@ class MyCampaignController extends Controller
                 $btnDelete = '';
                 $btnEdit = '';
                 if (strtolower($datumCampaign->campaign_status == 'pending')) {
-                    $btnEdit = '<a href="' . route('my.campaigns.edit', $datumCampaign->id) . '" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
+                    $btnEdit = '<a href="' . route('mysuperuser.campaigns.edit', $datumCampaign->id) . '" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                             <i class="fa fa-edit"></i>
                         </a>';
                 }
@@ -81,7 +81,7 @@ class MyCampaignController extends Controller
                           </a>';
                 }
 
-                $btnDetails = '<a target="_blank" href="' . route('my.campaigns.view', $datumCampaign->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="View Details">
+                $btnDetails = '<a target="_blank" href="' . route('mysuperuser.campaigns.view', $datumCampaign->id) . '" class="btn btn-xs btn-default text-teal mx-1 shadow" title="View Details">
                                <i class="fa fa-lg fa-fw fa-eye"></i>
                            </a>';
 
@@ -106,6 +106,7 @@ class MyCampaignController extends Controller
             $data['config'] = [
                 'data' => $campaignList,
                 // 'order' => [[1, 'asc']],
+                'scrollX'=> true,
                 'beautify' => true,
                 'columns' => [null, null, null, null, null, null, null, null, null, ['orderable' => false]],
             ];
@@ -121,7 +122,8 @@ class MyCampaignController extends Controller
     {
         $data['page_title'] = 'Campaign Add';
         $data['campaignCategories'] = CampaignCategory::where('status', 1)->orderby('title', 'asc')->get();
-        return view('frontendsuperuser.my.campaignsadd', $data);
+        return $this->renderView('.add', $data);
+
     }
     public function store(Request $request)
     {
@@ -201,21 +203,22 @@ class MyCampaignController extends Controller
         $data['campaignDetail'] = $campaignDetails;
         if (!$campaignDetails) {
             Session::flash('error', 'Bad request.');
-            return redirect()->route('my.campaigns.list');
+            return redirect()->route('mysuperuser.campaigns.list');
         }
         if (strtolower($campaignDetails->campaign_status) !== 'pending') {
             Session::flash('error', 'Only pending campaigns can be edited.');
-            return redirect()->route('my.campaigns.list');
+            return redirect()->route('mysuperuser.campaigns.list');
         }
         $data['campaignCategories'] = CampaignCategory::where('status', 1)->orderby('title', 'asc')->get();
-        return view('frontendsuperuser.my.campaignsedit', $data);
+        return $this->renderView('.edit', $data);
+
     }
 
     public function view(Request $request, $campaignId)
     {
         $data['page_title'] = 'Campaign Detail';
         $data['campaignDetail'] = Campaign::where('id', $campaignId)->first();
-        return view('frontendsuperuser.my.campaignsview', $data);
+        return $this->renderView('.view', $data);
     }
 
     public function update(Request $request, $campaignId)
@@ -223,7 +226,7 @@ class MyCampaignController extends Controller
         $campaign = Campaign::where('id', $campaignId)->where('campaign_status','pending')->first();
         if (!$campaign) {
             Session::flash('error', 'Bad request.');
-            return redirect()->route('my.campaigns.list');
+            return redirect()->route('mysuperuser.campaigns.list');
         }
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255|min:10',
@@ -246,7 +249,7 @@ class MyCampaignController extends Controller
             
             if (strtolower($campaign->campaign_status) !== 'pending') {
                 Session::flash('error', 'Only pending campaign can be updated.');
-                return redirect()->route('my.campaigns.list');
+                return redirect()->route('mysuperuser.campaigns.list');
             }
             $data = $request->only('title', 'goal_amount', 'start_date', 'end_date', 'campaign_category_id', 'address', 'country', 'video_url', 'status', 'description');
             if ($request->file('cover_image')) {
@@ -263,7 +266,7 @@ class MyCampaignController extends Controller
             $data['updated_at'] = date('Y-m-d H:i:s');
             Campaign::where('id', $campaignId)->update($data);
             Session::flash('success', 'Success! Data saved successfully.');
-            return redirect()->route('my.campaigns.list')->withInput();
+            return redirect()->route('mysuperuser.campaigns.list')->withInput();
         } catch (Throwable $th) {
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');

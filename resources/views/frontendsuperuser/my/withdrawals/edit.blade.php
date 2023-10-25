@@ -22,7 +22,7 @@
 @stop
 
 @section('content')
-    <form method="post" action="{{ route('my.campaigns.update', $campaignDetail->id) }}" class="mt-6 space-y-6"
+    <form method="post" action="{{ route('mysuperuser.campaigns.update', $campaignDetail->id) }}" class="mt-6 space-y-6"
         enctype="multipart/form-data">
         @csrf
         @method('put')
@@ -183,7 +183,7 @@
             </div>
             <div class="flex items-center gap-4 mb-2">
                 <x-adminlte-button label="Primary" type="submit" theme="primary" label="Save" icon="fas fa-save" />
-                <a href="{{ route('my.withdrawals.list') }}" class="btn btn-default">
+                <a href="{{ route('mysuperuser.withdrawals.list') }}" class="btn btn-default">
                     <i class="fas fa-backward"></i> Back </a>
             </div>
         </div>

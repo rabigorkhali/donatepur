@@ -28,8 +28,8 @@
             <div class="col-md-6">
                 @php $formInputName='campaign_id'; @endphp
                 <x-adminlte-select2 id="{{ $formInputName }}" required name="{{ $formInputName }}"
-                    value="{{ old($formInputName) }}" label="Campaigns (Note: Only completed campaigns will be listed.)" label-class=""
-                    data-placeholder="Select Campaign...">
+                    value="{{ old($formInputName) }}" label="Campaigns (Note: Only completed campaigns will be listed.)"
+                    label-class="" data-placeholder="Select Campaign...">
                     <option value="none" selected>Select Campaign</option>
                     @foreach ($campaigns as $campaignsDatum)
                         <option value="{{ $campaignsDatum->id }}" @if (old($formInputName) == $campaignsDatum->id) selected @endif>
@@ -56,10 +56,12 @@
                             data-payment-gateway-name="{{ $paymentGatewaysDatum->payment_gateway_name }}"
                             data-mobile-number="{{ $paymentGatewaysDatum->mobile_number }}"
                             value="{{ $paymentGatewaysDatum->id }}" @if (old($formInputName) == $paymentGatewaysDatum->campaign_id) selected @endif>
-                            {{ $paymentGatewaysDatum->payment_gateway_name }} 
-                            @if(strtolower($paymentGatewaysDatum->payment_gateway_name) =='bank') 
-                            ({{$paymentGatewaysDatum->bank_name}}) @else
-                            ({{$paymentGatewaysDatum->mobile_number}})@endif
+                            {{ $paymentGatewaysDatum->payment_gateway_name }}
+                            @if (strtolower($paymentGatewaysDatum->payment_gateway_name) == 'bank')
+                                ({{ $paymentGatewaysDatum->bank_name }})
+                            @else
+                                ({{ $paymentGatewaysDatum->mobile_number }})
+                            @endif
                         </option>
                     @endforeach
                 </x-adminlte-select2>
@@ -81,7 +83,7 @@
                             <tr>
                                 <h5 class="ml-2">Campaign Details</h5>
                             </tr>
-                            
+
                             <tr>
                                 <th style="width:20%">Goal Amount:</th>
                                 <td class="campaign-data" id="goal_amount">N/A</td>
@@ -182,6 +184,7 @@
 
         $(document).ready(function() {
             $('#campaign_id').change();
+
             function getCompaignDetails(campaignId) {
 
                 let fetchUrl = "{{ url('/my/campaigns-summary/') }}" + '/' + campaignId;
@@ -223,11 +226,14 @@
                 $('#info_bank_account_number').text($('#user_payment_gateway_id option:selected').data(
                     'bank-account-number'));
                 $('#info_payment_type').text($('#user_payment_gateway_id option:selected').text().trim());
-                if ($('#user_payment_gateway_id option:selected').data('payment-gateway-name').trim() == 'Bank') {
-                        $('.bank-attr').show();
-                    } else {
-                        $('.bank-attr').hide();
-                    }
+                let selectedPaymentGateway = $('#user_payment_gateway_id option:selected').data(
+                    'payment-gateway-name').trim();
+                if (selectedPaymentGateway == 'Bank' || selectedPaymentGateway ==
+                    'Bank (National/International)') {
+                    $('.bank-attr').show();
+                } else {
+                    $('.bank-attr').hide();
+                }
             });
 
             $('#user_payment_gateway_id').change(function() {
@@ -243,7 +249,12 @@
                         'bank-account-number'));
                     $('#info_payment_type').text($('#user_payment_gateway_id option:selected').text()
                         .trim());
-                    if ($('#user_payment_gateway_id option:selected').data('payment-gateway-name').trim() == 'Bank') {
+                    $('#info_payment_type').text($('#user_payment_gateway_id option:selected').text()
+                    .trim());
+                    let selectedPaymentGateway = $('#user_payment_gateway_id option:selected').data(
+                        'payment-gateway-name').trim();
+                    if (selectedPaymentGateway == 'Bank' || selectedPaymentGateway ==
+                        'Bank (National/International)') {
                         $('.bank-attr').show();
                     } else {
                         $('.bank-attr').hide();

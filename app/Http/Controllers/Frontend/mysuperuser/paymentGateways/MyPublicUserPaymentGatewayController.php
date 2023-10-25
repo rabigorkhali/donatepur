@@ -81,6 +81,7 @@ class MyPublicUserPaymentGatewayController extends Controller
                 'data' => $paymentGatewaysList,
                 'order' => [[1, 'asc']],
                 'beautify' => false,
+                'scrollX'=> true,
                 'buttons' => [
                     [
                         'extend' => 'excel',
