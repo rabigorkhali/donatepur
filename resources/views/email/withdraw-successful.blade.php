@@ -347,7 +347,7 @@
                                                                                 <b>{{ priceToNprFormat($campaignDetails['summary_total_collection'] ?? 0) }}</b>
                                                                                 for the campaign
                                                                                 "{{ $campaignDetails?->title ?? '' }}"
-                                                                                 has been withdrawn successfully. Keeping note that the net amount you receive is after deducting 7% proccessing charge from your total gross collection i.e. {{$campaignDetails['net_amount_collection'] ?? 0}}
+                                                                                 has been withdrawn successfully. Keeping note that the net amount you receive is after deducting 7% proccessing charge from your total gross collection i.e. <b>{{$campaignDetails['net_amount_collection'] ?? 0}}</b>
                                                                                 Thank you. <br> May
                                                                                 god bless you.
                                                                                 <br>
