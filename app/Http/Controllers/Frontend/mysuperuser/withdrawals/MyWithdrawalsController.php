@@ -333,7 +333,6 @@ class MyWithdrawalsController extends Controller
             Session::flash('success', 'Success! Data saved successfully.');
             return redirect()->back();
         } catch (Throwable $th) {
-            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }
