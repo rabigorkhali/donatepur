@@ -14,8 +14,8 @@
     </section>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="{{ url('/my/dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item "><a href="{{ url('/my/withdrawals') }}">Withdrawals</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/mysuperuser/dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item "><a href="{{ url('/mysuperuser/withdrawals') }}">Withdrawals</a></li>
             <li class="breadcrumb-item active"><a>Detail</a></li>
         </ol>
 
@@ -45,7 +45,7 @@
                                         <tr>
                                             <th>Service</th>
                                             <th>Mobile Number</th>
-                                            @if ($withdrawalDetails?->userPaymentGateway?->payment_gateway_name == 'Bank')
+                                            @if (in_array($withdrawalDetails?->userPaymentGateway?->payment_gateway_name ,['Bank','Bank (National/International)']))
                                                 <th>Bank Name</th>
                                                 <th>Bank Account Number</th>
                                                 <th>Bank Address</th>
@@ -54,7 +54,7 @@
                                         <tr>
                                             <td>{{ $withdrawalDetails?->userPaymentGateway?->payment_gateway_name }}</td>
                                             <td>{{ $withdrawalDetails?->userPaymentGateway?->mobile_number }}</td>
-                                            @if ($withdrawalDetails?->userPaymentGateway?->payment_gateway_name == 'Bank')
+                                            @if (in_array($withdrawalDetails?->userPaymentGateway?->payment_gateway_name ,['Bank','Bank (National/International)']))
                                                 <td>{{ $withdrawalDetails->userPaymentGateway->bank_name }}</td>
                                                 <td>{{ $withdrawalDetails?->userPaymentGateway?->bank_account_number }}</td>
                                                 <td>{{ $withdrawalDetails?->userPaymentGateway?->bank_address }}</td>
@@ -130,7 +130,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th> <a href="{{ route('my.withdrawals.list') }}" rel="noopener"
+                                <th> <a href="{{ route('mysuperuser.withdrawals.list') }}" rel="noopener"
                                         class="btn btn-default float-left mb-4"><i class="fas fa-backward"></i> Back</a>
                                 </th>
                                 <td>

@@ -295,19 +295,37 @@ class MyWithdrawalsController extends Controller
             throw new ValidationException($validator);
         }
         try {
+            $campaignId = $request->get('campaign_id');
+            $userPaymentGatewayId = $request->get('user_payment_gateway_id');
             $withdrawal = Withdrawal::where('id', $withdrawalId)->where('withdrawal_status', '!=', 'completedtemp')->first();
             if (!$withdrawal) {
                 Session::flash('error', 'Bad request.');
                 return redirect()->back();
             }
             $data = $request->only('withdrawal_status', 'user_payment_gateway_id', 'campaign_id');
+            $data['email_sent']=1;
+            $campaignData = CampaignView::where('campaign_status', 'completed')->find($campaignId);
+            if (!$campaignData) {
+                Session::flash('error', 'Campaign deleted or not found.');
+                return redirect()->back();
+            }
+            $userPaymentDetails = UserPaymentGateway::withTrashed()->find($userPaymentGatewayId);
+            if (!$userPaymentDetails) {
+                Session::flash('error', 'Payment gateway not found.');
+                return redirect()->back();
+            }
+            if (!$campaignData->summary_total_collection || $campaignData->summary_total_collection < 11) {
+                Session::flash('error', 'The minimum fund that can be withdrawn must be greater or equals to Rs. 10.');
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
             Withdrawal::where('id', $withdrawalId)->update($data);
             /*EMAIL  */
 
-            if ($data['withdrawal_status'] == 'completed') {
+            if ($data['withdrawal_status'] == 'completed' && $withdrawal->email_sent) {
                 $mailData = [];
                 $mailData['withdrawalId'] = $withdrawalId;
                 $mailData['campaignDetails'] = $withdrawal->campaign;
+                $mailData['userPaymentDetails'] = $userPaymentDetails;
                 $mailData['receiverEmail'] = $withdrawal->campaign->owner->email;
                 dispatch(new SendEmailAfterWithdrawMade($mailData));
             }
@@ -315,6 +333,7 @@ class MyWithdrawalsController extends Controller
             Session::flash('success', 'Success! Data saved successfully.');
             return redirect()->back();
         } catch (Throwable $th) {
+            dd($th);
             SystemErrorLog::insert(['message' => $th->getMessage()]);
             return redirect()->route('frontend.error.page');
         }

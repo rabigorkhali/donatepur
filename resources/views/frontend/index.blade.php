@@ -43,7 +43,7 @@
                                             data-mask_in="x:0px;y:0px;s:inherit;e:inherit;"
                                             data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1000"
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
-                                            style="z-index: 7; white-space: nowrap; font-weight:700;">Donate
+                                            style="z-index: 7; white-space: nowrap; font-weight:700;">{{ $sliderBannersDatum->title }}
                                         </div>
                                         <!-- LAYER NR. 2 -->
                                         <div class="tp-caption tp-resizeme text-uppercase text-white font-raleway bg-theme-colored-transparent pl-20 pr-20"
@@ -70,6 +70,7 @@
                                             data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1400"
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:0px; font-weight:400;">
+                                            <br>
                                             {{ substr(strip_manual_tags($sliderBannersDatum->description), 0, 50) }} <br>
                                             {{ substr(strip_manual_tags($sliderBannersDatum->description), 51, 100) }} <br>
                                             {{ substr(strip_manual_tags($sliderBannersDatum->description), 101, 150) }}....
@@ -144,6 +145,7 @@
                                             data-mask_out="x:inherit;y:inherit;s:inherit;e:inherit;" data-start="1400"
                                             data-splitin="none" data-splitout="none" data-responsive_offset="on"
                                             style="z-index: 5; white-space: nowrap; letter-spacing:0px; font-weight:400;">
+                                            <br>
                                             {{ substr($sliderBannersDatum->description, 0, 50) }} <br>
                                             {{ substr($sliderBannersDatum->description, 51, 100) }} <br>
                                             {{ substr($sliderBannersDatum->description, 101, 150) }}.... </div>

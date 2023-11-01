@@ -45,7 +45,7 @@
                                         <tr>
                                             <th>Service</th>
                                             <th>Mobile Number</th>
-                                            @if ($withdrawalDetails?->userPaymentGateway?->payment_gateway_name == 'Bank')
+                                            @if (in_array($withdrawalDetails?->userPaymentGateway?->payment_gateway_name ,['Bank','Bank (National/International)']))
                                                 <th>Bank Name</th>
                                                 <th>Bank Account Number</th>
                                                 <th>Bank Address</th>
@@ -54,7 +54,7 @@
                                         <tr>
                                             <td>{{ $withdrawalDetails?->userPaymentGateway?->payment_gateway_name }}</td>
                                             <td>{{ $withdrawalDetails?->userPaymentGateway?->mobile_number }}</td>
-                                            @if ($withdrawalDetails?->userPaymentGateway?->payment_gateway_name == 'Bank')
+                                            @if (in_array($withdrawalDetails?->userPaymentGateway?->payment_gateway_name ,['Bank','Bank (National/International)']))
                                                 <td>{{ $withdrawalDetails->userPaymentGateway->bank_name }}</td>
                                                 <td>{{ $withdrawalDetails?->userPaymentGateway?->bank_account_number }}</td>
                                                 <td>{{ $withdrawalDetails?->userPaymentGateway?->bank_address }}</td>
