@@ -709,6 +709,9 @@
                 </div>
             </section>
         @endif
+
+        <div id="disqus_thread"></div>
+
     </div>
 @endsection
 @if ($campaignDetails->campaign_status == 'running')

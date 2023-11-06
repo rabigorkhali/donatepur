@@ -45,6 +45,10 @@ class ComposerStaticInit52a4671ef6d975bc7f4bf439c915bf7c
         array (
             'kartik\\plugins\\fileinput\\' => 25,
         ),
+        'Y' => 
+        array (
+            'Yajra\\Disqus\\' => 13,
+        ),
         'W' => 
         array (
             'Whoops\\' => 7,
@@ -202,6 +206,10 @@ class ComposerStaticInit52a4671ef6d975bc7f4bf439c915bf7c
         'kartik\\plugins\\fileinput\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/bootstrap-fileinput',
+        ),
+        'Yajra\\Disqus\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yajra/laravel-disqus/src',
         ),
         'Whoops\\' => 
         array (
@@ -609,6 +617,7 @@ class ComposerStaticInit52a4671ef6d975bc7f4bf439c915bf7c
         'App\\Console\\Commands\\syncExpiredCampaigns' => __DIR__ . '/../..' . '/app/Console/Commands/syncExpiredCampaigns.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Http\\Controllers\\AuthSuperUser\\AuthenticatedSessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuthSuperUser/AuthenticatedSessionController.php',
         'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
         'App\\Http\\Controllers\\Auth\\ConfirmablePasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmablePasswordController.php',
         'App\\Http\\Controllers\\Auth\\EmailVerificationNotificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/EmailVerificationNotificationController.php',
@@ -629,6 +638,13 @@ class ComposerStaticInit52a4671ef6d975bc7f4bf439c915bf7c
         'App\\Http\\Controllers\\Frontend\\my\\paymentGateways\\MyPublicUserPaymentGatewayController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/my/paymentGateways/MyPublicUserPaymentGatewayController.php',
         'App\\Http\\Controllers\\Frontend\\my\\profile\\BaseControllerProfile' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/my/profile/BaseControllerProfile.php',
         'App\\Http\\Controllers\\Frontend\\my\\withdrawals\\MyWithdrawalsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/my/withdrawals/MyWithdrawalsController.php',
+        'App\\Http\\Controllers\\Frontend\\mysuperuser\\MyDashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/mysuperuser/MyDashboardController.php',
+        'App\\Http\\Controllers\\Frontend\\mysuperuser\\campaigns\\MyCampaignController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/mysuperuser/campaigns/MyCampaignController.php',
+        'App\\Http\\Controllers\\Frontend\\mysuperuser\\donations\\MyDonationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/mysuperuser/donations/MyDonationController.php',
+        'App\\Http\\Controllers\\Frontend\\mysuperuser\\donations\\MyDonationReceivedController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/mysuperuser/donations/MyDonationReceivedController.php',
+        'App\\Http\\Controllers\\Frontend\\mysuperuser\\paymentGateways\\MyPublicUserPaymentGatewayController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/mysuperuser/paymentGateways/MyPublicUserPaymentGatewayController.php',
+        'App\\Http\\Controllers\\Frontend\\mysuperuser\\profile\\BaseControllerProfile' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/mysuperuser/profile/BaseControllerProfile.php',
+        'App\\Http\\Controllers\\Frontend\\mysuperuser\\withdrawals\\MyWithdrawalsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/mysuperuser/withdrawals/MyWithdrawalsController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
         'App\\Http\\Controllers\\Voyager\\ContentTypes\\BaseType' => __DIR__ . '/../..' . '/app/Http/Controllers/Voyager/ContentTypes/BaseType.php',
@@ -667,10 +683,12 @@ class ComposerStaticInit52a4671ef6d975bc7f4bf439c915bf7c
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Middleware\\frontendAuth' => __DIR__ . '/../..' . '/app/Http/Middleware/frontendAuth.php',
+        'App\\Http\\Middleware\\frontendAuthSuperUser' => __DIR__ . '/../..' . '/app/Http/Middleware/frontendAuthSuperUser.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
         'App\\Http\\Requests\\ProfileUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfileUpdateRequest.php',
         'App\\Jobs\\SendEmailAfterDonationMade' => __DIR__ . '/../..' . '/app/Jobs/SendEmailAfterDonationMade.php',
         'App\\Jobs\\SendEmailAfterDonationMadeToGiver' => __DIR__ . '/../..' . '/app/Jobs/SendEmailAfterDonationMadeToGiver.php',
+        'App\\Jobs\\SendEmailAfterWithdrawMade' => __DIR__ . '/../..' . '/app/Jobs/SendEmailAfterWithdrawMade.php',
         'App\\Mail\\DonationGivenEmail' => __DIR__ . '/../..' . '/app/Mail/DonationGivenEmail.php',
         'App\\Mail\\DonationReceivedEmail' => __DIR__ . '/../..' . '/app/Mail/DonationReceivedEmail.php',
         'App\\Mail\\NewUserRegistrationEmail' => __DIR__ . '/../..' . '/app/Mail/NewUserRegistrationEmail.php',
@@ -7292,6 +7310,8 @@ class ComposerStaticInit52a4671ef6d975bc7f4bf439c915bf7c
         'Whoops\\Util\\Misc' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/Misc.php',
         'Whoops\\Util\\SystemFacade' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
         'Whoops\\Util\\TemplateHelper' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
+        'Yajra\\Disqus\\DisqusMiddleware' => __DIR__ . '/..' . '/yajra/laravel-disqus/src/DisqusMiddleware.php',
+        'Yajra\\Disqus\\DisqusServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-disqus/src/DisqusServiceProvider.php',
         'voku\\helper\\ASCII' => __DIR__ . '/..' . '/voku/portable-ascii/src/voku/helper/ASCII.php',
     );
 
