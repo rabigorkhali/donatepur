@@ -72,15 +72,15 @@
                                             </ul>
 
                                             @if ($campaignDetails->campaign_status == 'running')
-                                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
+                                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 mb-10"
                                                     href="#donationForm" onclick="scrollToElement('donationForm')">Donate
                                                     Now</a>
                                             @elseif (in_array($campaignDetails->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                                 <a href="#"
-                                                    class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed</a>
+                                                    class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10">Completed</a>
                                             @elseif($campaignDetails->end_date < date('Y-m-d'))
                                                 <a href="#"
-                                                    class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired
+                                                    class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10">Expired
                                                 </a>
                                             @endif
                                         </div>
@@ -131,16 +131,16 @@
                                     <div id="legacy-clock" class="flip sm-text-center font-14 mt-10 pt-5 mb-sm-20"></div>
 
                                     @if ($campaignDetails->campaign_status == 'running')
-                                        <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10"
+                                        <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 mb-10"
                                             href="#donationForm" onclick="scrollToElement('donationForm')">Donate
                                             Now</a>
                                     @elseif (in_array($campaignDetails->campaign_status, ['completed', 'withdrawal-processing', 'withdrawn']))
                                         <a href="#"
-                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Completed
+                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10">Completed
                                             ON {{ $campaignDetails->end_date->format('Y-M-d') }}</a>
                                     @elseif ($campaignDetails->end_date < date('Y-m-d'))
                                         <a href="#"
-                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled">Expired
+                                            class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10 disabled mb-10">Expired
                                             ON {{ $campaignDetails->end_date->format('Y-M-d') }}</a>
                                     @endif
 
