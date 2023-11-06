@@ -710,6 +710,11 @@
             </section>
         @endif
 
+        <style>
+            #disqus_thread{
+                padding: 12px;
+            }
+            </style>
         <div id="disqus_thread"></div>
 
     </div>
