@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::prefix('my')->middleware('frontend_users')->group(function () {
+Route::prefix('my')->middleware(['frontend_users','throttle:100,1'])->group(function () {
     Route::get('/dashboard', [MyDashboardController::class, 'index'])->name('my.dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

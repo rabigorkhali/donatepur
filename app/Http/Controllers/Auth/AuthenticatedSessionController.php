@@ -45,7 +45,7 @@ class AuthenticatedSessionController extends Controller
         $data['email_verify_token'] = $publicUser->email_verify_token;
 
         $request->authenticate();
-        if ($publicUser->status !== '1') {
+        if ($publicUser->status !== 1) {
             Auth::guard('frontend_users')->logout();
 
             $request->session()->invalidate();
