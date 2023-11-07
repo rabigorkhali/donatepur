@@ -187,7 +187,7 @@ class HomeController extends FrontendBaseController
             }
             $postQuery = $postQuery->orderby('id', 'desc')
                 ->where('status', 1)
-                ->paginate(3);
+                ->paginate(12);
 
             $data['postList'] = $postQuery;
             $data['postCategories'] = Category::orderby('name', 'asc')->get();

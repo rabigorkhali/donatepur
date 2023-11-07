@@ -35,3 +35,14 @@ php artisan adminlte:plugins install --plugin=datatables --plugin=datatablesPlug
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## SCREEN BACKGROUNDUSGE
+1:Add new command in background: screen -S <session_name> EG. screen -S queue:work
+
+type1: put command run in background
+2:Leave command running in background: screen+A+D 
+
+type2:put it into the background but close
+To terminate the current screen session (not put it into the background but close), press Ctrl + D or type:
+
