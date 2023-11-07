@@ -45,7 +45,7 @@ class AuthenticatedSessionController extends Controller
         $data['email_verify_token'] = $publicUser->email_verify_token;
 
         $request->authenticate();
-        if ($publicUser->status !== 1) {
+        if ($publicUser->status !== '1' || $publicUser->status !== 1) {
             Auth::guard('frontend_users')->logout();
 
             $request->session()->invalidate();
@@ -54,7 +54,7 @@ class AuthenticatedSessionController extends Controller
             Session::flash('error', 'Your account is disabled.');
             return redirect()->route('login');
         }
-        if ($publicUser->is_email_verified == 0) {
+        if ($publicUser->is_email_verified == 0 || $publicUser->is_email_verified == '0') {
             Auth::guard('frontend_users')->logout();
 
             $request->session()->invalidate();
