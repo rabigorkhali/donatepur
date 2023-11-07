@@ -240,7 +240,7 @@ class MyCampaignController extends Controller
         try {
 
 
-            if (strtolower($campaign->campaign_status) !== 'withdrawn') {
+            if (strtolower($campaign->campaign_status) == 'withdrawn') {
                 Session::flash('error', 'Withdrawn campaign cannot be updated.');
                 return redirect()->route('mysuperuser.campaigns.list');
             }
