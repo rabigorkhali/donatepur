@@ -199,7 +199,7 @@ class MyCampaignController extends Controller
             Session::flash('error', 'Bad request.');
             return redirect()->route('mysuperuser.campaigns.list');
         }
-        if (strtolower($campaignDetails->campaign_status) !== 'withdrawn') {
+        if (strtolower($campaignDetails->campaign_status) == 'withdrawn') {
             Session::flash('error', 'Withdrawn campaigns cannot be edited.');
             return redirect()->route('mysuperuser.campaigns.list');
         }
