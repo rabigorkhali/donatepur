@@ -172,7 +172,7 @@ class HomeController extends FrontendBaseController
     public function postList(Request $request)
     {
         dump('test cicd');
-        dump('test cic222d');
+        dump('test cic22q2d');
         try {
             $data = array();
             $keyword = trim($request->get('title'));
