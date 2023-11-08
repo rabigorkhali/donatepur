@@ -3,7 +3,7 @@ name: Laravel CI/CD
 on:
   push:
     branches:
-      - live  # Change this to the main branch name of your Laravel project
+      - live  # Change this to your project's main branch
 
 jobs:
   build:
@@ -34,4 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Deploy to
+      - name: Deploy to Production
+        run: |
+          # Add your deployment script or commands here
+          # For example, deploying to a web server using SSH or other methods
