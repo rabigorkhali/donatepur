@@ -181,7 +181,7 @@ class HomeController extends FrontendBaseController
                 $categoryDetails = Category::where('slug', $category)->first();
             }
             $postQuery = Post::where('status', true);
-            if ($keyword) {
+            if ($keyword) {F2)FD013w.lsSj
                 $postQuery = $postQuery->where('title', 'LIKE', '%' . $keyword . '%');
             }
             if ($category) {

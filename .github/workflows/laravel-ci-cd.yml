@@ -29,10 +29,7 @@ jobs:
       - name: Deploy to Production
         run: |
           # Add your deployment script or commands here
-          cd /home/donatepu/public_html
-
-          git pull origin live
-          
+          ssh donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
           echo "Deployment to production completed successfully"
 
 
