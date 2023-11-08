@@ -18,14 +18,38 @@ jobs:
 
       - name: Pull Latest Changes
         run: git pull origin live
-        
+
       # - name: Run Tests
       #   run: vendor/bin/phpunit
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to Production
-        run: |
-          # Add your deployment script or commands here
+deploy:
+  runs-on: ubuntu-latest
+  needs: build
+  steps:
+    - name: Deploy to Production
+      run: |
+        # Navigate to your Laravel project directory
+        # cd /path/to/your/laravel/project
+
+        # Pull the latest changes from your Git repository (optional)
+        git pull origin live
+
+        # Install Composer dependencies
+        composer install --no-interaction --prefer-dist
+
+        # Update the database (if needed)
+        php artisan migrate --force
+
+        # Clear caches and optimize
+        php artisan optimize
+        php artisan config:cache
+        php artisan route:cache
+
+        # Restart your web server or PHP-FPM (adjust this based on your server configuration)
+        # sudo service apache2 restart
+
+        # Your additional deployment steps (e.g., asset compilation, restarting queues, etc.)
+
+        # Notify deployment success (optional)
+        echo "Deployment to production completed successfully"
+
