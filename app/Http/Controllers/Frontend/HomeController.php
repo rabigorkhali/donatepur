@@ -172,7 +172,7 @@ class HomeController extends FrontendBaseController
     public function postList(Request $request)
     {
         dump('test cicd');
-        dump('test 7658');
+        dump('test 765dsf8');
         try {
             $data = array();
             $keyword = trim($request->get('title'));
@@ -181,7 +181,7 @@ class HomeController extends FrontendBaseController
                 $categoryDetails = Category::where('slug', $category)->first();
             }
             $postQuery = Post::where('status', true);
-            if ($keyword) {F2)FD013w.lsSj
+            if ($keyword)
                 $postQuery = $postQuery->where('title', 'LIKE', '%' . $keyword . '%');
             }
             if ($category) {
