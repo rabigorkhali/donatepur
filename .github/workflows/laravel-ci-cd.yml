@@ -10,9 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-  
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: main  # Replace 'main' with your project's main branch name
+          repository: ${{ github.repository }}
+      
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install Composer Dependencies
+        run: composer install
 
       - name: Run Tests
         run: vendor/bin/phpunit
