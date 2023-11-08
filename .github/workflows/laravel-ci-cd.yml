@@ -29,7 +29,8 @@ jobs:
       - name: Deploy to Production
         run: |
           # Add your deployment script or commands here
-          cd /home/donatepu/public_html
+          cd $GITHUB_WORKSPACE
+
           git pull origin live
           
           echo "Deployment to production completed successfully"
