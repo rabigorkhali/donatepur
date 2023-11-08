@@ -16,6 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Pull Latest Changes
+        run: git pull origin live
+        
       # - name: Run Tests
       #   run: vendor/bin/phpunit
 
