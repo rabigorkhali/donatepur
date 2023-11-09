@@ -175,7 +175,6 @@ class HomeController extends FrontendBaseController
             dump('testss');
             // dump('testss');
             // dump('testss');
-            // dump('testss');
             $data = array();
             $keyword = trim($request->get('title'));
             $category = trim($request->get('category'));
