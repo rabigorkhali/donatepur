@@ -29,12 +29,19 @@ jobs:
       - name: Deploy to Production
         run: |
             # Set up the SSH key for authentication
-            echo "GITHUB_REPOSITORY_value_echo: $SSH_PRIVATE_KEY"
-            echo $SSH_PRIVATE_KEY
-            echo "$SSH_PRIVATE_KEY" > deploy_key
-            chmod 600 deploy_key
-            ssh -i deploy_key donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
-            echo "Deployment to production completed successfully"
+            # echo "GITHUB_REPOSITORY_value_echo: $SSH_PRIVATE_KEY"
+            # echo $SSH_PRIVATE_KEY
+            # echo "$SSH_PRIVATE_KEY" > deploy_key
+            # chmod 600 deploy_key
+            # ssh -i deploy_key donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
+            # echo "Deployment to production completed successfully"
+            eval "$(ssh-agent -s)"
+            ssh-add - <<< "b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABCxarljQG50d4616a1jzQcsAAAAEAAAAAEAAAEXAAAAB3NzaC1yc2EAAAADAQABAAABAQDI8a9FYG3fhqseTMBAAMIMxyMh3tSMfaCNxcpY0IHfKaxRDRi7FjwXeBHYseqrGjU69WM11lVM9J5ZZ1ZI78IdI2iIGf8uxtmBA8wHCaS8H9v8OmIbLTJJbuzOrevNVm2LGlezpX+K866qtJECDTuuAayQeZUyMHKVZhoir2QlbpWjpEcfVbl8fl2EdshQe/BzuYzSffdsQxF9q93zsIcGdfYVnpnpCGYK4PFwrA3WJJ6xSgKZ3dTTfQCdUxYBgiVW8FuDz9INv0kMi2Dz+e0HHMHcbFZU2l2m6fBIHaufbaKVIZYXTW+deeZ501VqCBjl7ZbXhGxXGZKEQmC8a+JhAAADwL7gP0hspJsjnzUjuWkkxhtJ7wMkwD6u08l+oNsyvZZtMIm5GIkZJysyxz+bgPuHeWemZjARjE4KM3pnDRBy3Aus+dw9A0Zu2QP+9nnInMJPV+tETps9KHGV1NVlzxsyXKepoh/ef/wazTTyS8RhCHp0UKeSSqZHPjvCe5bIsElhFUvJZbc0QiW0v41RzS57jJxrFpJ2Ow6+Os/2qe1tEWVX4g1UZiW1umdWaCOOcDEtLp50QrcGHvW9cNZzEbyRa+hQQ/u+5NI1STa4KasDDYeU+aUceOJZfT6d9STWWz23c0T3B4w98F53KeaDk2atThQ1uMY46jWQU5VvJ5XcyeSUtbFZELsNB2ky4JYe7vQSUgNWsy5/hooFTUxOwWBhu4g/tDa+F9p5VOuggCpVz3qYp7huDoN67AYgBGjAOduOzmCC1VmuFo7S7vs1+n9DjaKMUEHnF3ZN7Ci7pu007AOpta5QuKxNEwoJlJDLDJhh+VeAfIr228g84RTjuCV0Rnj/nBgKiQcDqztabaufhvw2Jytg01yehzypiQNZxXyj1DJ2ERrJVpve6v+uk1PmdAcnKdc6mQy5j1FfG8VLqeUrDKRz1KUxqfnDcNGMTz54NmHhH8Plh/aHeg/MiW/gBqnvcHhyB84O9N5SoUtOFSFqcaA4l/N5Oe94J+TutTPwmSD9qzFtfTMNkALDFU2FY6uMJfE8zZMcw+1tfIn+FqDlno6n44RWNZw+FWHQDN2lOy7K61TXfE1OYSb3gfX4QcMNxVberSNn6eHYgjAosau+V/6cbm5ObklKyF91AyTCjzB+AWpnGr7pX3/dXjLHzn7Y1COAtQRnTql7cI7qEWq7i3ict3nw2UaXQoxTtaTENM7AsHs8N63F+j7bx/GPHJ3rMB/TQYlv0S5awuzgDhP1N4jo/pg8SnROZwMK4W+GpuotGxlImj+LdkXM8gIcWGpQNQetRV2qarKoLH5+z4hY+SMKDFTyKG5GCY5nsxqTofhqSo7CSyxt0uSkKG7AFvjwKovoKIRBzzZsIEB3Ck2isAg2hC8QMosTYe9NJ4sCU1tzgL8ls4ZXxqszbURcgzyknXFCECk2aDw3tzFDrvUoo0Ox8d2Joo5b2/mp3h4tELRf2vNU+b21vrEelTPrKu4fI7sib1fU1vXmxib9kmvYR9TIFfPby7n+gvUY01mA5RkXWodbgH/Tl554yhtdpq1J+BjYf/450VYaD1az4qxxuyhxU1eMN745xu1c5amwISiMk2f2MC48x+Gd9kuMrA=="
+            ssh donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
+            ssh-agent -k
+
+
+
 
     # deploy:
     #   runs-on: ubuntu-latest
