@@ -29,7 +29,7 @@ jobs:
       - name: Deploy to Production
         run: |
             # Set up the SSH key for authentication
-            echo "$SSH_PRIVATE_KEY" > deploy_key
+            echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI8a9FYG3fhqseTMBAAMIMxyMh3tSMfaCNxcpY0IHfKaxRDRi7FjwXeBHYseqrGjU69WM11lVM9J5ZZ1ZI78IdI2iIGf8uxtmBA8wHCaS8H9v8OmIbLTJJbuzOrevNVm2LGlezpX+K866qtJECDTuuAayQeZUyMHKVZhoir2QlbpWjpEcfVbl8fl2EdshQe/BzuYzSffdsQxF9q93zsIcGdfYVnpnpCGYK4PFwrA3WJJ6xSgKZ3dTTfQCdUxYBgiVW8FuDz9INv0kMi2Dz+e0HHMHcbFZU2l2m6fBIHaufbaKVIZYXTW+deeZ501VqCBjl7ZbXhGxXGZKEQmC8a+Jh" > deploy_key
             chmod 600 deploy_key
             ssh -i deploy_key donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
             echo "Deployment to production completed successfully"
