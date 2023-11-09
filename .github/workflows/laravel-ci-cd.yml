@@ -29,12 +29,16 @@ jobs:
       - name: Deploy to Production
         run: |
             # Set up the SSH key for authentication
-            # echo "GITHUB_REPOSITORY_value_echo: $SSH_PRIVATE_KEY"
+            echo "GITHUB_REPOSITORY_value_echo: $SSH_PRIVATE_KEY"
             # echo $SSH_PRIVATE_KEY
             # echo "$SSH_PRIVATE_KEY" > deploy_key
             # chmod 600 deploy_key
             # ssh -i deploy_key donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
             # echo "Deployment to production completed successfully"
+            # Save your private key to a file (e.g., id_rsa)
+            # Start the SSH agent
+            eval "$(ssh-agent -s)"
+
             # Save your private key to a file (e.g., id_rsa)
             echo "$SSH_PRIVATE_KEY" > id_rsa
 
@@ -46,6 +50,7 @@ jobs:
 
             # Use the key for SSH operations
             ssh donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
+
 
 
 
