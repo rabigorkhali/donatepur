@@ -33,7 +33,7 @@ jobs:
             echo $SSH_PRIVATE_KEY
             echo "$SSH_PRIVATE_KEY" > deploy_key
             chmod 600 deploy_key
-            ssh -i $SSH_PRIVATE_KEY donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
+            ssh -i deploy_key donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
             echo "Deployment to production completed successfully"
 
     # deploy:
