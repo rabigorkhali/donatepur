@@ -12,7 +12,8 @@ Documentation: https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Installation
 copy all vendor/tcf/voyager /migrations to database/migrations
 copy vendor/tcf/voyager/assets/views to resources/
 copy vendor/tcf/voyager/routes/voyager.php to routes/
-copy all controllers as well
+copy all controllers as well [    // $namespacePrefix = '\\'.config('voyager.controllers.namespace').'\\';
+]
 
 for css
 
