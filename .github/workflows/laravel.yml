@@ -35,5 +35,5 @@ jobs:
       run: vendor/bin/phpunit
     - name: SSH into server and pull latest changes
       run: |
-        ssh -v -i .ssh/deploy_key donatepu@141.95.99.203 'cd public_html && git pull origin live'
+        ssh -v -i ../.ssh/deploy_key donatepu@141.95.99.203 'cd public_html && git pull origin live'
         
