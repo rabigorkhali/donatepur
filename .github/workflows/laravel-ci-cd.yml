@@ -26,14 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Deploy to Production
-        run: |
-            # ssh donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
-            # ssh -T donatepu@141.95.99.203
-
-
-
-
+      - name: Git Pull
+        run: git pull origin live
 
 
     # deploy:
