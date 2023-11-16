@@ -173,7 +173,7 @@ class HomeController extends FrontendBaseController
     {
         try {
             dump('testss');
-            dump('testss');
+            // dump('testss');
             // dump('testss');
             $data = array();
             $keyword = trim($request->get('title'));
