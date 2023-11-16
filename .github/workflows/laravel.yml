@@ -47,7 +47,7 @@ jobs:
     #       ssh -o StrictHostKeyChecking=no -i ${{ secrets.DEPLOY_KEY_PATH }} donatepu@141.95.99.203 'cd public_html && git pull origin live'
 
       - name: Check Key
-        uses: ./
+        uses: donatepu/ssh-action@v0.1.10
         with:
           host: "141.95.99.203"
           username: "donatepu"
