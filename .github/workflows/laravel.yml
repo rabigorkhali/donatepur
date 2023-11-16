@@ -42,16 +42,16 @@ jobs:
           DB_DATABASE: database/database.sqlite
         run: vendor/bin/phpunit
 
-    #   - name: SSH into server and pull latest changes
-    #     run: |
-    #       ssh -o StrictHostKeyChecking=no -i ${{ secrets.DEPLOY_KEY_PATH }} donatepu@141.95.99.203 'cd public_html && git pull origin live'
+      - name: SSH into server and pull latest changes
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.DEPLOY_KEY_PATH }} donatepu@141.95.99.203 'cd public_html && git pull origin live'
 
-      - name: Check Key
-        uses: donatepu/ssh-action@v0.1.10
-        with:
-          host: "141.95.99.203"
-          username: "donatepu"
-          password: "F2)FD013w.lsSj"
-          key: "1234"
-          port: "2"
-          script: whoami
+    #   - name: Check Key
+    #     uses: donatepu/ssh-action@v0.1.10
+    #     with:
+    #       host: "141.95.99.203"
+    #       username: "donatepu"
+    #       password: "F2)FD013w.lsSj"
+    #       key: "1234"
+    #       port: "2"
+    #       script: whoami
