@@ -49,7 +49,8 @@ jobs:
             ssh-add id_rsa
 
             # Use the key for SSH operations
-            ssh donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
+            # ssh donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
+            ssh donatepu@141.95.99.203
 
 
 
