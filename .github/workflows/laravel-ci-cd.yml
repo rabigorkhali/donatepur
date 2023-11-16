@@ -37,16 +37,16 @@ jobs:
             # echo "Deployment to production completed successfully"
             # Save your private key to a file (e.g., id_rsa)
             # Start the SSH agent
-            eval "$(ssh-agent -s)"
+            # eval "$(ssh-agent -s)"
 
-            # Save your private key to a file (e.g., id_rsa)
-            echo "$SSH_PRIVATE_KEY" > id_rsa
+            # # Save your private key to a file (e.g., id_rsa)
+            # echo "$SSH_PRIVATE_KEY" > id_rsa
 
-            # Set appropriate file permissions
-            chmod 600 id_rsa
+            # # Set appropriate file permissions
+            # chmod 600 id_rsa
 
-            # Add the key to the SSH agent
-            ssh-add id_rsa
+            # # Add the key to the SSH agent
+            # ssh-add id_rsa
 
             # Use the key for SSH operations
             # ssh donatepu@141.95.99.203 'cd /home/donatepu/public_html && git pull origin live'
