@@ -38,7 +38,8 @@ jobs:
     - name: Pull Request
       uses: appleboy/ssh-action@v1.0.0
       with:
-        host: "141.95.99.203"
+        # host: "141.95.99.203"
+        host: ${{ secrets.HOST }}
         username: "donatepu"
         password: "F2)FD013w.lsSj"
         key: ""
