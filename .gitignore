@@ -25,4 +25,5 @@ Homestead.json
 vendor
 vendor/*
 vendor/
-public_html/uploads
+public/uploads
+
