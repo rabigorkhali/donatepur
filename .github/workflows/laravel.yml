@@ -43,4 +43,6 @@ jobs:
         password: "F2)FD013w.lsSj"
         key: ""
         port: "22"
-        script: git pull origin live
+        script: |
+          cd public_html
+          git pull origin live
