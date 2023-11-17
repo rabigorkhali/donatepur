@@ -40,10 +40,13 @@ jobs:
       with:
         # host: "141.95.99.203"
         host: ${{ secrets.HOST }}
-        username: "donatepu"
-        password: "F2)FD013w.lsSj"
+        # username: "donatepu"
+        username: ${{ secrets.USERNAME }}
+        # password: "F2)FD013w.lsSj"
+        password: ${{ secrets.PASSWORD }}
         key: ""
-        port: "22"
+        port: ${{ secrets.PORT }}
+        # port: "22"
         script: |
           cd public_html
           git pull origin live
