@@ -35,3 +35,12 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: vendor/bin/phpunit
+    - name: Check Key
+      uses: donatepu/ssh-action@v0.1.10
+      with:
+        host: "141.95.99.203"
+        username: "donatepu"
+        password: "F2)FD013w.lsSj"
+        key: ""
+        port: "22"
+        script: whoami
