@@ -29,7 +29,7 @@ class PublicUser  extends Authenticatable
 
      public function adminlte_image()
      {
-         return  asset('public/uploads/' . giveImageName(Auth::guard('frontend_users')->user()->profile_picture, 'small')) ;
+         return  asset('public/uploads/' . giveImageName(Auth::guard('frontend_users')->user()->profile_picture, 'medium')) ;
      }
  
      public function adminlte_desc()
