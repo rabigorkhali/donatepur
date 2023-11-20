@@ -28,3 +28,7 @@ include('profilesuperuser.php'); // super user frontend admin admin
 Route::get('/error', function () {
     return view('frontend.errorpage');
 })->name('frontend.error.page');
+
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
