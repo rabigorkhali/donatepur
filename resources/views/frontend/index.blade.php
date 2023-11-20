@@ -480,7 +480,7 @@
                         @if (($rowCountRecentCampaign - 1) % 3 == 0 || $rowCountRecentCampaign == 1)
                             <div class="row">
                         @endif
-                        <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
+                           <div class="col-xs-12 col-sm-6 col-md-4 mb-30">
                             <div class="image-box-thum">
                                 <a href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">
                                     <img height="239" class="img-fullwidth" style=" border-radius:5px 5px 0 0;"
@@ -545,11 +545,11 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                           </div>
 
                         @if ($rowCountRecentCampaign % 3 == 0 && $rowCountRecentCampaign != 1)
-                </div>
-                @endif
+                         </div>
+                        @endif
                 @php $rowCountRecentCampaign=$rowCountRecentCampaign+1;@endphp
                 @endforeach
                 <div class="row">

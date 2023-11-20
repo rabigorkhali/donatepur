@@ -55,16 +55,16 @@
                             @php $rowCountRecentCampaign=1;@endphp
 
                             @foreach ($postList as $postListKey => $postListDatum)
-                                @if (($rowCountRecentCampaign - 1) % 3 == 0 || $rowCountRecentCampaign == 1)
-                                   <div class="row">
-                                  @endif
-                                      <div class="col-md-4">
-                                        <article class="post clearfix mb-30 bg-lighter">
+                            @if (($rowCountRecentCampaign - 1) % 3 == 0 || $rowCountRecentCampaign == 1)
+                            <div class="row">
+                                @endif
+                                <div class="col-md-4">
+                                    <article class="post clearfix mb-30 bg-lighter">
                                         <div class="entry-header">
                                             <div class="post-thumb thumb">
                                                 <a href="{{ route('postDetailPage', $postListDatum->slug) }}">
-                                                <img src="{{ asset('/public/uploads') . '/' . imageName($postListDatum->image, '-cropped') }}"
-                                                    alt="" class="img-responsive img-fullwidth">
+                                                    <img src="{{ asset('/public/uploads') . '/' . imageName($postListDatum->image, '-cropped') }}"
+                                                        alt="" class="img-responsive img-fullwidth">
                                                 </a>
                                             </div>
                                         </div>
@@ -94,37 +94,39 @@
                                                 </div>
                                             </div>
                                             <a href="{{ route('postDetailPage', $postListDatum->slug) }}">
-                                            <p class="mt-10"> {{ substr(strip_manual_tags($postListDatum->body), 0, 100) }}....</p>
+                                                <p class="mt-10">
+                                                    {{ substr(strip_manual_tags($postListDatum->body), 0, 100) }}....</p>
                                             </a>
                                             <a href="{{ route('postDetailPage', $postListDatum->slug) }}"
                                                 class="btn-read-more">Read more</a>
                                             <div class="clearfix"></div>
                                         </div>
                                     </article>
-                                      </div>
+                                </div>
                                 @if ($rowCountRecentCampaign % 3 == 0 && $rowCountRecentCampaign != 1)
-
-                                   </div>
-                                @endif
-                            @endforeach
-                            @if (!$postList->count())
-                                <div class="col-md-5">
-                                </div>
-                                <div class="col-md-6">
-                                    <h2 class="font-weight-300 m-0">Data not found.</h2>
-                                </div>
-                            @endif
-
-                            <div class="col-md-12">
-                                <nav>
-                                    {{ $postList->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
-                                </nav>
                             </div>
+                                 @endif
+                                 @php $rowCountRecentCampaign=$rowCountRecentCampaign+1;@endphp
+
+                             @endforeach
+                        @if (!$postList->count())
+                            <div class="col-md-5">
+                            </div>
+                            <div class="col-md-6">
+                                <h2 class="font-weight-300 m-0">Data not found.</h2>
+                            </div>
+                        @endif
+
+                        <div class="col-md-12">
+                            <nav>
+                                {{ $postList->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
+                            </nav>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+    </div>
+    </section>
     </div>
     <!-- end main-content -->
 @endsection
