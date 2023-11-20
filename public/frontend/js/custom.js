@@ -754,7 +754,9 @@ var THEMEMASCOT = THEMEMASCOT || {};
             if ($window.scrollTop() > (50)) {
                 $(".navbar-sticky-animated").removeClass("animated-active");
             } else {
-                $(".navbar-sticky-animated").addClass("animated-active");
+                // $(".navbar-sticky-animated").addClass("animated-active");
+                $(".navbar-sticky-animated").removeClass("animated-active");
+
             }
 
             if ($window.scrollTop() > (50)) {

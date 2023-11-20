@@ -1,6 +1,7 @@
 <header id="header" class="header">
     <div
-        class="header-nav navbar-fixed-top header-dark navbar-white navbar-transparent bg-transparent-1 navbar-sticky-animated animated-active">
+        {{-- class="header-nav navbar-fixed-top header-dark navbar-white navbar-transparent bg-transparent-1 navbar-sticky-animated animated-active"> --}}
+        class="header-nav navbar-fixed-top header-dark navbar-white navbar-transparent bg-transparent-1 navbar-sticky-animated">
         <div class="header-nav-wrapper">
             <div class="container">
                 <nav id="menuzord-right" class="menuzord default no-bg">
