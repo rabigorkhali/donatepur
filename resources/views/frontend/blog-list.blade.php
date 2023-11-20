@@ -50,11 +50,16 @@
 
                 </div>
                 <div class="section-content">
-                    <div class="row multi-row-clearfix">
+                    <div class=" multi-row-clearfix">
                         <div class="blog-posts">
+                            @php $rowCountRecentCampaign=1;@endphp
+
                             @foreach ($postList as $postListKey => $postListDatum)
-                                <div class="col-md-4">
-                                    <article class="post clearfix mb-30 bg-lighter">
+                                @if (($rowCountRecentCampaign - 1) % 3 == 0 || $rowCountRecentCampaign == 1)
+                                   <div class="row">
+                                  @endif
+                                      <div class="col-md-4">
+                                        <article class="post clearfix mb-30 bg-lighter">
                                         <div class="entry-header">
                                             <div class="post-thumb thumb">
                                                 <a href="{{ route('postDetailPage', $postListDatum->slug) }}">
@@ -96,7 +101,11 @@
                                             <div class="clearfix"></div>
                                         </div>
                                     </article>
-                                </div>
+                                      </div>
+                                @if ($rowCountRecentCampaign % 3 == 0 && $rowCountRecentCampaign != 1)
+
+                                   </div>
+                                @endif
                             @endforeach
                             @if (!$postList->count())
                                 <div class="col-md-5">
