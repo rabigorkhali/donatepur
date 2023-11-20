@@ -356,6 +356,14 @@ return [
             'url'  => 'my/profile/change-password',
             'icon' => 'fa fa-key',
         ],
+        ['header' => 'RESOURCES'],
+        [
+            'text' => 'User Guides',
+            'url'  => 'https://docs.google.com/document/d/1zg83tQWuPqocv9RH6cEw8AdBzrmUM3Jzw4_J69xXAjI',
+            'icon' => 'fa fa-book',
+        ],
+
+        
         // [
         //     'text'    => 'multilevel',
         //     'icon'    => 'fas fa-fw fa-share',
