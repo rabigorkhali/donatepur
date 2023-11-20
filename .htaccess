@@ -33,3 +33,7 @@
     Header set Access-Control-Allow-Headers "*"
     Header set Access-Control-Allow-Credentials "true"
 </IfModule>
+
+# Set PHP Configuration Directives
+php_value upload_max_filesize 25M
+php_value post_max_size 25M
