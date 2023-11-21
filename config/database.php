@@ -58,9 +58,21 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+            'engine' => null,
+            'max_connections' => 10000, // Set to a very high number
+            // 'options' => extension_loaded('pdo_mysql') ? array_filter([
+            //     PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            // ]) : [],
+            'options' => [
+                PDO::ATTR_PERSISTENT => true,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_AUTOCOMMIT => 1,
+                PDO::ATTR_TIMEOUT => 30,
+            ],
+            'retry' => [
+                'max_attempts' => 3, // Number of reconnect attempts before giving up.
+                'sleep' => 1000,     // Milliseconds to sleep between attempts.
+            ]
         ],
 
         'pgsql' => [
