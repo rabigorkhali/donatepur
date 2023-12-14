@@ -26,6 +26,7 @@ Route::prefix('mysuperuser')->middleware('frontend_users_super')->group(function
 
     /* CAMPAIGNS */
     Route::get('/campaigns', [MyCampaignController::class, 'index'])->name('mysuperuser.campaigns.list');
+    Route::get('/campaigns/force-withdraw', [MyCampaignController::class, 'forceWithdraw'])->name('mysuperuser.campaigns.forceWithdraw');
     Route::get('/campaigns/{id}/edit', [MyCampaignController::class, 'edit'])->name('mysuperuser.campaigns.edit');
     Route::get('/campaigns/{id}/view', [MyCampaignController::class, 'view'])->name('mysuperuser.campaigns.view');
     Route::put('/campaigns/{id}', [MyCampaignController::class, 'update'])->name('mysuperuser.campaigns.update');

@@ -38,6 +38,28 @@ class MyCampaignController extends Controller
         return view('frontendsuperuser.my.campaigns' . $viewFile, $data)->render();
     }
 
+    function forceWithdraw(Request $request)
+    {
+        try {
+            $campaignId = $request->get('id');
+            $campaign = Campaign::where('id', $campaignId)->first();
+            if (!$campaign) {
+                Session::flash('error', 'Campaign not found.');
+                return redirect()->back();
+            }
+            if ($campaign->campaign_status !== 'running') {
+                Session::flash('error', 'Only running campaigns can be force withdrawn.');
+                return redirect()->back();
+            }
+            Campaign::where('id', $campaignId)->update(['end_date' => date('Y-m-d')]);
+            Session::flash('success', 'Your campaign will end on '.date('Y-m-d').'. You will be able to request withdrawal from tomorrow.');
+            return redirect()->back();
+        } catch (Throwable $th) {
+            SystemErrorLog::insert(['message' => $th->getMessage()]);
+            return redirect()->route('frontend.error.page');
+        }
+    }
+
     public function index(Request $request)
     {
         try {
@@ -70,6 +92,7 @@ class MyCampaignController extends Controller
             foreach ($campaigns as $keyCampaigns => $datumCampaign) {
                 $btnDelete = '';
                 $btnEdit = '';
+                $btnForceEnd = '';
                 $btnEdit = '<a href="' . route('mysuperuser.campaigns.edit', $datumCampaign->id) . '" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                             <i class="fa fa-edit"></i>
                         </a>';
@@ -83,6 +106,12 @@ class MyCampaignController extends Controller
                 $btnViewInSite = '<a target="_blank" href="' . route('campaignDetailPage', $datumCampaign->slug) . '" class="btn btn-xs btn-info text-white mx-1 shadow" title="Navigate to website.">
                            <i class="fa fa-lg fa-fw fa-info-circle"></i> View in site.
                        </a>';
+                if (strtolower($datumCampaign->campaign_status) == 'running') {
+                    $btnForceEnd = '<a onclick="forceWithdrawBtn(' . $datumCampaign->id . ')" target="_blank"  class="btn btn-xs btn-primary text-white mx-1 shadow" title="End campaign and force enable withdraw.">
+                    <i class="fa fa-lg fa-fw fa-money"></i>Force withdraw
+                </a>';
+                }
+
                 $thisArray = [
                     $sn,
                     substr($datumCampaign->title, 0, 50),
@@ -93,7 +122,7 @@ class MyCampaignController extends Controller
                     priceToNprFormat($datumCampaign->goal_amount),
                     priceToNprFormat($datumCampaign->total_collection),
                     ($datumCampaign->status) ? 'Active' : 'Inactive',
-                    '<nobr>' . $btnEdit . $btnDelete . $btnDetails . $btnViewInSite . '</nobr>'
+                    '<nobr>' . $btnEdit . $btnDelete . $btnDetails . $btnViewInSite . $btnForceEnd . '</nobr>'
                 ];
                 $sn = $sn + 1;
                 array_push($campaignList, $thisArray);
@@ -216,7 +245,7 @@ class MyCampaignController extends Controller
 
     public function update(Request $request, $campaignId)
     {
-        $campaign = Campaign::where('id', $campaignId)->where('campaign_status','!=', 'withdrawn')->first();
+        $campaign = Campaign::where('id', $campaignId)->where('campaign_status', '!=', 'withdrawn')->first();
         if (!$campaign) {
             Session::flash('error', 'Bad request.');
             return redirect()->route('mysuperuser.campaigns.list');

@@ -31,7 +31,7 @@
         hoverable with-buttons />
 
     {{-- With buttons + customization --}}
-   
+
 
 @stop
 
@@ -64,5 +64,31 @@
         }
     </script>
 
-    <script></script>
+    <script>
+        function forceWithdrawBtn(dataId) {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+
+            const formattedDate = `${year}-${month}-${day}`;
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are force ending your campaign. Note: your campaign will be marked as completed on " +
+                    formattedDate + " once you force withdraw.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Force end!'
+            }).then((result) => {
+                if (result.value) {
+                    // Send request to delete route
+                    const deleteUrl = "{{ route('my.campaigns.forceWithdraw') }}" + '?id=' + dataId;
+                    window.location.href = deleteUrl;
+                    // location.reload();
+                }
+            });
+        }
+    </script>
 @stop

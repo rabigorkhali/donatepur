@@ -24,6 +24,7 @@ Route::prefix('my')->middleware(['frontend_users','throttle:100,1'])->group(func
     Route::post('/profile/logout', [ProfileController::class, 'logout'])->name('profile.logout');
 
     /* CAMPAIGNS */
+    Route::get('/campaigns/force-withdraw', [MyCampaignController::class, 'forceWithdraw'])->name('my.campaigns.forceWithdraw');
     Route::get('/campaigns', [MyCampaignController::class, 'index'])->name('my.campaigns.list');
     Route::get('/campaigns/{id}/edit', [MyCampaignController::class, 'edit'])->name('my.campaigns.edit');
     Route::get('/campaigns/{id}/view', [MyCampaignController::class, 'view'])->name('my.campaigns.view');
