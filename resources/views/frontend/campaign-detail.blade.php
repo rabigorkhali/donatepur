@@ -93,8 +93,15 @@
                             <div class="target-information pb-sm-20 bg-light pr-0 pb-50 pl-0">
                                 <div class="col-md-6">
                                     <div class="col-md-12 text-center">
+                                        @php
+                                            if ($campaignDetails?->owner?->profile_picture) {
+                                                $profilePic = asset('/public/uploads') . '/' . imageName($campaignDetails?->owner?->profile_picture, '-medium');
+                                            } else {
+                                                $profilePic = asset('public/uploads/static-images/images/usernotfound.png');
+                                            }
+                                        @endphp
                                         <img width="160" class="img-circle" alt="" style="margin: 7px;"
-                                            src="{{ asset('/public/uploads') . '/' . imageName($campaignDetails?->owner?->profile_picture, '-medium') }}">
+                                            src="{{ $profilePic }}">
                                     </div>
                                     <div class="col-md-12 text-center">
                                         <ul class="list-inline clearfix  mb-20">
@@ -711,10 +718,10 @@
         @endif
 
         <style>
-            #disqus_thread{
+            #disqus_thread {
                 padding: 12px;
             }
-            </style>
+        </style>
         <div id="disqus_thread"></div>
 
     </div>
@@ -908,14 +915,14 @@
                     "productIdentity": "{{ $campaignDetails?->id }}",
                     "productName": '{{ $campaignDetails?->slug }}',
                     "productUrl": "{{ route('campaignDetailPage', $campaignDetails?->slug) }}",
-                    /* "paymentPreference": [
+                    "paymentPreference": [
                         "KHALTI",
                         "EBANKING",
                         "MOBILE_BANKING",
                         "CONNECT_IPS",
                         "SCT",
-                    ], */
-                    paymentPreference: [paymentGatewayValue],
+                    ],
+                    // paymentPreference: [paymentGatewayValue],
                     "eventHandler": {
                         onSuccess(payload) {
                             $.ajaxSetup({

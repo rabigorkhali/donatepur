@@ -35,7 +35,6 @@ class SendEmailAfterDonationMadeToGiver implements ShouldQueue
      */
     public function handle()
     {
-        dump('send emaile to giver ');
         Mail::to($this->mailData['donationGiverEmail'])->send(new DonationGivenEmail($this->mailData));
     }
 }
