@@ -13,15 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('password_reset_public_user', function (Blueprint $table) {
-            $table->id();
-            $table->string('email');
-            $table->string('token')->unique();
-            $table->timestamp('last_used_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('password_reset_public_user')) {
+            Schema::create('password_reset_public_user', function (Blueprint $table) {
+                $table->id();
+                $table->string('email');
+                $table->string('token')->unique();
+                $table->timestamp('last_used_at')->nullable();
+                $table->timestamp('expires_at')->nullable();
+                $table->timestamps();
+            });
+        }
     }
+
 
     /**
      * Reverse the migrations.
