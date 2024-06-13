@@ -61,7 +61,7 @@
                                 <a href="{{ route('campaignDetailPage', $causesListDatum->slug) }}">
                                     <img height="239" class="img-fullwidth " style=" border-radius:5px 5px 0 0;"
                                         alt=""
-                                        src="{{ asset('/public/uploads') . '/' . imageName($causesListDatum->cover_image, '-cropped') }}">
+                                        src="{{ asset('/uploads') . '/' . imageName($causesListDatum->cover_image, '-cropped') }}">
                                 </a>
                             </div>
                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">

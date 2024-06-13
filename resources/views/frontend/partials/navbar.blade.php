@@ -6,7 +6,7 @@
             <div class="container">
                 <nav id="menuzord-right" class="menuzord default no-bg">
                     <a class="menuzord-brand pull-left flip" href="{{ url('/') }}"><img
-                            src="{{ asset('/public/uploads') . '/' . imageName(setting('site.logo')) }}"
+                            src="{{ asset('/uploads') . '/' . imageName(setting('site.logo')) }}"
                             alt=""></a>
                     <ul class="menuzord-menu">
                         <li class="{{ frontendActiveButton('fontendDefaultPage') }}"><a

@@ -7,7 +7,7 @@
     <div class="main-content">
         <!-- Section: inner-header -->
         <section class="inner-header divider parallax layer-overlay overlay-dark-5" data-stellar-background-ratio="0.5"
-            data-bg-img="{{ asset('/public/uploads/static-images/images/banner-small.jpeg') }}"
+            data-bg-img="{{ asset('/uploads/static-images/images/banner-small.jpeg') }}"
             style="background-image: url(&quot;images/bg/bg1.jpg&quot;); background-position: 50% 61px;">
             <div class="container pt-100 pb-50">
                 <!-- Section Content -->
@@ -33,7 +33,7 @@
                                     <div class="col-md-5">
                                         <div class="thumb">
                                             <img class="img-fullwidth img-thumbnail" alt=""
-                                                src="{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}">
+                                                src="{{ asset('/uploads') . '/' . $campaignDetails->cover_image }}">
                                         </div>
                                     </div>
                                     <div class="col-md-7">
@@ -95,7 +95,7 @@
                                     <div class="col-md-12 text-center">
                                         @php
                                             if ($campaignDetails?->owner?->profile_picture) {
-                                                $profilePic = asset('/public/uploads') . '/' . imageName($campaignDetails?->owner?->profile_picture, '-medium');
+                                                $profilePic = asset('/uploads') . '/' . imageName($campaignDetails?->owner?->profile_picture, '-medium');
                                             } else {
                                                 $profilePic = asset('public/uploads/static-images/images/usernotfound.png');
                                             }
@@ -175,9 +175,9 @@
         </section>
         @if ($campaignDetails->campaign_status == 'running')
             <section id="donationForm" class="divider parallax"
-                data-bg-img="{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}"
+                data-bg-img="{{ asset('/uploads') . '/' . $campaignDetails->cover_image }}"
                 data-parallax-ratio="0.7"
-                style="background-image: url('{{ asset('/public/uploads') . '/' . $campaignDetails->cover_image }}'); background-position: 50% 76px;">
+                style="background-image: url('{{ asset('/uploads') . '/' . $campaignDetails->cover_image }}'); background-position: 50% 76px;">
                 <div class="container pt-0 pb-0">
                     <div class="row">
                         <div class="col-md-8">
@@ -536,7 +536,7 @@
                                                 </label>{{ !empty(($paymentConfigs = getPaymentConfigs('bank'))['fullname']) ? $paymentConfigs['fullname'] : setting('bank.bank_name') }}</br>
                                                 @if (getPaymentConfigs('bank')['qr_image'])
                                                     <label>QR: </label><br> <img height="100"
-                                                        src="{{ asset('/public/uploads') . '/' . getPaymentConfigs('bank')['qr_image'] ?? setting('bank.bank_qr') }}">
+                                                        src="{{ asset('/uploads') . '/' . getPaymentConfigs('bank')['qr_image'] ?? setting('bank.bank_qr') }}">
                                                 @endif
                                             </div>
                                         </div>

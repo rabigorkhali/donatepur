@@ -70,7 +70,7 @@
         <div class="row">
 
             <div class="col-sm-12 col-md-12 btn btn-block btn-flat ">
-                <a href="{{ url('/') }}"><img src="{{ asset('/public/uploads') . '/' . imageName(setting('site.logo')) }}"
+                <a href="{{ url('/') }}"><img src="{{ asset('/uploads') . '/' . imageName(setting('site.logo')) }}"
                         height="100">
                 </a>
             </div>

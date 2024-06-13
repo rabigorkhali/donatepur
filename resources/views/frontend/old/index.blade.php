@@ -31,7 +31,7 @@
             <div class="hero-slider">
                 @foreach ($sliderBanners as $sliderBannersKey => $sliderBannersDatum)
                     <div class="slide">
-                        <img src="{{ asset('/public/uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}"
+                        <img src="{{ asset('/uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}"
                             alt="" class="slider-bg">
                         <div class="container">
                             <div class="row">
@@ -81,7 +81,7 @@
                             <div class="grid">
                                 <div class="img-holder">
                                     <a href="{{ url('campaigns/' . $topCausesDatum->id) }}"> <img
-                                            src="{{ asset('/public/uploads') . '/' . imageName($topCausesDatum->cover_image, '-cropped') }}"
+                                            src="{{ asset('/uploads') . '/' . imageName($topCausesDatum->cover_image, '-cropped') }}"
                                             alt="" class="img img-responsive">
                                     </a>
                                     {{-- <img src="{{asset('public/uploads/').'/'.$topCausesDatum->cover_image}}" alt="" class="img img-responsive"> --}}
@@ -199,7 +199,7 @@
                                     <div class="grid">
                                         <div class="img-holder">
 
-                                            <img src="{{ asset('/public/uploads') . '/' . imageName($topDonorsDatum?->publicUser?->profile_picture, '-cropped') }}"
+                                            <img src="{{ asset('/uploads') . '/' . imageName($topDonorsDatum?->publicUser?->profile_picture, '-cropped') }}"
                                                 alt="" class="img img-responsive">
                                         </div>
                                         <div class="volunteers-details">

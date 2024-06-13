@@ -24,10 +24,10 @@
                                 @if ($islider % 2 === 0)
                                     <li data-index="rs-2" data-transition="slidingoverlayhorizontal" data-slotamount="default"
                                         data-easein="default" data-easeout="default" data-masterspeed="default"
-                                        data-thumb="{{ asset('/public/uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}"
+                                        data-thumb="{{ asset('/uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}"
                                         data-rotate="0" data-saveperformance="off" data-title="Slide 2" data-description="">
                                         <!-- MAIN IMAGE -->
-                                        <img src="{{ asset('/public/uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}"
+                                        <img src="{{ asset('/uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}"
                                             alt="" data-bgposition="center center" data-bgfit="cover"
                                             data-bgrepeat="no-repeat" class="rev-slidebg" data-bgparallax="10"
                                             data-no-retina>
@@ -95,11 +95,11 @@
                                     <li data-index="rs-3" data-transition="slidingoverlayhorizontal"
                                         data-slotamount="default" data-easein="default" data-easeout="default"
                                         data-masterspeed="default"
-                                        data-thumb="{{ asset('/public/uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}"
+                                        data-thumb="{{ asset('/uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-small') }}"
                                         data-rotate="0" data-saveperformance="off" data-title="Slide 3"
                                         data-description="">
                                         <!-- MAIN IMAGE -->
-                                        <img src="{{ asset('/public/uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}"
+                                        <img src="{{ asset('/uploads') . '/' . imageName($sliderBannersDatum->cover_image, '-cropped') }}"
                                             alt="" data-bgposition="center center" data-bgfit="cover"
                                             data-bgrepeat="no-repeat" class="rev-slidebg" data-bgparallax="10"
                                             data-no-retina>
@@ -297,7 +297,7 @@
                                                 <a href="{{ route('campaignDetailPage', $featuredCausesDatum->slug) }}">
                                                     <img height="239" style=" border-radius:5px 5px 0 0;"
                                                         class="img-fullwidth" alt=""
-                                                        src="{{ asset('/public/uploads') . '/' . imageName($featuredCausesDatum->cover_image, '-cropped') }}">
+                                                        src="{{ asset('/uploads') . '/' . imageName($featuredCausesDatum->cover_image, '-cropped') }}">
                                                 </a>
                                             </div>
                                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
@@ -407,7 +407,7 @@
         </section>
         <!-- Divider: Funfact -->
         <section class="divider parallax layer-overlay overlay-white-8"
-            data-bg-img="{{ asset('/public/frontend/images/bg/bg2.jpg') }}" data-parallax-ratio="0.7">
+            data-bg-img="{{ asset('/frontend/images/bg/bg2.jpg') }}" data-parallax-ratio="0.7">
             <div class="container pt-90 pb-90">
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-3 mb-md-50">
@@ -485,7 +485,7 @@
                                 <a href="{{ route('campaignDetailPage', $recentCausesDatum->slug) }}">
                                     <img height="239" class="img-fullwidth" style=" border-radius:5px 5px 0 0;"
                                         alt=""
-                                        src="{{ asset('/public/uploads') . '/' . imageName($recentCausesDatum->cover_image, '-cropped') }}">
+                                        src="{{ asset('/uploads') . '/' . imageName($recentCausesDatum->cover_image, '-cropped') }}">
                                 </a>
                             </div>
                             <div class="image-box-details bg-lighter p-15 pt-20 pb-sm-20">
@@ -575,7 +575,7 @@
                                 <div class="testimonial pt-10">
                                     <div class="thumb pull-left mb-0 mr-0 pr-20">
                                         <img width="75" class="img-circle" alt=""
-                                            src="{{ asset('/public/uploads') . '/' . imageName($testimonialsDatum->profile_picture, '-cropped') }}">
+                                            src="{{ asset('/uploads') . '/' . imageName($testimonialsDatum->profile_picture, '-cropped') }}">
                                     </div>
                                     <div class="ml-100 ">
                                         <h4 class="mt-0 font-weight-300">{{ $testimonialsDatum->message }}</h4>
@@ -604,7 +604,7 @@
                                 <div class="item">
                                     <a href="{{ $partnersDatum->website }}" target="_blank">
                                         <img class="img-responsive"
-                                            src="{{ asset('/public/uploads') . '/' . imageName($partnersDatum->logo, '-small') }}"
+                                            src="{{ asset('/uploads') . '/' . imageName($partnersDatum->logo, '-small') }}"
                                             alt="">
                                     </a>
                                 </div>

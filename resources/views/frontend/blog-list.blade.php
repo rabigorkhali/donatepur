@@ -63,7 +63,7 @@
                                         <div class="entry-header">
                                             <div class="post-thumb thumb">
                                                 <a href="{{ route('postDetailPage', $postListDatum->slug) }}">
-                                                    <img src="{{ asset('/public/uploads') . '/' . imageName($postListDatum->image, '-cropped') }}"
+                                                    <img src="{{ asset('/uploads') . '/' . imageName($postListDatum->image, '-cropped') }}"
                                                         alt="" class="img-responsive img-fullwidth">
                                                 </a>
                                             </div>

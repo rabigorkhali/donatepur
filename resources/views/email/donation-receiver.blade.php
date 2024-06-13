@@ -189,7 +189,7 @@
                                                                 style="width:100%;padding-right:0px;padding-left:0px;">
                                                                 <div align="center" class="alignment"
                                                                     style="line-height:10px"><img alt="Company Logo"
-                                                                        src="{{ asset('/public/uploads') . '/' . imageName(setting('site.logo')) }}"
+                                                                        src="{{ asset('/uploads') . '/' . imageName(setting('site.logo')) }}"
                                                                         style="display: block; height: auto; border: 0; width: 147px; max-width: 100%;"
                                                                         title="Company Logo" width="147" /></div>
                                                             </td>
@@ -257,7 +257,7 @@
                                                                 <div align="center" class="alignment"
                                                                     style="line-height:10px"><img
                                                                         alt="Top round corners" class="big"
-                                                                        src="{{ asset('/public/uploads/static-images/images/round_corner_top.png') }}"
+                                                                        src="{{ asset('/uploads/static-images/images/round_corner_top.png') }}"
                                                                         style="display: block; height: auto; border: 0; width: 680px; max-width: 100%;"
                                                                         title="Top round corners" width="680" />
                                                                 </div>
@@ -435,7 +435,7 @@
                                                                 <div align="center" class="alignment"
                                                                     style="line-height:10px"><img
                                                                         alt="Bottom round corners" class="big"
-                                                                        src="{{ asset('/public/uploads/static-images/images/round_corner_bottom.png') }}"
+                                                                        src="{{ asset('/uploads/static-images/images/round_corner_bottom.png') }}"
                                                                         style="display: block; height: auto; border: 0; width: 680px; max-width: 100%;"
                                                                         title="Bottom round corners" width="680" />
                                                                 </div>

@@ -7,7 +7,7 @@
     <div class="main-content">
         <!-- Section: inner-header -->
         <section class="inner-header divider parallax layer-overlay overlay-dark-5" data-stellar-background-ratio="0.5"
-            data-bg-img="{{ asset('/public/uploads') . '/'.setting('site.contact_us_image') }}"
+            data-bg-img="{{ asset('/uploads') . '/'.setting('site.contact_us_image') }}"
             style="background-image: url(&quot;images/bg/bg1.jpg&quot;); background-position: 50% 61px;">
             <div class="container pt-100 pb-50">
                 <!-- Section Content -->
@@ -24,8 +24,8 @@
         </section>
 
         <section id="donationForm" class="divider parallax"
-            data-bg-img="{{ asset('/public/uploads') . '/'  }}" data-parallax-ratio="0.7"
-            style="background-image: url('{{ asset('/public/uploads') . '/'  }}'); background-position: 50% 76px;">
+            data-bg-img="{{ asset('/uploads') . '/'  }}" data-parallax-ratio="0.7"
+            style="background-image: url('{{ asset('/uploads') . '/'  }}'); background-position: 50% 76px;">
             <div class="container pt-0 pb-0">
                 <div class="row">
                     <div class="col-md-8">

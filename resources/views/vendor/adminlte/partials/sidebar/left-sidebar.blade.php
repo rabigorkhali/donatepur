@@ -7,7 +7,7 @@
         @include('adminlte::partials.common.brand-logo-xs')
     @endif --}}
     <a href="{{ route('my.dashboard') }}" class="brand-link ">
-        <img src="{{ asset('/public/uploads') . '/' . imageName(setting('site.logo')) }}" alt="Donatepur Logo"
+        <img src="{{ asset('/uploads') . '/' . imageName(setting('site.logo')) }}" alt="Donatepur Logo"
             class="brand-image " style="opacity:.8; display: inline-block;">
         <br>
         <span class="brand-text font-weight-light ">
