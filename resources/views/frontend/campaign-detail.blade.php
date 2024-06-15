@@ -97,7 +97,7 @@
                                             if ($campaignDetails?->owner?->profile_picture) {
                                                 $profilePic = asset('/uploads') . '/' . imageName($campaignDetails?->owner?->profile_picture, '-medium');
                                             } else {
-                                                $profilePic = asset('public/uploads/static-images/images/usernotfound.png');
+                                                $profilePic = asset('uploads/static-images/images/usernotfound.png');
                                             }
                                         @endphp
                                         <img width="160" class="img-circle" alt="" style="margin: 7px;"
@@ -157,7 +157,7 @@
 
                             {{-- <h2 class="bg-theme-colored text-white text-uppercase font-weight-600 p-10 pl-30 pr-30 mt-10">
                                 BY: {{ $campaignDetails->owner->full_name }} <img
-                                    src="{{ asset('public/uploads/' . $campaignDetails->owner->profile_picture, '-medium') }}">
+                                    src="{{ asset('uploads/' . $campaignDetails->owner->profile_picture, '-medium') }}">
                             </h2> --}}
                         </div>
 

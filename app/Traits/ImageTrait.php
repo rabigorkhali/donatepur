@@ -103,15 +103,15 @@ trait ImageTrait
         }
         $image->save($directory . '/' . $fileName, 70);
 
-        // // /* THUMBNAIL */
-        // $directoryThumbnail = public_path() . $dir;
-        // if (is_dir($directoryThumbnail) != true) \File::makeDirectory($directoryThumbnail, $mode = 0775, true);
-        // $imageThumbnail = Image::make(Request::file($input))->orientate();
-        // $imageThumbnail = $image->resize(500, null, function ($constraintThumbnail) {
-        //     $constraintThumbnail->aspectRatio();
-        // });
-        // $imageThumbnail->save($directoryThumbnail . '/' . $fileThumbnail, 70);
-        // // /* THUMBNAIL */
+        // /* THUMBNAIL */
+        $directoryThumbnail = public_path() . $dir;
+        if (is_dir($directoryThumbnail) != true) \File::makeDirectory($directoryThumbnail, $mode = 0775, true);
+        $imageThumbnail = Image::make(Request::file($input))->orientate();
+        $imageThumbnail = $image->resize(500, null, function ($constraintThumbnail) {
+            $constraintThumbnail->aspectRatio();
+        });
+        $imageThumbnail->save($directoryThumbnail . '/' . $fileThumbnail, 70);
+        // /* THUMBNAIL */
 
         /* CROPPED */
         $directoryThumbnail = public_path() . $dir;

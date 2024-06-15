@@ -69,9 +69,9 @@
                             <tr>
                                 <th style="width:20%;">Cover Image</th>
                                 <td>
-                                    <a href="{{ asset('public/uploads/' . $campaignDetail->cover_image) }}" target="_blank">
+                                    <a href="{{ asset('uploads/' . $campaignDetail->cover_image) }}" target="_blank">
                                         <img class="img-thumbnail" style="height:100px"
-                                            src="{{ asset('public/uploads/' . giveImageName($campaignDetail->cover_image, 'medium')) }}"
+                                            src="{{ asset('uploads/' . giveImageName($campaignDetail->cover_image, 'medium')) }}"
                                             height="50">
                                     </a>
                                 </td>

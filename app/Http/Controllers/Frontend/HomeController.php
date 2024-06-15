@@ -114,14 +114,14 @@ class HomeController extends FrontendBaseController
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
                 if ($donationRawDatum->donor_display_image) {
-                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image, '-medium');
+                    $topDonors['profile_pic'] = asset('uploads/') . '/' . imageName($donationRawDatum->donor_display_image, '-medium');
                 } else if ($donationRawDatum?->giver?->profile_picture) {
-                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
+                    $topDonors['profile_pic'] = asset('uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
                 } else {
-                    $topDonors['profile_pic'] = asset('public/uploads/static-images/images/usernotfound.png');
+                    $topDonors['profile_pic'] = asset('uploads/static-images/images/usernotfound.png');
                 }
 
-                // $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
+                // $topDonors['profile_pic'] = asset('uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
                 $topDonors['amount'] = $donationRawDatum->amount;
                 $topDonors['is_anonymous'] = $donationRawDatum->is_anonymous;
                 $topDonors['giver_public_user_id'] = $donationRawDatum->giver_public_user_id;
@@ -364,11 +364,11 @@ class HomeController extends FrontendBaseController
                 $topDonors = [];
                 $topDonors['name'] = $donationRawDatum?->giver?->name ?? $donationRawDatum->fullname;
                 if ($donationRawDatum->donor_display_image) {
-                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum->donor_display_image, '-medium');
+                    $topDonors['profile_pic'] = asset('uploads/') . '/' . imageName($donationRawDatum->donor_display_image, '-medium');
                 } else if ($donationRawDatum?->giver?->profile_picture) {
-                    $topDonors['profile_pic'] = asset('public/uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
+                    $topDonors['profile_pic'] = asset('uploads/') . '/' . imageName($donationRawDatum?->giver?->profile_picture, '-medium');
                 } else {
-                    $topDonors['profile_pic'] = asset('public/uploads/static-images/images/usernotfound.png');
+                    $topDonors['profile_pic'] = asset('uploads/static-images/images/usernotfound.png');
                 }
 
 

@@ -60,9 +60,9 @@
                             {{-- <tr>
                                 <th style="width:20%;">Qr Code</th>
                                 <td>
-                                    <a href="{{ asset('public/uploads/' . $thisModelDetail->qr_code) }}" target="_blank">
+                                    <a href="{{ asset('uploads/' . $thisModelDetail->qr_code) }}" target="_blank">
                                         <img class="img-thumbnail" style="height:200"
-                                            src="{{ asset('public/uploads/' . giveImageName($thisModelDetail->qr_code, 'medium')) }}"
+                                            src="{{ asset('uploads/' . giveImageName($thisModelDetail->qr_code, 'medium')) }}"
                                             height="50">
                                     </a>
                                 </td>

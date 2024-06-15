@@ -84,7 +84,7 @@
                                             src="{{ asset('/uploads') . '/' . imageName($topCausesDatum->cover_image, '-cropped') }}"
                                             alt="" class="img img-responsive">
                                     </a>
-                                    {{-- <img src="{{asset('public/uploads/').'/'.$topCausesDatum->cover_image}}" alt="" class="img img-responsive"> --}}
+                                    {{-- <img src="{{asset('uploads/').'/'.$topCausesDatum->cover_image}}" alt="" class="img img-responsive"> --}}
                                 </div>
                                 <div class="goal-raised">
                                     <div class="progress">
