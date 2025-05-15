@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use Anhskohbo\NoCaptcha\NoCaptcha;
 use App\Http\Controllers\Frontend\FrontendBaseController;
 use App\Jobs\SendEmailAfterDonationMade;
 use App\Jobs\SendEmailAfterDonationMadeToGiver;
@@ -232,6 +233,8 @@ class HomeController extends FrontendBaseController
                 'email' => 'required|email|max:255',
                 'message' => 'required|string|max:255',
                 'honeypot' => 'nullable|max:0', // Honeypot field should be empty
+                'g-recaptcha-response' => 'required',
+
             ]);
 
             if ($validator->fails()) {
@@ -742,8 +745,8 @@ class HomeController extends FrontendBaseController
             $data['longitude'] = $request->input('longitude') ?? null;
             $data['campaign_id'] = $request->input('campaign_id') ?? null;
             $data['created_at'] = date('Y-m-d H:i:s');
-            $currentDateTime = now(); 
-            $oneHourAgo = $currentDateTime->subHour(); 
+            $currentDateTime = now();
+            $oneHourAgo = $currentDateTime->subHour();
             $ifExists = CampaignVisit::where('ip', $data['ip'])->where('campaign_id', $data['campaign_id'])->where('created_at', '>=', $oneHourAgo)->count();
             if (!$ifExists) {
                 CampaignVisit::insert($data);

@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "anhskohbo/no-captcha": "*",
         "cixware/esewa-php-sdk": "^2.5",
         "dipesh79/laravel-esewa": "^1.0",
         "guzzlehttp/guzzle": "^7.2",

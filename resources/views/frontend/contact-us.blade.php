@@ -36,7 +36,7 @@
                                 @csrf
                                 <input type="hidden" name="honeypot" value="">
                                 <div class="row">
-                                    
+
                                     <div class="col-sm-12 @if ($errors->first('name')) has-error @endif">
                                         <div class="form-group mb-20">
                                             <label><strong>Name</strong><span class="text-danger">*</span></label>
@@ -78,7 +78,7 @@
                                         </div>
                                     </div>
 
- 
+
                                     <div class="col-sm-12 @if ($errors->first('message')) has-error @endif">
                                         <div class="form-group mb-20">
                                             <label><strong>Message</strong><span class="text-danger">*</span></label>
@@ -90,6 +90,8 @@
                                             @endif
                                         </div>
                                     </div>
+                                    {!! NoCaptcha::renderJs() !!}
+                                    {!! NoCaptcha::display() !!}
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <button type="submit" id="" type="button"

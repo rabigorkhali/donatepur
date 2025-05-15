@@ -26,4 +26,4 @@ vendor
 vendor/*
 vendor/
 public/uploads
-
+.idea/
