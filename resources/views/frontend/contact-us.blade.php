@@ -89,9 +89,10 @@
                                                     class="text-danger display-block">{{ $errors->first('message') }}</span>
                                             @endif
                                         </div>
+                                        {!! NoCaptcha::renderJs() !!}
+                                        {!! NoCaptcha::display() !!}
                                     </div>
-                                    {!! NoCaptcha::renderJs() !!}
-                                    {!! NoCaptcha::display() !!}
+
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <button type="submit" id="" type="button"
