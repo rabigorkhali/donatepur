@@ -236,6 +236,8 @@ class HomeController extends FrontendBaseController
                 'g-recaptcha-response' => 'required',
 
             ]);
+            $data = $request->only('name', 'phone','email','message');
+
 
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
